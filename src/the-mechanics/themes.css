@@ -22,12 +22,12 @@
     /* Light / Paper-Stone — stony canvas, cream paper, green-black ink */
     --tm-canvas: #dcd9cf;
     --tm-chrome: #e6e0cc;       /* app shell (topbar, sidebar): warm sand, distinct from canvas and paper */
-    --tm-surface: #f6f3eb;
-    --tm-surface-alt: #efebe1;
-    --tm-head-1: #e6e2d5;
-    --tm-head-2: #ebe7dc;
-    --tm-sunken: #e8e5d9;
-    --tm-inset: #fbfaf5;
+    --tm-surface: #efebe1;
+    --tm-surface-alt: #e8e4d9;
+    --tm-head-1: #e0dccf;
+    --tm-head-2: #e5e1d5;
+    --tm-sunken: #e2dfd2;
+    --tm-inset: #f2efe6;
     --tm-inverse: #2a2f2b;
 
     --tm-text: #22271f;

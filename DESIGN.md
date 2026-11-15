@@ -40,7 +40,7 @@ Selected by `data-tm-theme` on `<html>` (or any subtree). Light is the default.
 
 | Theme | Intent | Canvas → surface | Text | Accent | Focus |
 |---|---|---|---|---|---|
-| **Light / Paper-Stone** | Stone-gray canvas, cream paper, green-black ink. Surfaces are visibly distinct from canvas (not white-on-white). | `#dcd9cf` → `#f6f3eb` | `#22271f` | olive `#44622a` | blue `#1d5fb0` |
+| **Light / Paper-Stone** | Stone-gray canvas, cream paper, green-black ink. Surfaces are visibly distinct from canvas (not white-on-white). | `#dcd9cf` → `#efebe1` (shell `#e6e0cc`) | `#22271f` | olive `#44622a` | blue `#1d5fb0` |
 | **Dark / Graphite** | Lifted graphite (canvas `#26292c`, never near-black); muted olive accent, no neon. | `#26292c` → `#33373b` | `#e9ebe6` | `#aac67b` | `#7db3ff` |
 | **Coffee / Espresso-Mocha** | Warm mid-dark espresso, mocha surfaces, cream text, muted copper. Distinct from Graphite by hue, not just lightness. | `#33261e` → `#433228` | `#f3e8d8` | copper `#d79560` | teal `#83cfc6` |
 

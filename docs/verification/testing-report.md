@@ -36,6 +36,7 @@ Round 3 (owner review):
 19. Inconsistent hover (buttons filled, chips/pagination/cards changed border; cards are not clickable) → single rule: clickable controls get a fill tint, borders never change on hover, non-clickable containers do not react.
 20. Level-2 borders too faint (2.15:1 Coffee, 2.19:1 Dark, 2.51:1 Light on canvas) → raised to ≥3:1 on surface and canvas in all themes; now enforced by `check:contrast` (41 pairs per theme).
 21. Light theme shell (topbar, sidebar) used the same cream as the panels and read as colorless white → new `--tm-chrome` token; Light uses warm sand `#e6e0cc` (Dark/Coffee unchanged). Contrast check covers text on chrome (45 pairs per theme).
+22. Light panels (`#f6f3eb`) and controls (`#fbfaf5`, even brighter) glared against the gray canvas → two variants were served side by side for owner review; chosen variant tones panels to `#efebe1` and controls to `#f2efe6` (heads/sunken shifted proportionally, canvas unchanged). All contrast pairs pass.
 
 ### Interaction / keyboard checks — `pnpm smoke` (15/15 pass, [`smoke-results.json`](smoke-results.json))
 Desktop 1440×900, Chromium:
