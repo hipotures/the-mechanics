@@ -369,3 +369,8 @@ h1:focus { outline: 0; }
   visibility: hidden !important;
   transition: none !important;
 }
+
+/* Data table density: compact shows one line per account. */
+.pg-compact .tm-table__secondary { display: none; }
+.pg-note-flag { display: none; color: var(--tm-info); }
+.pg-compact .pg-note-flag { display: inline-flex; }

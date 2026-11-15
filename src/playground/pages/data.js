@@ -102,7 +102,8 @@ export default {
         case "name":
           if (st.inline === r.id)
             return `<td class="tm-cell-primary" data-label=""><div class="pg-inline"><input class="tm-input tm-input--sm" id="inline-input" value="${esc(r.name)}" aria-label="Account name for ${esc(r.id)}"><button class="tm-btn tm-btn--sm tm-btn--primary tm-btn--icon" data-inline-save aria-label="Save name">${icon("check", "tm-icon--sm")}</button><button class="tm-btn tm-btn--sm tm-btn--ghost tm-btn--icon" data-inline-cancel aria-label="Cancel edit">${icon("x", "tm-icon--sm")}</button></div></td>`;
-          return `<td class="tm-cell-primary" data-label=""><div class="pg-acc"><span class="tm-table__primary">${esc(r.name)}</span>
+          return `<td class="tm-cell-primary" data-label=""><div class="pg-acc"><span class="tm-table__primary" title="${esc(`${r.id} · ${r.email}`)}">${esc(r.name)}</span>
+            ${r.note ? `<span class="pg-note-flag" title="${esc(r.note)}" aria-label="Has internal note">${icon("info", "tm-icon--sm")}</span>` : ""}
             <button class="tm-btn tm-btn--ghost tm-btn--icon tm-btn--sm pg-inline-edit" data-inline="${r.id}" aria-label="Rename ${esc(r.name)}">${icon("edit", "tm-icon--sm")}</button></div>
             <span class="tm-table__secondary"><span class="tm-mono">${esc(r.id)}</span> · ${esc(r.email)}</span>
             ${r.note ? `<span class="tm-table__secondary pg-note tm-truncate" title="${esc(r.note)}">${icon("info", "tm-icon--sm")} ${esc(r.note)}</span>` : ""}</td>`;
@@ -119,7 +120,9 @@ export default {
 
     function renderTable() {
       const wrap = $("#table-wrap");
-      const tbl = (body) => `<table class="tm-table tm-table--stack ${st.density === "comfortable" ? "tm-density-comfortable" : ""}" id="acc-table">
+      // Compact: one line per account (id/email in the title tooltip), 32px rows.
+      // Comfortable: name + id/email + note lines, 40px minimum and more air.
+      const tbl = (body) => `<table class="tm-table tm-table--stack ${st.density === "comfortable" ? "tm-density-comfortable" : "pg-compact"}" id="acc-table">
         <caption class="tm-sr-only">Accounts, sortable by column headers</caption>
         <thead><tr><th scope="col" class="tm-col-check"><input class="tm-check" type="checkbox" id="check-all" aria-label="Select all on this page"></th>${dm.columns.map(headerCell).join("")}<th scope="col" class="tm-col-actions"><span class="tm-sr-only">Actions</span></th></tr></thead>
         <tbody>${body}</tbody></table>`;
