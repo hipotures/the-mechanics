@@ -1,0 +1,1762 @@
+{
+  "meta": {
+    "version": "0.1.0",
+    "language": "en",
+    "purpose": "Deterministic, synthetic visual fixtures for five application archetypes. Data is a design stress test, not an API contract.",
+    "asOf": "2026-11-14T12:00:00Z",
+    "noRuntimeNetwork": true,
+    "themeIds": [
+      "light",
+      "dark",
+      "coffee"
+    ],
+    "viewportExamples": [
+      {
+        "name": "desktop",
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "name": "mobile",
+        "width": 390,
+        "height": 844
+      }
+    ]
+  },
+  "analytics": {
+    "pageTitle": "AI Operations Overview",
+    "description": "A compact monitoring workspace with many simultaneously visible data panels.",
+    "timeRange": "24h",
+    "timeRangeOptions": [
+      "24h",
+      "7d",
+      "30d"
+    ],
+    "serviceFilter": "All services",
+    "serviceOptions": [
+      "All services",
+      "API",
+      "GPU Workers",
+      "Queue"
+    ],
+    "kpis": [
+      {
+        "id": "requests",
+        "label": "Requests",
+        "value": 124280,
+        "unit": "",
+        "deltaPercent": 12.4,
+        "trend": "up"
+      },
+      {
+        "id": "tokens",
+        "label": "Total tokens",
+        "value": 748378,
+        "unit": "",
+        "deltaPercent": 8.1,
+        "trend": "up"
+      },
+      {
+        "id": "cache",
+        "label": "Cache hit",
+        "value": 73.4,
+        "unit": "%",
+        "deltaPercent": -1.6,
+        "trend": "down"
+      },
+      {
+        "id": "latency",
+        "label": "P95 latency",
+        "value": 712,
+        "unit": "ms",
+        "deltaPercent": -4.2,
+        "trend": "down"
+      },
+      {
+        "id": "cost",
+        "label": "Cost",
+        "value": 68.73,
+        "unit": "USD",
+        "deltaPercent": 2.9,
+        "trend": "up"
+      },
+      {
+        "id": "errors",
+        "label": "Error rate",
+        "value": 0.63,
+        "unit": "%",
+        "deltaPercent": -0.2,
+        "trend": "down"
+      },
+      {
+        "id": "workers",
+        "label": "Healthy workers",
+        "value": 5,
+        "denominator": 6,
+        "unit": "",
+        "deltaPercent": null,
+        "trend": "neutral"
+      },
+      {
+        "id": "queue",
+        "label": "Queued jobs",
+        "value": 3,
+        "unit": "",
+        "deltaPercent": -42,
+        "trend": "down"
+      }
+    ],
+    "charts": [
+      {
+        "id": "requests",
+        "title": "Request throughput",
+        "kind": "line",
+        "unit": "req/min",
+        "series": [
+          {
+            "name": "API",
+            "values": [
+              86,
+              98,
+              105,
+              188,
+              206,
+              181,
+              160,
+              127
+            ]
+          },
+          {
+            "name": "Worker",
+            "values": [
+              39,
+              44,
+              62,
+              76,
+              110,
+              91,
+              88,
+              70
+            ]
+          }
+        ],
+        "xLabels": [
+          "00:00",
+          "03:00",
+          "06:00",
+          "09:00",
+          "12:00",
+          "15:00",
+          "18:00",
+          "21:00"
+        ]
+      },
+      {
+        "id": "tokens",
+        "title": "Token volume",
+        "kind": "stacked-bar",
+        "unit": "k tokens",
+        "series": [
+          {
+            "name": "Input",
+            "values": [
+              84,
+              91,
+              102,
+              130,
+              148,
+              142,
+              136,
+              121
+            ]
+          },
+          {
+            "name": "Output",
+            "values": [
+              12,
+              14,
+              19,
+              23,
+              28,
+              22,
+              20,
+              17
+            ]
+          },
+          {
+            "name": "Cache",
+            "values": [
+              40,
+              52,
+              57,
+              83,
+              109,
+              111,
+              98,
+              92
+            ]
+          }
+        ],
+        "xLabels": [
+          "00:00",
+          "03:00",
+          "06:00",
+          "09:00",
+          "12:00",
+          "15:00",
+          "18:00",
+          "21:00"
+        ]
+      },
+      {
+        "id": "ttft",
+        "title": "Time to first token",
+        "kind": "line",
+        "unit": "ms",
+        "series": [
+          {
+            "name": "p50",
+            "values": [
+              340,
+              310,
+              299,
+              312,
+              315,
+              355,
+              340,
+              328
+            ]
+          },
+          {
+            "name": "p95",
+            "values": [
+              670,
+              633,
+              610,
+              660,
+              805,
+              742,
+              712,
+              689
+            ]
+          }
+        ],
+        "xLabels": [
+          "00:00",
+          "03:00",
+          "06:00",
+          "09:00",
+          "12:00",
+          "15:00",
+          "18:00",
+          "21:00"
+        ],
+        "threshold": 750
+      },
+      {
+        "id": "cost-trend",
+        "title": "Inference cost",
+        "kind": "area",
+        "unit": "USD",
+        "series": [
+          {
+            "name": "Cost",
+            "values": [
+              2.2,
+              3.1,
+              3.8,
+              6.9,
+              8,
+              7.2,
+              6.7,
+              5.9
+            ]
+          }
+        ],
+        "xLabels": [
+          "00:00",
+          "03:00",
+          "06:00",
+          "09:00",
+          "12:00",
+          "15:00",
+          "18:00",
+          "21:00"
+        ]
+      },
+      {
+        "id": "provider-share",
+        "title": "Provider split",
+        "kind": "donut",
+        "unit": "%",
+        "series": [
+          {
+            "label": "Local GPU",
+            "value": 64
+          },
+          {
+            "label": "Provider A",
+            "value": 22
+          },
+          {
+            "label": "Provider B",
+            "value": 11
+          },
+          {
+            "label": "Other",
+            "value": 3
+          }
+        ]
+      },
+      {
+        "id": "model-latency",
+        "title": "Decode latency by model",
+        "kind": "grouped-bar",
+        "unit": "ms",
+        "series": [
+          {
+            "name": "p50",
+            "values": [
+              43,
+              59,
+              62,
+              78,
+              89
+            ]
+          },
+          {
+            "name": "p95",
+            "values": [
+              94,
+              110,
+              141,
+              180,
+              193
+            ]
+          }
+        ],
+        "xLabels": [
+          "Model Small",
+          "Model Medium",
+          "Model Large",
+          "Model Vision",
+          "Long Context"
+        ]
+      },
+      {
+        "id": "cache-hit",
+        "title": "Cache hit rate",
+        "kind": "area",
+        "unit": "%",
+        "series": [
+          {
+            "name": "Hit rate",
+            "values": [
+              49,
+              51,
+              64,
+              68,
+              70,
+              74,
+              76,
+              73
+            ]
+          }
+        ],
+        "xLabels": [
+          "00:00",
+          "03:00",
+          "06:00",
+          "09:00",
+          "12:00",
+          "15:00",
+          "18:00",
+          "21:00"
+        ],
+        "target": 75
+      },
+      {
+        "id": "queue",
+        "title": "Pending jobs",
+        "kind": "line",
+        "unit": "jobs",
+        "series": [
+          {
+            "name": "Waiting",
+            "values": [
+              2,
+              2,
+              5,
+              9,
+              27,
+              14,
+              6,
+              3
+            ]
+          },
+          {
+            "name": "Running",
+            "values": [
+              5,
+              6,
+              6,
+              7,
+              8,
+              8,
+              6,
+              5
+            ]
+          }
+        ],
+        "xLabels": [
+          "00:00",
+          "03:00",
+          "06:00",
+          "09:00",
+          "12:00",
+          "15:00",
+          "18:00",
+          "21:00"
+        ]
+      },
+      {
+        "id": "error-rate",
+        "title": "Error rate vs traffic",
+        "kind": "scatter",
+        "unit": "% / req/min",
+        "series": [
+          {
+            "x": 82,
+            "y": 0.3,
+            "label": "00:00"
+          },
+          {
+            "x": 112,
+            "y": 0.2,
+            "label": "06:00"
+          },
+          {
+            "x": 188,
+            "y": 1.7,
+            "label": "09:00"
+          },
+          {
+            "x": 206,
+            "y": 2.4,
+            "label": "12:00"
+          },
+          {
+            "x": 160,
+            "y": 0.9,
+            "label": "18:00"
+          },
+          {
+            "x": 127,
+            "y": 0.4,
+            "label": "21:00"
+          }
+        ]
+      },
+      {
+        "id": "gpu-memory",
+        "title": "GPU VRAM allocation",
+        "kind": "line",
+        "unit": "GiB",
+        "series": [
+          {
+            "name": "Model weights",
+            "values": [
+              15.8,
+              15.8,
+              15.8,
+              15.8,
+              15.8,
+              15.8,
+              15.8,
+              15.8
+            ]
+          },
+          {
+            "name": "KV cache",
+            "values": [
+              3.2,
+              3.6,
+              4.1,
+              5.3,
+              6.2,
+              5.8,
+              4.9,
+              4.4
+            ]
+          }
+        ],
+        "xLabels": [
+          "00:00",
+          "03:00",
+          "06:00",
+          "09:00",
+          "12:00",
+          "15:00",
+          "18:00",
+          "21:00"
+        ],
+        "capacity": 24
+      },
+      {
+        "id": "durations",
+        "title": "Task duration distribution",
+        "kind": "histogram",
+        "unit": "tasks",
+        "series": [
+          {
+            "range": "0–1s",
+            "count": 94
+          },
+          {
+            "range": "1–2s",
+            "count": 128
+          },
+          {
+            "range": "2–4s",
+            "count": 73
+          },
+          {
+            "range": "4–8s",
+            "count": 31
+          },
+          {
+            "range": "8–16s",
+            "count": 9
+          },
+          {
+            "range": ">16s",
+            "count": 3
+          }
+        ]
+      },
+      {
+        "id": "network",
+        "title": "Requests by route",
+        "kind": "grouped-bar",
+        "unit": "req/min",
+        "series": [
+          {
+            "name": "Success",
+            "values": [
+              74,
+              82,
+              91,
+              122,
+              140
+            ]
+          },
+          {
+            "name": "Failure",
+            "values": [
+              1,
+              0,
+              3,
+              8,
+              2
+            ]
+          }
+        ],
+        "xLabels": [
+          "/api/models",
+          "/api/usage",
+          "/api/jobs",
+          "/api/history",
+          "/api/config"
+        ]
+      },
+      {
+        "id": "worker-util",
+        "title": "Worker utilization",
+        "kind": "heatmap",
+        "unit": "%",
+        "series": [
+          {
+            "row": "worker-01",
+            "values": [
+              42,
+              55,
+              66,
+              78,
+              88,
+              76,
+              73,
+              63
+            ]
+          },
+          {
+            "row": "worker-02",
+            "values": [
+              29,
+              31,
+              45,
+              61,
+              85,
+              83,
+              65,
+              40
+            ]
+          },
+          {
+            "row": "worker-03",
+            "values": [
+              56,
+              59,
+              62,
+              68,
+              72,
+              79,
+              82,
+              75
+            ]
+          },
+          {
+            "row": "worker-04",
+            "values": [
+              0,
+              0,
+              22,
+              41,
+              64,
+              55,
+              33,
+              12
+            ]
+          },
+          {
+            "row": "worker-05",
+            "values": [
+              47,
+              53,
+              60,
+              64,
+              71,
+              76,
+              73,
+              68
+            ]
+          },
+          {
+            "row": "worker-06",
+            "values": [
+              33,
+              39,
+              40,
+              48,
+              54,
+              63,
+              60,
+              58
+            ]
+          }
+        ],
+        "xLabels": [
+          "00:00",
+          "03:00",
+          "06:00",
+          "09:00",
+          "12:00",
+          "15:00",
+          "18:00",
+          "21:00"
+        ]
+      },
+      {
+        "id": "endpoints",
+        "title": "Top endpoints",
+        "kind": "horizontal-bar",
+        "unit": "requests",
+        "series": [
+          {
+            "label": "Read usage",
+            "value": 2845
+          },
+          {
+            "label": "Model events",
+            "value": 2055
+          },
+          {
+            "label": "Run tasks",
+            "value": 1230
+          },
+          {
+            "label": "Get history",
+            "value": 862
+          },
+          {
+            "label": "Admin operations",
+            "value": 194
+          }
+        ]
+      },
+      {
+        "id": "model-cost",
+        "title": "Cost by model",
+        "kind": "donut",
+        "unit": "USD",
+        "series": [
+          {
+            "label": "Model Small",
+            "value": 19.42
+          },
+          {
+            "label": "Model Medium",
+            "value": 31.8
+          },
+          {
+            "label": "Model Large",
+            "value": 44.16
+          },
+          {
+            "label": "Model Vision",
+            "value": 8.55
+          }
+        ]
+      },
+      {
+        "id": "incident-log",
+        "title": "Recent incidents",
+        "kind": "table",
+        "unit": "events",
+        "series": [
+          {
+            "at": "2026-11-11T12:05:00Z",
+            "type": "warning",
+            "name": "Queue depth above target",
+            "service": "Worker Pool",
+            "duration": "12 min"
+          },
+          {
+            "at": "2026-11-11T10:42:00Z",
+            "type": "error",
+            "name": "Inference request timeout",
+            "service": "Model Large",
+            "duration": "4 min"
+          },
+          {
+            "at": "2026-11-11T09:13:00Z",
+            "type": "success",
+            "name": "Scaling event completed",
+            "service": "Worker Pool",
+            "duration": "2 min"
+          },
+          {
+            "at": "2026-11-11T07:20:00Z",
+            "type": "info",
+            "name": "Maintenance window scheduled",
+            "service": "GPU Cluster",
+            "duration": "—"
+          }
+        ]
+      }
+    ],
+    "emptyPanel": {
+      "title": "No data for selected period",
+      "message": "Try a longer time range or a different service."
+    },
+    "stalePanel": {
+      "title": "Telemetry delayed",
+      "ageMinutes": 17,
+      "status": "warning"
+    },
+    "errorPanel": {
+      "title": "Provider unavailable",
+      "message": "Failed to refresh one data source; other panels remain available."
+    }
+  },
+  "workspace": {
+    "pageTitle": "Analyse · P1",
+    "project": "Sample Field Manual",
+    "description": "Whole-project analysis",
+    "totalUnits": 58,
+    "completeUnits": 58,
+    "entities": 175,
+    "metrics": [
+      {
+        "label": "Input",
+        "value": 748378
+      },
+      {
+        "label": "Cache",
+        "value": 490240
+      },
+      {
+        "label": "Reason",
+        "value": 9307
+      },
+      {
+        "label": "Output",
+        "value": 66563
+      },
+      {
+        "label": "Cost",
+        "value": 1.2309,
+        "unit": "USD"
+      }
+    ],
+    "units": [
+      {
+        "id": "ch0001_a001",
+        "title": "PROLOGUE",
+        "status": "complete",
+        "progress": 100,
+        "selected": true
+      },
+      {
+        "id": "ch0002_a001",
+        "title": "SIX YEARS LATER",
+        "status": "complete",
+        "progress": 100,
+        "selected": false
+      },
+      {
+        "id": "ch0003_a001",
+        "title": "ONE",
+        "status": "complete",
+        "progress": 100,
+        "selected": false
+      },
+      {
+        "id": "ch0004_a001",
+        "title": "TWO",
+        "status": "complete",
+        "progress": 100,
+        "selected": false
+      },
+      {
+        "id": "ch0005_a001",
+        "title": "THREE",
+        "status": "review",
+        "progress": 86,
+        "selected": false
+      },
+      {
+        "id": "ch0006_a001",
+        "title": "FOUR",
+        "status": "complete",
+        "progress": 100,
+        "selected": false
+      },
+      {
+        "id": "ch0007_a001",
+        "title": "FIVE",
+        "status": "complete",
+        "progress": 100,
+        "selected": false
+      },
+      {
+        "id": "ch0008_a001",
+        "title": "SIX",
+        "status": "complete",
+        "progress": 100,
+        "selected": false
+      },
+      {
+        "id": "ch0009_a001",
+        "title": "SEVEN",
+        "status": "complete",
+        "progress": 100,
+        "selected": false
+      },
+      {
+        "id": "ch0010_a001",
+        "title": "EIGHT",
+        "status": "complete",
+        "progress": 100,
+        "selected": false
+      },
+      {
+        "id": "ch0011_a001",
+        "title": "NINE",
+        "status": "complete",
+        "progress": 100,
+        "selected": false
+      },
+      {
+        "id": "ch0012_a001",
+        "title": "TEN",
+        "status": "complete",
+        "progress": 100,
+        "selected": false
+      },
+      {
+        "id": "ch0013_a001",
+        "title": "ELEVEN",
+        "status": "warning",
+        "progress": 100,
+        "selected": false
+      },
+      {
+        "id": "ch0014_a001",
+        "title": "TWELVE",
+        "status": "complete",
+        "progress": 100,
+        "selected": false
+      },
+      {
+        "id": "ch0015_a001",
+        "title": "THIRTEEN",
+        "status": "complete",
+        "progress": 100,
+        "selected": false
+      },
+      {
+        "id": "ch0016_a001",
+        "title": "FOURTEEN",
+        "status": "complete",
+        "progress": 100,
+        "selected": false
+      },
+      {
+        "id": "ch0017_a001",
+        "title": "FIFTEEN",
+        "status": "complete",
+        "progress": 100,
+        "selected": false
+      },
+      {
+        "id": "ch0018_a001",
+        "title": "SIXTEEN",
+        "status": "complete",
+        "progress": 100,
+        "selected": false
+      }
+    ],
+    "preview": {
+      "unitId": "ch0001_a001",
+      "title": "PROLOGUE",
+      "tabs": [
+        "Preview",
+        "Terms",
+        "Observations"
+      ],
+      "blocks": [
+        {
+          "id": "B0000218",
+          "english": "PROLOGUE",
+          "annotations": []
+        },
+        {
+          "id": "B0000219",
+          "english": "Several years later, the distant survey station began transmitting again.",
+          "annotations": []
+        },
+        {
+          "id": "B0000220",
+          "english": "The research team prepared another expedition to a region beyond their mapped routes.",
+          "annotations": [
+            {
+              "term": "Frontier",
+              "type": "place",
+              "confidence": "high",
+              "description": "Use the same technical name across all sections.",
+              "translationNote": "Obszar poza granicami znanych tras."
+            },
+            {
+              "term": "Survey station",
+              "type": "facility",
+              "confidence": "high",
+              "description": "Do not translate the facility name inconsistently.",
+              "translationNote": "Placówka prowadząca pomiary terenowe."
+            }
+          ]
+        },
+        {
+          "id": "B0000221",
+          "english": "The discovery changed the team's priorities for the entire season.",
+          "annotations": [
+            {
+              "term": "Director",
+              "type": "role",
+              "confidence": "medium",
+              "description": "Distinguish a role title from a personal name.",
+              "translationNote": "Funkcja, a nie imię osoby."
+            }
+          ]
+        },
+        {
+          "id": "B0000222",
+          "english": "The next report arrived at dawn.",
+          "annotations": []
+        }
+      ]
+    },
+    "navigation": {
+      "hasNext": true,
+      "pageSize": 5
+    },
+    "states": {
+      "selectedUnit": "ch0001_a001",
+      "searchNoResults": "nonexistent-unit-xxxxx",
+      "missingAnnotationsBlock": "B0000219",
+      "longTerm": "Hyperdimensional-Interoperability-Verification-Protocol"
+    }
+  },
+  "dataManagement": {
+    "pageTitle": "Accounts and Permissions",
+    "description": "A dense administrative table with common edge cases.",
+    "totalRecords": 32,
+    "pageSize": 10,
+    "sortableFields": [
+      "name",
+      "team",
+      "status",
+      "balance",
+      "updated"
+    ],
+    "filters": {
+      "status": [
+        "all",
+        "active",
+        "pending",
+        "paused",
+        "overdue",
+        "disabled"
+      ],
+      "team": [
+        "all",
+        "Research",
+        "Platform",
+        "Operations",
+        "Editorial",
+        "Sales",
+        "Support"
+      ]
+    },
+    "bulkActions": [
+      "Export selected",
+      "Assign team",
+      "Deactivate selected"
+    ],
+    "columns": [
+      {
+        "key": "name",
+        "label": "Account",
+        "kind": "text"
+      },
+      {
+        "key": "team",
+        "label": "Team",
+        "kind": "text"
+      },
+      {
+        "key": "plan",
+        "label": "Plan",
+        "kind": "text"
+      },
+      {
+        "key": "status",
+        "label": "Status",
+        "kind": "badge"
+      },
+      {
+        "key": "balance",
+        "label": "Balance",
+        "kind": "currency"
+      },
+      {
+        "key": "updated",
+        "label": "Last updated",
+        "kind": "date"
+      }
+    ],
+    "records": [
+      {
+        "id": "ACC-1001",
+        "name": "Marta Kowalska",
+        "email": "marta.kowalska@example.test",
+        "team": "Research",
+        "plan": "Starter",
+        "status": "active",
+        "balance": 0,
+        "updated": "2026-11-14T08:30:00Z",
+        "note": null
+      },
+      {
+        "id": "ACC-1002",
+        "name": "Oliver Reed",
+        "email": "oliver.reed@example.test",
+        "team": "Platform",
+        "plan": "Growth",
+        "status": "active",
+        "balance": 49,
+        "updated": "2026-11-13T09:30:00Z",
+        "note": null
+      },
+      {
+        "id": "ACC-1003",
+        "name": "Agnieszka Nowak",
+        "email": "agnieszka.nowak@example.test",
+        "team": "Operations",
+        "plan": "Enterprise",
+        "status": "pending",
+        "balance": -12.6,
+        "updated": "2026-11-12T10:30:00Z",
+        "note": null
+      },
+      {
+        "id": "ACC-1004",
+        "name": "Sofia Lind",
+        "email": "sofia.lind@example.test",
+        "team": "Editorial",
+        "plan": "Starter",
+        "status": "active",
+        "balance": 425,
+        "updated": "2026-11-11T11:30:00Z",
+        "note": null
+      },
+      {
+        "id": "ACC-1005",
+        "name": "Jakub Wiśniewski",
+        "email": "jakub.wisniewski@example.test",
+        "team": "Sales",
+        "plan": "Growth",
+        "status": "paused",
+        "balance": 1180,
+        "updated": "2026-11-10T12:30:00Z",
+        "note": null
+      },
+      {
+        "id": "ACC-1006",
+        "name": "Emma Brooks",
+        "email": "emma.brooks@example.test",
+        "team": "Support",
+        "plan": "Enterprise",
+        "status": "active",
+        "balance": 0,
+        "updated": "2026-11-09T13:30:00Z",
+        "note": null
+      },
+      {
+        "id": "ACC-1007",
+        "name": "Léa Bernard",
+        "email": "lea.bernard@example.test",
+        "team": "Research",
+        "plan": "Starter",
+        "status": "overdue",
+        "balance": 75.4,
+        "updated": "2026-11-08T14:30:00Z",
+        "note": null
+      },
+      {
+        "id": "ACC-1008",
+        "name": "Noah Weber",
+        "email": "noah.weber@example.test",
+        "team": "Platform",
+        "plan": "Growth",
+        "status": "active",
+        "balance": 0,
+        "updated": "2026-11-07T15:30:00Z",
+        "note": null
+      },
+      {
+        "id": "ACC-1009",
+        "name": "Łukasz Zieliński",
+        "email": "lukasz.zielinski@example.test",
+        "team": "Operations",
+        "plan": "Enterprise",
+        "status": "active",
+        "balance": 49,
+        "updated": "2026-11-06T16:30:00Z",
+        "note": "Extremely long internal label: North-East Operations / Transcontinental Accounts / Retention Review"
+      },
+      {
+        "id": "ACC-1010",
+        "name": "Amelia Torres",
+        "email": "amelia.torres@example.test",
+        "team": "Editorial",
+        "plan": "Starter",
+        "status": "pending",
+        "balance": -12.6,
+        "updated": "2026-11-05T17:30:00Z",
+        "note": null
+      },
+      {
+        "id": "ACC-1011",
+        "name": "Jan Brzeziński",
+        "email": "jan.brzezinski@example.test",
+        "team": "Sales",
+        "plan": "Growth",
+        "status": "active",
+        "balance": 425,
+        "updated": "2026-11-04T18:30:00Z",
+        "note": null
+      },
+      {
+        "id": "ACC-1012",
+        "name": "Harper Chen",
+        "email": "harper.chen@example.test",
+        "team": "Support",
+        "plan": "Enterprise",
+        "status": "disabled",
+        "balance": 1180,
+        "updated": "2026-11-03T19:30:00Z",
+        "note": null
+      },
+      {
+        "id": "ACC-1013",
+        "name": "Małgorzata Wójcik",
+        "email": "malgorzata.wojcik@example.test",
+        "team": "Research",
+        "plan": "Starter",
+        "status": "active",
+        "balance": 0,
+        "updated": "2026-11-02T20:30:00Z",
+        "note": "Zażółć gęślą jaźń — diacritic test"
+      },
+      {
+        "id": "ACC-1014",
+        "name": "Lucas Moreau",
+        "email": "lucas.moreau@example.test",
+        "team": "Platform",
+        "plan": "Growth",
+        "status": "active",
+        "balance": 75.4,
+        "updated": "2026-11-01T21:30:00Z",
+        "note": null
+      },
+      {
+        "id": "ACC-1015",
+        "name": "Zoë Mitchell",
+        "email": "zoe.mitchell@example.test",
+        "team": "Operations",
+        "plan": "Enterprise",
+        "status": "active",
+        "balance": 0,
+        "updated": "2026-11-14T22:30:00Z",
+        "note": null
+      },
+      {
+        "id": "ACC-1016",
+        "name": "Filip Dąbrowski",
+        "email": "filip.dabrowski@example.test",
+        "team": "Editorial",
+        "plan": "Starter",
+        "status": "overdue",
+        "balance": 49,
+        "updated": "2026-11-13T23:30:00Z",
+        "note": null
+      },
+      {
+        "id": "ACC-1017",
+        "name": "Tomasz Kaczmarek",
+        "email": "tomasz.kaczmarek@example.test",
+        "team": "Sales",
+        "plan": "Growth",
+        "status": "active",
+        "balance": -12.6,
+        "updated": "2026-11-12T00:30:00Z",
+        "note": null
+      },
+      {
+        "id": "ACC-1018",
+        "name": "Freya Nilsson",
+        "email": "freya.nilsson@example.test",
+        "team": "Support",
+        "plan": "Enterprise",
+        "status": "pending",
+        "balance": 425,
+        "updated": "2026-11-11T01:30:00Z",
+        "note": null
+      },
+      {
+        "id": "ACC-1019",
+        "name": "Ewa Król",
+        "email": "ewa.krol@example.test",
+        "team": "Research",
+        "plan": "Starter",
+        "status": "active",
+        "balance": 1180,
+        "updated": "2026-11-10T02:30:00Z",
+        "note": null
+      },
+      {
+        "id": "ACC-1020",
+        "name": "Nora Wagner",
+        "email": "nora.wagner@example.test",
+        "team": "Platform",
+        "plan": "Growth",
+        "status": "paused",
+        "balance": 0,
+        "updated": "2026-11-09T03:30:00Z",
+        "note": null
+      },
+      {
+        "id": "ACC-1021",
+        "name": "Przemysław Szymański",
+        "email": "przemyslaw.szymanski@example.test",
+        "team": "Operations",
+        "plan": "Enterprise",
+        "status": "active",
+        "balance": 75.4,
+        "updated": "2026-11-08T04:30:00Z",
+        "note": null
+      },
+      {
+        "id": "ACC-1022",
+        "name": "Mateo Ruiz",
+        "email": "mateo.ruiz@example.test",
+        "team": "Editorial",
+        "plan": "Starter",
+        "status": "active",
+        "balance": 0,
+        "updated": "2026-11-07T05:30:00Z",
+        "note": null
+      },
+      {
+        "id": "ACC-1023",
+        "name": "Aleksandra Żuk",
+        "email": "aleksandra.zuk@example.test",
+        "team": "Sales",
+        "plan": "Growth",
+        "status": "disabled",
+        "balance": 49,
+        "updated": "2026-11-06T06:30:00Z",
+        "note": null
+      },
+      {
+        "id": "ACC-1024",
+        "name": "Iris Tan",
+        "email": "iris.tan@example.test",
+        "team": "Support",
+        "plan": "Enterprise",
+        "status": "active",
+        "balance": -12.6,
+        "updated": "2026-11-05T07:30:00Z",
+        "note": null
+      },
+      {
+        "id": "ACC-1025",
+        "name": "Aneta Wróbel",
+        "email": "aneta.wrobel@example.test",
+        "team": "Research",
+        "plan": "Starter",
+        "status": "active",
+        "balance": 425,
+        "updated": "2026-11-04T08:30:00Z",
+        "note": null
+      },
+      {
+        "id": "ACC-1026",
+        "name": "Ethan Novak",
+        "email": "ethan.novak@example.test",
+        "team": "Platform",
+        "plan": "Growth",
+        "status": "pending",
+        "balance": 1180,
+        "updated": "2026-11-03T09:30:00Z",
+        "note": null
+      },
+      {
+        "id": "ACC-1027",
+        "name": "Paweł Pająk",
+        "email": "pawel.pajak@example.test",
+        "team": "Operations",
+        "plan": "Enterprise",
+        "status": "active",
+        "balance": 0,
+        "updated": "2026-11-02T10:30:00Z",
+        "note": null
+      },
+      {
+        "id": "ACC-1028",
+        "name": "Mila Novak",
+        "email": "mila.novak@example.test",
+        "team": "Editorial",
+        "plan": "Starter",
+        "status": "overdue",
+        "balance": 75.4,
+        "updated": "2026-11-01T11:30:00Z",
+        "note": null
+      },
+      {
+        "id": "ACC-1029",
+        "name": "Żaneta Bąk",
+        "email": "zaneta.bak@example.test",
+        "team": "Sales",
+        "plan": "Growth",
+        "status": "active",
+        "balance": 0,
+        "updated": "2026-11-14T12:30:00Z",
+        "note": null
+      },
+      {
+        "id": "ACC-1030",
+        "name": "Henry Walsh",
+        "email": "henry.walsh@example.test",
+        "team": "Support",
+        "plan": "Enterprise",
+        "status": "active",
+        "balance": 49,
+        "updated": "2026-11-13T13:30:00Z",
+        "note": null
+      },
+      {
+        "id": "ACC-1031",
+        "name": "Oliwia Wysocka",
+        "email": "oliwia.wysocka@example.test",
+        "team": "Research",
+        "plan": "Starter",
+        "status": "paused",
+        "balance": -12.6,
+        "updated": "2026-11-12T14:30:00Z",
+        "note": null
+      },
+      {
+        "id": "ACC-1032",
+        "name": "Eva Laurent",
+        "email": "eva.laurent@example.test",
+        "team": "Platform",
+        "plan": "Growth",
+        "status": "active",
+        "balance": 425,
+        "updated": "2026-11-11T15:30:00Z",
+        "note": null
+      }
+    ],
+    "emptyQuery": "definitely-no-such-account-zzzzz",
+    "validationSamples": {
+      "invalidEmail": "alex@",
+      "invalidNumber": "-12",
+      "validEmail": "editor@example.test"
+    },
+    "selectionSample": {
+      "selectedIds": [
+        "ACC-1001",
+        "ACC-1003",
+        "ACC-1004"
+      ],
+      "indeterminate": true
+    }
+  },
+  "commerce": {
+    "pageTitle": "The Workshop Store",
+    "description": "An image-led, text-aware catalog, intentionally not a dashboard.",
+    "currency": "USD",
+    "categories": [
+      "All",
+      "Stationery",
+      "Office",
+      "Lighting",
+      "Electronics",
+      "Home",
+      "Accessories"
+    ],
+    "sortOptions": [
+      "Featured",
+      "Price: low to high",
+      "Price: high to low",
+      "Name"
+    ],
+    "products": [
+      {
+        "id": "PROD-001",
+        "title": "Atlas Field Notebook",
+        "category": "Stationery",
+        "price": 24.5,
+        "currency": "USD",
+        "stockStatus": "in-stock",
+        "stockCount": 28,
+        "description": "Compact notebook with durable paper and sewn binding.",
+        "imageKey": "product-001",
+        "rating": 3.7,
+        "badge": "Featured"
+      },
+      {
+        "id": "PROD-002",
+        "title": "Modular Desk Lamp",
+        "category": "Lighting",
+        "price": 128,
+        "currency": "USD",
+        "stockStatus": "in-stock",
+        "stockCount": 7,
+        "description": "Angle-adjustable lamp with a warm-white light source.",
+        "imageKey": "product-002",
+        "rating": 3.9,
+        "badge": null
+      },
+      {
+        "id": "PROD-003",
+        "title": "Graphite Mechanical Keyboard",
+        "category": "Electronics",
+        "price": 169,
+        "currency": "USD",
+        "stockStatus": "limited",
+        "stockCount": 4,
+        "description": "A compact mechanical keyboard with quiet tactile switches.",
+        "imageKey": "product-003",
+        "rating": 4.1,
+        "badge": null
+      },
+      {
+        "id": "PROD-004",
+        "title": "Oak Document Stand",
+        "category": "Office",
+        "price": 56.9,
+        "currency": "USD",
+        "stockStatus": "in-stock",
+        "stockCount": 23,
+        "description": "A low-profile solid wood document stand.",
+        "imageKey": "product-004",
+        "rating": 4.3,
+        "badge": null
+      },
+      {
+        "id": "PROD-005",
+        "title": "Canvas Utility Tote",
+        "category": "Accessories",
+        "price": 34,
+        "currency": "USD",
+        "stockStatus": "in-stock",
+        "stockCount": 42,
+        "description": "Heavyweight canvas bag with an internal organizer.",
+        "imageKey": "product-005",
+        "rating": 4.5,
+        "badge": "Featured"
+      },
+      {
+        "id": "PROD-006",
+        "title": "Minimalist Wall Clock",
+        "category": "Home",
+        "price": 89,
+        "currency": "USD",
+        "stockStatus": "out-of-stock",
+        "stockCount": 0,
+        "description": "An understated analog clock with a matte case.",
+        "imageKey": "product-006",
+        "rating": null,
+        "badge": "Sold out"
+      },
+      {
+        "id": "PROD-007",
+        "title": "Porcelain Coffee Mug",
+        "category": "Home",
+        "price": 19.95,
+        "currency": "USD",
+        "stockStatus": "in-stock",
+        "stockCount": 68,
+        "description": "Stackable 300 ml mug in a muted stone glaze.",
+        "imageKey": "product-007",
+        "rating": 3.7,
+        "badge": null
+      },
+      {
+        "id": "PROD-008",
+        "title": "Portable SSD Case",
+        "category": "Electronics",
+        "price": 29.9,
+        "currency": "USD",
+        "stockStatus": "in-stock",
+        "stockCount": 13,
+        "description": "Shock-resistant case for compact storage devices.",
+        "imageKey": "product-008",
+        "rating": 3.9,
+        "badge": null
+      },
+      {
+        "id": "PROD-009",
+        "title": "Archival Index Cards",
+        "category": "Stationery",
+        "price": 12,
+        "currency": "USD",
+        "stockStatus": "in-stock",
+        "stockCount": 94,
+        "description": "Uncoated cards for cataloging notes and physical archives.",
+        "imageKey": "product-009",
+        "rating": 4.1,
+        "badge": "Featured"
+      },
+      {
+        "id": "PROD-010",
+        "title": "Adjustable Monitor Riser",
+        "category": "Office",
+        "price": 115,
+        "currency": "USD",
+        "stockStatus": "limited",
+        "stockCount": 2,
+        "description": "Powder-coated steel riser with adjustable width.",
+        "imageKey": "product-010",
+        "rating": 4.3,
+        "badge": null
+      },
+      {
+        "id": "PROD-011",
+        "title": "Felt Desk Mat",
+        "category": "Office",
+        "price": 42,
+        "currency": "USD",
+        "stockStatus": "in-stock",
+        "stockCount": 19,
+        "description": "Low-pile felt desk surface that protects worktops.",
+        "imageKey": "product-011",
+        "rating": 4.5,
+        "badge": null
+      },
+      {
+        "id": "PROD-012",
+        "title": "Technical Pen Set, Extra-Fine Nibs — Limited Workshop Edition",
+        "category": "Stationery",
+        "price": 79,
+        "currency": "USD",
+        "stockStatus": "preorder",
+        "stockCount": 0,
+        "description": "Five precise pens in a reusable case, for diagrams and annotation.",
+        "imageKey": "product-012",
+        "rating": 4.7,
+        "badge": "Preorder"
+      }
+    ],
+    "imagePolicy": "Generate local original illustrative SVGs for each imageKey; never depend on external runtime URLs.",
+    "cart": {
+      "items": [
+        {
+          "productId": "PROD-001",
+          "quantity": 2
+        },
+        {
+          "productId": "PROD-007",
+          "quantity": 1
+        }
+      ],
+      "discountCode": "NOTVALID"
+    },
+    "edgeCases": {
+      "missingImageKey": "product-missing",
+      "noResultsQuery": "supercalifragilistic-gear",
+      "longDescriptionProduct": "PROD-012"
+    }
+  },
+  "website": {
+    "siteName": "The Field Notes",
+    "nav": [
+      {
+        "label": "Overview",
+        "target": "overview"
+      },
+      {
+        "label": "Principles",
+        "target": "principles"
+      },
+      {
+        "label": "Guides",
+        "target": "guides"
+      },
+      {
+        "label": "About",
+        "target": "about"
+      }
+    ],
+    "hero": {
+      "eyebrow": "Editorial / Technical",
+      "title": "Clear structure for complex work.",
+      "subtitle": "An example content website showing the same design language with fewer controls and more room for reading.",
+      "primaryAction": "Read the guide",
+      "secondaryAction": "Explore examples"
+    },
+    "articles": [
+      {
+        "id": "principles",
+        "title": "Design for density, not visual noise",
+        "author": "Editorial Team",
+        "date": "2026-11-12",
+        "readingMinutes": 6,
+        "paragraphs": [
+          "Useful software often has more information than a marketing page. The visual system should help readers distinguish navigation, active work, context, and supporting metadata without placing every sentence inside a thick border.",
+          "The page remains legible by varying the strength of separators, limiting accent colors, and keeping a consistent typographic rhythm. Interactive controls retain clear focus and selection states, even when their default treatment is understated.",
+          "A shared design system should translate across applications without forcing identical page compositions. Content hierarchy is a contract; the amount of whitespace can respond to the task."
+        ]
+      },
+      {
+        "id": "guides",
+        "title": "A practical guide to design tokens",
+        "author": "Documentation Team",
+        "date": "2026-11-10",
+        "readingMinutes": 9,
+        "paragraphs": [
+          "Tokens describe purpose rather than appearance. A canvas, a panel and a nested record must stay distinct across all available themes. Colors are only one of several dimensions of hierarchy.",
+          "Component states should be visible in the gallery alongside the full-page examples. This helps reveal broken disabled, hover and focus treatments that are harder to notice in a polished screenshot."
+        ]
+      }
+    ],
+    "quote": {
+      "text": "An interface can be dense without feeling heavy.",
+      "attribution": "The Mechanics design principle"
+    },
+    "faq": [
+      {
+        "question": "Is this a UI framework?",
+        "answer": "No. The Mechanics is a portable visual standard and demonstration environment."
+      },
+      {
+        "question": "Do themes affect component sizes?",
+        "answer": "No. Themes change color and surface treatment, not geometry or behavior."
+      },
+      {
+        "question": "Can an application use only the CSS?",
+        "answer": "The output should document a CSS-only integration path where feasible."
+      }
+    ],
+    "callout": {
+      "kind": "info",
+      "heading": "Accessibility first",
+      "body": "Text and controls must remain legible in every theme, including keyboard focus and validation states."
+    },
+    "footer": "Demonstration content only."
+  },
+  "componentStates": {
+    "statusValues": [
+      "neutral",
+      "info",
+      "success",
+      "warning",
+      "danger",
+      "pending",
+      "offline"
+    ],
+    "requiredStates": [
+      "default",
+      "hover",
+      "focus-visible",
+      "active",
+      "selected",
+      "disabled",
+      "loading",
+      "invalid",
+      "readonly",
+      "empty",
+      "error"
+    ],
+    "densityModes": [
+      "compact",
+      "comfortable"
+    ],
+    "stressText": [
+      "OK",
+      "An unusually long action label that must wrap or truncate safely",
+      "Zażółć gęślą jaźń",
+      "Price: -€1,234.56",
+      "99.999%",
+      "2026-11-14T12:00:00Z",
+      "null / unknown / n.a."
+    ],
+    "formExamples": {
+      "email": "editor@example.test",
+      "invalidEmail": "alex@",
+      "number": 42,
+      "invalidNumber": -12,
+      "slider": 37,
+      "select": "Growth",
+      "textarea": "A multiline note that should retain readable line length."
+    },
+    "confirmation": {
+      "title": "Deactivate selected accounts?",
+      "body": "Selected accounts will lose access until they are reactivated.",
+      "confirm": "Deactivate",
+      "cancel": "Cancel"
+    }
+  }
+}
