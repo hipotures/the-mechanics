@@ -119,6 +119,22 @@ Because state is plain attributes (`aria-busy`, `aria-invalid`, `aria-selected`)
 
 daisyUI components (`btn`, `toggle`, `range`, `alert`, `tabs`, …) then use The Mechanics colors, radii and border width in all three themes (see “daisyUI bridge” in the Component Gallery; the playground loads daisyUI with `prefix: "d-"` to avoid name clashes). Declaring `tm` before `components, utilities` lets Tailwind utilities still adjust layout.
 
-## 8. Versioning
+## 8. Charts (Apache ECharts, optional)
+
+`src/the-mechanics/adapters/echarts.js` is a dependency-free ES module (it does not import ECharts):
+
+```js
+import * as echarts from "echarts";
+import { readChartTokens, createEChartsTheme, referenceLine } from "the-mechanics/src/the-mechanics/adapters/echarts.js";
+
+const tokens = readChartTokens(document.documentElement);   // resolves --tm-* for the active theme
+echarts.registerTheme("tm", createEChartsTheme(tokens));
+const chart = echarts.init(el, "tm", { renderer: "svg" });
+chart.setOption({ /* … */ series: [{ type: "line", data, markLine: referenceLine(tokens, 750, "750 ms") }] });
+```
+
+After switching `data-tm-theme`, re-read tokens, register the theme again and re-create the charts (see `mountChart` in `src/playground/charts.js` for a complete example with keyboard tooltips and HTML legends).
+
+## 9. Versioning
 
 The package is not published. Treat `--tm-*` tokens and `.tm-*` class names as the stable surface from v0.1.0; breaking renames should bump the minor version until 1.0.

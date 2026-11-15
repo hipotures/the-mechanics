@@ -39,6 +39,7 @@ corepack pnpm shots [label]    # 6 pages × 3 themes × desktop/mobile → tmp/s
 | Vite | 8.3.8 | MIT |
 | Tailwind CSS + @tailwindcss/vite | 4.3.5 | MIT |
 | daisyUI | 5.8.1 | MIT |
+| Apache ECharts (charts, SVG renderer) | 6.1.0 | Apache-2.0 |
 | Playwright (dev, verification only) | 1.65.1 (Chromium headless shell 159) | Apache-2.0 |
 | @fontsource/ibm-plex-sans, ibm-plex-mono | 5.3.0 (IBM Plex fonts) | SIL OFL 1.1 |
 
@@ -66,8 +67,9 @@ src/the-mechanics/        PORTABLE design system (no Tailwind/daisyUI needed)
   base.css                opt-in base styles scoped to .tm-root
   components.css          public .tm-* component classes
   adapters/daisyui.css    optional daisyUI 5 variable bridge
+  adapters/echarts.js     optional Apache ECharts theme built from --tm-* tokens
   index.css               layered entry point
-src/playground/           playground only: shell, router, pages, SVG chart renderer, page layouts (pg-*)
+src/playground/           playground only: shell, router, pages, ECharts chart mapping, page layouts (pg-*)
 fixtures/demo-data.json   deterministic synthetic data (single source of demo content)
 public/products/          original generated product illustrations (scripts/gen-product-images.mjs)
 examples/plain-html/      CSS-only consumer example
@@ -89,6 +91,7 @@ references/               visual concept reference (not production code)
 
 - Project code and docs: CC0-1.0 (see `LICENSE`).
 - All CSS, JavaScript, SVG illustrations and sample copy were written for this repository. No third-party HTML, scripts, stylesheets or design-skill packages were copied.
+- Charts: Apache ECharts 6.1.0 (Apache-2.0), styled only through `src/the-mechanics/adapters/echarts.js`, which turns `--tm-*` tokens into an ECharts theme.
 - Fonts: IBM Plex Sans / Mono via Fontsource, SIL Open Font License 1.1; license files are copied into `dist/the-mechanics/fonts/`.
 - Visual references: the local concept `references/sharp-retro-tech-target.html` and the issue brief. The public TypeUI (Cypherpunk, Nostalgia) and Inkline Town pages are aesthetic references only and were not accessed or copied during this implementation. The daisyUI `retro`, `coffee`, `caramellatte`, `wireframe` and `cyberpunk` theme files in the installed package were inspected as starting references; the three themes here use original values.
 - Fixture data is synthetic; no real customer data, credentials or book excerpts.

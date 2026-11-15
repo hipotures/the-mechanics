@@ -99,7 +99,7 @@ try {
     await page.keyboard.press("ArrowRight");
     await page.keyboard.press("ArrowRight");
     await page.keyboard.press("ArrowRight");
-    assert(await page.locator('[data-chart="ttft"] .tm-chart-tooltip').isVisible(), "tooltip hidden");
+    await page.waitForFunction(() => { const t = document.querySelector('[data-chart="ttft"] .pg-echarts-tip'); return t && getComputedStyle(t).display !== "none" && getComputedStyle(t).opacity !== "0" && t.textContent.includes("p95"); }, null, { timeout: 3000 });
     await page.locator('[data-panel="ttft"]').screenshot({ path: join(shots, "chart-keyboard-tooltip.png") });
   });
   await check("analytics: service filter + time range empty state + refresh", async () => {

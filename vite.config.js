@@ -9,5 +9,7 @@ export default defineConfig({
   build: {
     outDir: "dist/playground",
     emptyOutDir: true,
+    // ECharts (tree-shaken, ~550 kB min / ~180 kB gzip) dominates the bundle; expected for the playground.
+    chunkSizeWarningLimit: 1000,
   },
 });
