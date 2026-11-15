@@ -1,4 +1,4 @@
-import { esc, icon, fmtMoney, fmtNum, badge, toast, rangeFill } from "../lib.js";
+import { esc, icon, fmtMoney, fmtNum, badge, toast, rangeFill, stepperHTML, wireSteppers } from "../lib.js";
 
 const BASE = import.meta.env.BASE_URL;
 const img = (key) => `${BASE}products/${key}.svg`;
@@ -194,7 +194,7 @@ export default {
           }
           <div class="pg-buy">
             <div class="tm-field"><label class="tm-field__label" for="qty">Quantity</label>
-              <div class="tm-btn-group"><button class="tm-btn tm-btn--icon" data-step="-1" aria-label="Decrease quantity">${icon("minus")}</button><input class="tm-input tm-input--mono pg-qty" id="qty" type="number" min="1" max="${p.stockCount || 99}" value="1" ${p.stockStatus === "out-of-stock" ? "disabled" : ""}><button class="tm-btn tm-btn--icon" data-step="1" aria-label="Increase quantity">${icon("plus")}</button></div></div>
+              ${stepperHTML({ id: "qty", value: 1, min: 1, max: p.stockCount || 99, label: "quantity", size: "lg", disabled: p.stockStatus === "out-of-stock" })}</div>
             ${p.stockStatus === "out-of-stock" ? `<button class="tm-btn tm-btn--lg" disabled>Sold out</button>` : `<button class="tm-btn tm-btn--primary tm-btn--lg" data-add-qty="${p.id}">${icon("cart")}${p.stockStatus === "preorder" ? "Preorder" : "Add to cart"}</button>`}
           </div>
           <table class="tm-table pg-spec-table"><caption class="tm-sr-only">Specifications</caption><tbody>
@@ -202,6 +202,7 @@ export default {
             <tr><th scope="row">Units available</th><td class="tm-num">${p.stockCount}</td></tr><tr><th scope="row">Currency</th><td class="tm-num">${esc(p.currency)}</td></tr></tbody></table>
         </div></div>`;
       bindMedia(d);
+      wireSteppers(d);
       d.showModal();
     }
 
@@ -271,12 +272,6 @@ export default {
       if (addq) {
         addToCart(addq.dataset.addQty, Math.max(1, +$("#qty").value || 1));
         $("#detail").close();
-        return;
-      }
-      const step = t.closest("[data-step]");
-      if (step) {
-        const q = $("#qty");
-        q.value = Math.min(+q.max, Math.max(1, (+q.value || 1) + +step.dataset.step));
         return;
       }
       const cq = t.closest("[data-cq]");

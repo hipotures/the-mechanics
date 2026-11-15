@@ -15,8 +15,9 @@ Source of truth for values: `src/the-mechanics/tokens.css` (geometry, type, spac
 3. **Color means something.** Accent = primary action / selection. Status hues = state. Chart hues = series identity. Decoration uses neutrals.
 4. **Never color alone.** Every status badge has a marker shape; series have dash patterns or marker styles; selection adds a 3–4 px bar; invalid fields add an inset bar and an error message.
 5. **Themes change paint, never geometry.** Verified by the smoke test: page dimensions are identical in all three themes on all six pages.
-6. **One hover language.** Every clickable control signals hover by a fill tint (`--tm-hover`), never by changing its border; selection never changes font weight (widths stay constant). Only form fields darken their border on hover. Containers that are not clickable (panels, product cards, regions) do not react to hover.
-7. **Native first.** `<dialog>`, `<details>`, `popover`, real inputs and buttons. This keeps the CSS portable to any framework or server-rendered stack.
+6. **No side accent bars.** Elements never get a thick colored bar on their left edge (no `border-left` accents, no inset-shadow bars). State is shown by fill, a thin straight frame and typography: errors = 1px border in the error color + message; selected rows/items = selection fill + 1px selection-colored frame (tables: fill + checked checkbox); active navigation = fill + frame + full-strength text; alerts, toasts, code blocks = uniform 1px border. Allowed exceptions: the blockquote rule and the table-of-contents position indicator; horizontal indicators (tab/segment underlines) are fine.
+7. **One hover language.** Every clickable control signals hover by a fill tint (`--tm-hover`), never by changing its border; selection never changes font weight (widths stay constant). Only form fields darken their border on hover. Containers that are not clickable (panels, product cards, regions) do not react to hover.
+8. **Native first.** `<dialog>`, `<details>`, `popover`, real inputs and buttons. This keeps the CSS portable to any framework or server-rendered stack.
 
 ## 2. Three-level visual hierarchy
 
@@ -91,7 +92,7 @@ Reading width 68ch; content max 1600 px; narrow 1120 px; sidebar 232 px (56 px c
 |---|---|
 | Button | Variants primary / secondary / outline / ghost / danger / danger-outline; sizes sm / md / lg; icon-only must have `aria-label`. Loading = `aria-busy="true"` (spinner + label kept). Disabled = muted surface, gray border and text, `not-allowed` cursor. Pressed = `aria-pressed="true"`. |
 | Segmented control | Radio inputs inside `.tm-segmented__option` (or `aria-pressed` buttons). Selected = selection tint + 3 px underline + full-strength text color. Selection never changes font weight, so widths never shift. |
-| Fields | Label above, hint below, error replaces nothing (both can show). Invalid = `aria-invalid="true"` → red border + 3 px inset bar + `.tm-field__error` with a “!” glyph. Read-only = dashed outline, transparent fill. Prefix/suffix via `.tm-input-group` + `.tm-affix`. |
+| Fields | Label above, hint below, error replaces nothing (both can show). Invalid = `aria-invalid="true"` → red border + `.tm-field__error` with a “!” glyph. Native number spinners are always hidden; use `.tm-stepper` ([−] [unit value] [+], square buttons with full-height dividers, matching control height, buttons disabled at min/max). Read-only = dashed outline, transparent fill. Prefix/suffix via `.tm-input-group` + `.tm-affix`. |
 | Selection | Square checkbox (2 px radius), round radio, rectangular switch (not pill). Indeterminate shows a bar. Descriptions via `.tm-choice__desc`. |
 | Badge | Mono 11 px, 1 px tinted border, soft fill, **marker shape per tone** (✓ success, ▲ warning, ✕ danger, ● info, ○ pending, dashed □ offline, — disabled). Count badge is inverse. |
 | Alert vs toast | Alerts are persistent, in-flow, 4 px left bar. Toasts are transient (5 s default, pause on hover, progress line); errors are persistent until dismissed. |

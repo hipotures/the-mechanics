@@ -251,7 +251,7 @@ tr:hover .pg-inline-edit,
 .pg-thumbs figure { margin: 0; display: grid; gap: 2px; }
 .pg-detail-title { font-weight: var(--tm-weight-bold); font-family: var(--tm-font-display); font-size: var(--tm-text-xl); line-height: var(--tm-leading-snug); overflow-wrap: anywhere; }
 .pg-buy { display: flex; flex-wrap: wrap; align-items: end; gap: var(--tm-space-3); }
-.pg-qty { width: 4rem; text-align: center; border-radius: 0; margin-left: -1px; margin-right: -1px; min-height: var(--tm-control-md); }
+.pg-buy .tm-stepper { width: 10rem; }
 .pg-spec-table th { width: 40%; font-family: var(--tm-font-mono); font-size: var(--tm-text-2xs); color: var(--tm-text-3); text-transform: uppercase; letter-spacing: var(--tm-tracking-label); font-weight: 600; }
 .pg-cart-line { align-items: flex-start; gap: var(--tm-space-3); padding: var(--tm-space-2) 0; }
 .pg-cart-thumb { width: 3.5rem; flex: none; }

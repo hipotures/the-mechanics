@@ -1,4 +1,4 @@
-import { esc, icon, fmtMoney, fmtDate, badge, toast, wait, wireMenus, confirmDialog } from "../lib.js";
+import { esc, icon, fmtMoney, fmtDate, badge, toast, wait, wireMenus, confirmDialog, stepperHTML, wireSteppers } from "../lib.js";
 
 const PLANS = ["Starter", "Growth", "Enterprise"];
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -272,7 +272,7 @@ export default {
         <div class="pg-2col">
           <div class="tm-field"><label class="tm-field__label" for="e-team">Team</label><select class="tm-select" id="e-team" name="team">${dm.filters.team.filter((t) => t !== "all").map((t) => `<option ${t === draft.team ? "selected" : ""}>${esc(t)}</option>`).join("")}</select></div>
           <div class="tm-field"><label class="tm-field__label" for="e-limit">Credit limit</label>
-            <div class="tm-input-group"><span class="tm-affix tm-affix--boxed">USD</span><input class="tm-input tm-input--mono" id="e-limit" name="limit" type="number" step="1" value="${esc(draft.limit ?? 500)}" aria-describedby="e-limit-err"></div>
+            ${stepperHTML({ id: "e-limit", name: "limit", value: draft.limit ?? 500, step: 50, unit: "USD", label: "credit limit", describedby: "e-limit-err" })}
             <span class="tm-field__error" id="e-limit-err" hidden></span></div>
         </div>
         <fieldset class="tm-field pg-plain-fieldset"><legend class="tm-field__label">Plan</legend>
@@ -286,6 +286,8 @@ export default {
       count();
       $("#e-reset").addEventListener("click", () => renderEditor(rec));
       ["e-name", "e-email", "e-limit"].forEach((id) => $(`#${id}`).addEventListener("blur", validate));
+      $("#e-limit").addEventListener("change", validate);
+      wireSteppers($("#editor"));
       validate();
     }
 

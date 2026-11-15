@@ -1,4 +1,4 @@
-import { esc, icon, badge, toast, wireMenus, confirmDialog, rangeFill, fmtMoney } from "../lib.js";
+import { esc, icon, badge, toast, wireMenus, confirmDialog, rangeFill, fmtMoney, stepperHTML, wireSteppers } from "../lib.js";
 import { mountChart, mountComposite } from "../charts.js";
 import { media, bindMedia } from "./catalog.js";
 
@@ -86,14 +86,16 @@ export default {
           <div class="tm-field"><label class="tm-field__label" for="f5">Invalid <span class="tm-req">*</span></label><input class="tm-input" id="f5" aria-invalid="true" aria-describedby="f5e" value="${esc(fe.invalidEmail)}"><span class="tm-field__error" id="f5e">Enter a complete email address.</span></div>
           <div class="tm-field"><label class="tm-field__label" for="f6">Read-only</label><input class="tm-input" id="f6" readonly value="ACC-1001"></div>
           <div class="tm-field"><label class="tm-field__label" for="f7">Disabled</label><input class="tm-input" id="f7" disabled value="Not editable"></div>
-          <div class="tm-field"><label class="tm-field__label" for="f8">Number · invalid</label><input class="tm-input" type="number" id="f8" aria-invalid="true" value="${fe.invalidNumber}" aria-describedby="f8e"><span class="tm-field__error" id="f8e">Must be 0 or greater.</span></div>
+          <div class="tm-field"><label class="tm-field__label" for="f8">Number · invalid</label>${stepperHTML({ id: "f8", value: fe.invalidNumber, invalid: true, describedby: "f8e", label: "number" })}<span class="tm-field__error" id="f8e">Must be 0 or greater.</span></div>
         </div>`, "pg-spec--wide")}
         ${spec("Select · search · textarea", `<div class="pg-stack-sm">
           <div class="tm-field"><label class="tm-field__label" for="f9">Plan</label><select class="tm-select" id="f9">${["Starter", "Growth", "Enterprise"].map((p) => `<option ${p === fe.select ? "selected" : ""}>${p}</option>`).join("")}</select></div>
           <div class="tm-field"><label class="tm-field__label" for="f10">Search</label><div class="tm-input-group"><span class="tm-affix">${icon("search", "tm-icon--sm")}</span><input class="tm-input" type="search" id="f10" placeholder="Search…"><span class="tm-affix"><kbd class="tm-kbd">/</kbd></span></div></div>
           <div class="tm-field"><label class="tm-field__label" for="f11">Note</label><textarea class="tm-textarea" id="f11" rows="3">${esc(fe.textarea)}</textarea></div></div>`)}
         ${spec("Number · date/time · affixes", `<div class="pg-stack-sm">
-          <div class="tm-field"><label class="tm-field__label" for="f12">Quantity</label><input class="tm-input" type="number" id="f12" value="${fe.number}"></div>
+          <div class="tm-field"><label class="tm-field__label" for="f12">Quantity · number stepper</label>${stepperHTML({ id: "f12", value: fe.number, min: 0, max: 99, label: "quantity" })}</div>
+          <div class="pg-2col"><div class="tm-field"><label class="tm-field__label" for="f12b">At minimum</label>${stepperHTML({ id: "f12b", value: 0, min: 0, max: 10, label: "seats" })}</div><div class="tm-field"><label class="tm-field__label" for="f12c">Disabled</label>${stepperHTML({ id: "f12c", value: 3, disabled: true, label: "seats" })}</div></div>
+          <div class="tm-field"><label class="tm-field__label" for="f12d">With unit · small</label>${stepperHTML({ id: "f12d", value: 500, step: 50, unit: "USD", size: "sm", label: "amount" })}</div>
           <div class="pg-2col"><div class="tm-field"><label class="tm-field__label" for="f13">Date</label><input class="tm-input" type="date" id="f13" value="2026-11-14"></div><div class="tm-field"><label class="tm-field__label" for="f14">Time (UTC)</label><input class="tm-input" type="time" id="f14" value="12:00"></div></div>
           <div class="tm-field"><label class="tm-field__label" for="f15">Price</label><div class="tm-input-group"><span class="tm-affix tm-affix--boxed">USD</span><input class="tm-input tm-input--mono" id="f15" value="1,234.56"><span class="tm-affix tm-affix--boxed">/ mo</span></div></div></div>`)}
         ${spec("Range · file dropzone · field group", `<div class="pg-stack-sm">
@@ -274,6 +276,7 @@ export default {
       }),
     );
     wireMenus(main);
+    wireSteppers(main);
     bindMedia(main);
     const chart = mountChart($("#g-chart"), sampleChart, { height: 160 });
     const byId = Object.fromEntries(data.analytics.charts.map((c) => [c.id, c]));

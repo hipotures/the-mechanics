@@ -201,11 +201,12 @@
     background: var(--tm-hover);
     color: var(--tm-text);
   }
+  /* Selection grammar (no side accent bars anywhere): selection fill +
+     thin straight frame in the selection color + full-strength text. */
   .tm-nav__item[aria-current="page"] {
     background: var(--tm-select-bg);
-    border-color: var(--tm-line-2);
+    border-color: var(--tm-select-line);
     color: var(--tm-text);
-    box-shadow: inset 3px 0 0 var(--tm-select-line);
   }
   .tm-nav__label {
     overflow: hidden;
@@ -552,7 +553,7 @@
   .tm-row[aria-current="true"],
   .tm-row.is-selected {
     background: var(--tm-select-bg);
-    box-shadow: inset 4px 0 0 var(--tm-select-line);
+    box-shadow: inset 0 0 0 1px var(--tm-select-line);
   }
   .tm-row:focus-visible {
     outline-offset: -2px;
@@ -949,12 +950,11 @@
   .tm-input[aria-invalid="true"],
   .tm-select[aria-invalid="true"],
   .tm-textarea[aria-invalid="true"] {
+    /* Error = thin solid border in the error color + the message below. */
     border-color: var(--tm-danger);
-    box-shadow: inset 3px 0 0 var(--tm-danger);
   }
   .tm-input.is-valid {
-    border-color: var(--tm-success-line);
-    box-shadow: inset 3px 0 0 var(--tm-success);
+    border-color: var(--tm-success);
   }
   .tm-input:disabled,
   .tm-select:disabled,
@@ -1037,6 +1037,118 @@
   .tm-affix--boxed:last-child {
     border-right: 0;
     border-left: var(--tm-bw-control) solid var(--tm-line-3);
+  }
+
+  /* Native number spinners come from the browser's own UI kit: always hidden.
+     Use .tm-stepper for explicit − / + controls. Keyboard ArrowUp/Down still work. */
+  .tm-input[type="number"] {
+    appearance: textfield;
+    -moz-appearance: textfield;
+  }
+  .tm-input[type="number"]::-webkit-inner-spin-button,
+  .tm-input[type="number"]::-webkit-outer-spin-button {
+    appearance: none;
+    margin: 0;
+  }
+
+  /* Number stepper: [−] [unit value] [+] in one framed control.
+     Buttons are square (control height), separated from the value by
+     full-height dividers, and never change size with state. Markup:
+       <div class="tm-stepper">
+         <button type="button" class="tm-stepper__btn" data-tm-step="-1" aria-label="Decrease">−</button>
+         <span class="tm-affix">USD</span>                    (optional unit)
+         <input class="tm-input" type="number" step="1">
+         <button type="button" class="tm-stepper__btn" data-tm-step="1" aria-label="Increase">+</button>
+       </div>
+     Behavior: input.stepUp()/stepDown() + dispatch "input" (see docs). */
+  .tm-stepper {
+    display: flex;
+    align-items: stretch;
+    min-width: 0;
+    height: var(--tm-control-md);
+    border: var(--tm-bw-control) solid var(--tm-line-input);
+    border-radius: var(--tm-radius-control);
+    background: var(--tm-inset);
+  }
+  .tm-stepper--sm { height: var(--tm-control-sm); }
+  .tm-stepper--lg { height: var(--tm-control-lg); }
+  .tm-stepper:hover {
+    border-color: var(--tm-line-1);
+  }
+  .tm-stepper:focus-within {
+    outline: var(--tm-bw-focus) solid var(--tm-focus);
+    border-color: var(--tm-focus);
+  }
+  .tm-stepper:has([aria-invalid="true"]) {
+    border-color: var(--tm-danger);
+  }
+  .tm-stepper > .tm-input {
+    flex: 1 1 auto;
+    width: 4rem;
+    min-width: 0;
+    min-height: 0;
+    height: 100%;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    font-family: var(--tm-font-numeric);
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+  }
+  .tm-stepper > .tm-affix + .tm-input {
+    text-align: left;
+    padding-left: 0;
+  }
+  .tm-stepper > .tm-input:focus-visible {
+    outline: 0;
+  }
+  .tm-stepper > .tm-affix {
+    align-self: stretch;
+  }
+  .tm-stepper__btn {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: var(--tm-control-md);
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: var(--tm-surface-alt);
+    color: var(--tm-text);
+    font-family: var(--tm-font-mono);
+    font-size: var(--tm-text-md);
+    font-weight: var(--tm-weight-bold);
+    line-height: 1;
+    cursor: pointer;
+  }
+  .tm-stepper--sm .tm-stepper__btn { width: var(--tm-control-sm); }
+  .tm-stepper--lg .tm-stepper__btn { width: var(--tm-control-lg); }
+  .tm-stepper__btn:first-child {
+    border-right: var(--tm-bw-control) solid var(--tm-line-input);
+    border-radius: calc(var(--tm-radius-control) - 1px) 0 0 calc(var(--tm-radius-control) - 1px);
+  }
+  .tm-stepper__btn:last-child {
+    border-left: var(--tm-bw-control) solid var(--tm-line-input);
+    border-radius: 0 calc(var(--tm-radius-control) - 1px) calc(var(--tm-radius-control) - 1px) 0;
+  }
+  .tm-stepper__btn:hover {
+    background-image: linear-gradient(var(--tm-hover), var(--tm-hover));
+  }
+  .tm-stepper__btn:active {
+    background-image: linear-gradient(var(--tm-press), var(--tm-press));
+  }
+  .tm-stepper__btn:focus-visible {
+    outline: var(--tm-bw-focus) solid var(--tm-focus);
+    outline-offset: -2px;
+  }
+  .tm-stepper__btn:disabled {
+    color: var(--tm-text-disabled);
+    background-image: none;
+    cursor: not-allowed;
+  }
+  .tm-stepper:has(.tm-input:disabled) {
+    background: var(--tm-surface-alt);
+    border-color: var(--tm-line-disabled);
   }
 
   .tm-fieldset {
@@ -1362,7 +1474,6 @@
     align-items: start;
     padding: var(--tm-space-2) var(--tm-space-3);
     border: 1px solid var(--_l);
-    border-left: 4px solid var(--_c);
     background: var(--_s);
     color: var(--tm-text);
     font-size: var(--tm-text-sm);
@@ -1886,9 +1997,6 @@
   .tm-table tbody tr[aria-selected="true"] > * {
     background: var(--tm-select-bg);
   }
-  .tm-table tbody tr[aria-selected="true"] > :first-child {
-    box-shadow: inset 4px 0 0 var(--tm-select-line);
-  }
   .tm-table tr.is-disabled > * {
     color: var(--tm-text-disabled);
   }
@@ -2019,7 +2127,6 @@
     }
     .tm-table--stack tbody tr[aria-selected="true"] {
       background: var(--tm-select-bg);
-      box-shadow: inset 4px 0 0 var(--tm-select-line);
     }
     .tm-table--stack tbody tr[aria-selected="true"] > *,
     .tm-table--stack tbody tr:hover > * {
@@ -2078,9 +2185,6 @@
     padding: var(--tm-space-3) var(--tm-space-4);
     border-top: var(--tm-bw-3) solid var(--tm-line-3);
     background: var(--tm-surface-alt);
-  }
-  .tm-dialog--danger .tm-dialog__head {
-    box-shadow: inset 4px 0 0 var(--tm-danger);
   }
   .tm-drawer {
     width: var(--tm-drawer-w);
@@ -2581,7 +2685,6 @@
     overflow-x: auto;
     padding: var(--tm-space-3) var(--tm-space-4);
     border: var(--tm-bw-2) solid var(--tm-line-2);
-    border-left-width: 4px;
     background: var(--tm-inset);
     color: var(--tm-text);
     font-family: var(--tm-font-mono);

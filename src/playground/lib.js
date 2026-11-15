@@ -266,3 +266,48 @@ export function balanceGrid(grid, minPx = 304) {
   apply();
   return { apply, destroy: () => ro.disconnect() };
 }
+
+// Number stepper behavior for .tm-stepper (delegated): − / + call
+// stepDown()/stepUp() within min/max, fire "input" + "change", and disable
+// a button at its bound. Native ArrowUp/ArrowDown on the input still work.
+export function wireSteppers(root = document) {
+  const sync = (stepper) => {
+    const input = stepper.querySelector('input[type="number"]');
+    if (!input) return;
+    const v = input.valueAsNumber;
+    const min = input.min === "" ? -Infinity : +input.min;
+    const max = input.max === "" ? Infinity : +input.max;
+    stepper.querySelectorAll("[data-tm-step]").forEach((b) => {
+      const dir = +b.dataset.tmStep;
+      b.disabled = input.disabled || (!Number.isNaN(v) && ((dir < 0 && v <= min) || (dir > 0 && v >= max)));
+    });
+  };
+  root.querySelectorAll(".tm-stepper").forEach(sync);
+  if (root.__tmSteppers) return;
+  root.__tmSteppers = true;
+  root.addEventListener("click", (e) => {
+    const b = e.target.closest("[data-tm-step]");
+    if (!b) return;
+    const stepper = b.closest(".tm-stepper");
+    const input = stepper.querySelector('input[type="number"]');
+    if (Number.isNaN(input.valueAsNumber)) input.value = input.min || 0;
+    else +b.dataset.tmStep > 0 ? input.stepUp() : input.stepDown();
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+    sync(stepper);
+  });
+  root.addEventListener("input", (e) => {
+    const stepper = e.target.closest?.(".tm-stepper");
+    if (stepper) sync(stepper);
+  });
+}
+
+// Markup for .tm-stepper (keeps every usage identical).
+export function stepperHTML({ id, name = "", value = "", min, max, step = 1, unit = "", label = "value", invalid = false, disabled = false, size = "", describedby = "" }) {
+  const a = (k, v) => (v === undefined || v === "" || v === false ? "" : ` ${k}="${esc(v)}"`);
+  return `<div class="tm-stepper${size ? ` tm-stepper--${size}` : ""}">
+    <button type="button" class="tm-stepper__btn" data-tm-step="-1" aria-label="Decrease ${esc(label)}"${disabled ? " disabled" : ""}>${icon("minus", "tm-icon--sm")}</button>
+    ${unit ? `<span class="tm-affix">${esc(unit)}</span>` : ""}<input class="tm-input" type="number" inputmode="decimal"${a("id", id)}${a("name", name)}${a("value", value)}${a("min", min)}${a("max", max)}${a("step", step)}${invalid ? ' aria-invalid="true"' : ""}${a("aria-describedby", describedby)}${disabled ? " disabled" : ""}>
+    <button type="button" class="tm-stepper__btn" data-tm-step="1" aria-label="Increase ${esc(label)}"${disabled ? " disabled" : ""}>${icon("plus", "tm-icon--sm")}</button>
+  </div>`;
+}
