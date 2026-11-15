@@ -122,10 +122,11 @@ export default {
           <h3 class="tm-product__title" id="t-${p.id}"><button data-detail="${p.id}">${esc(p.title)}</button></h3>
           <p class="tm-product__desc">${esc(p.description)}</p>
           ${rating(p.rating)}
+          ${badge(p.stockStatus, STOCK_LABEL(p)).replace('class="tm-badge ', 'class="tm-badge tm-badge--bare ')}
         </div>
         <div class="tm-product__foot">
-          <div class="pg-price-stack"><span class="tm-price"><span class="tm-price__now">${money(p.price)}</span></span>${badge(p.stockStatus, STOCK_LABEL(p))}</div>
-          ${actionBtn(p)}
+          <span class="tm-price"><span class="tm-price__now">${money(p.price)}</span></span>
+          ${actionBtn(p, "")}
         </div>
       </article>`;
     }

@@ -1258,6 +1258,15 @@
     background: currentColor;
   }
   .tm-badge--plain::before { content: none; }
+  /* Bare: status as a plain text line (marker + label), no frame or fill.
+     For places where a boxed badge would compete with nearby controls. */
+  .tm-badge--bare {
+    min-height: 0;
+    padding: 0;
+    border-color: transparent;
+    background: transparent;
+    font-size: var(--tm-text-xs);
+  }
   .tm-badge--success { --_c: var(--tm-success); --_s: var(--tm-success-soft); --_l: var(--tm-success-line); }
   .tm-badge--warning { --_c: var(--tm-warning); --_s: var(--tm-warning-soft); --_l: var(--tm-warning-line); }
   .tm-badge--warning::before { clip-path: polygon(50% 0, 100% 100%, 0 100%); width: 0.5rem; }
@@ -2368,14 +2377,34 @@
     color: var(--tm-text-2);
     font-size: var(--tm-text-xs);
   }
+  /* Footer = one fixed-height strip of two cells: price | action.
+     The action button is flush with the card frame (full cell height, no
+     radius), so price and button share one height and one center line.
+     Stock status belongs in the body as a .tm-badge--bare text line. */
   .tm-product__foot {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--tm-space-2);
-    padding: var(--tm-space-2) var(--tm-space-3);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: stretch;
+    min-height: var(--tm-control-lg);
     border-top: var(--tm-bw-3) solid var(--tm-line-3);
+  }
+  .tm-product__foot > .tm-price {
+    align-self: center;
+    padding: 0 var(--tm-space-3);
+  }
+  .tm-product__foot > .tm-btn {
+    min-height: var(--tm-control-lg);
+    padding: 0 var(--tm-space-4);
+    border-width: 0 0 0 var(--tm-bw-3);
+    border-color: var(--tm-line-3);
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .tm-product__foot > .tm-btn--primary {
+    border-left-color: var(--_bd);
+  }
+  .tm-product__foot > .tm-btn:focus-visible {
+    outline-offset: -3px;
   }
   .tm-price {
     display: inline-flex;

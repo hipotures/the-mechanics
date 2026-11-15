@@ -102,7 +102,7 @@ Reading width 68ch; content max 1600 px; narrow 1120 px; sidebar 232 px (56 px c
 | Empty / error / stale | `.tm-state` (+ `--error`, `--warning`). Always title + explanation + (where possible) one recovery action. |
 | KPI | Mono value, unit in smaller muted type, trend with arrow + sign + text (“improving/worsening” for screen readers); good/bad depends on metric direction, not on sign. |
 | Charts | See §6. |
-| Product card | Image first (4:3), then meta, title (wraps fully — never truncated), description, rating bar with number, footer with price + stock badge + action. Missing image shows a hatched fallback with text. |
+| Product card | Image first (4:3); body is a stack of plain lines — meta, title (wraps fully, never truncated), description, rating, stock status as a bare badge (marker + text, no frame). Footer is one fixed-height strip of two cells: price left, action button flush with the card frame on the right, so the two share one height and center line and footers align across a row. Never mix a boxed badge, a stacked price and a floating button in the footer. Missing image shows a hatched fallback with text. |
 | Prose | 16 px / 1.65, 68ch, display-font headings, square accent bullets, ink blockquote bar, code with 4 px left bar. |
 
 ### Documentation-only state classes

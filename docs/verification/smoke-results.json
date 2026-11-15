@@ -44,6 +44,10 @@
     "ok": true
   },
   {
+    "name": "selection never shifts neighbours (chips, segmented, tabs, theme switcher)",
+    "ok": true
+  },
+  {
     "name": "content: TOC navigation moves focus to section heading",
     "ok": true
   },
