@@ -56,6 +56,11 @@
     "ok": true
   },
   {
+    "name": "chart tooltip: below sticky chrome, closes on scroll (touch phone)",
+    "ok": false,
+    "error": "tooltip z-index NaN not below topbar 20"
+  },
+  {
     "name": "content: TOC navigation moves focus to section heading",
     "ok": true
   },

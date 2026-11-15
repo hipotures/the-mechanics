@@ -257,6 +257,20 @@ export function summarize(c) {
   return `${c.title}: ${kind} chart in ${c.unit}, ${c.series.length} items.`;
 }
 
+// Tooltips must not outlive the interaction: close them when the page scrolls
+// (they would drift away from their chart) and on a tap/click outside the chart
+// (touch has no "mouse leave").
+function autoHideTip(el, hide) {
+  const onScroll = () => hide();
+  const onDown = (e) => { if (!el.contains(e.target)) hide(); };
+  window.addEventListener("scroll", onScroll, { passive: true, capture: true });
+  document.addEventListener("pointerdown", onDown, true);
+  return () => {
+    window.removeEventListener("scroll", onScroll, { capture: true });
+    document.removeEventListener("pointerdown", onDown, true);
+  };
+}
+
 const pointCount = (c) => (c.kind === "heatmap" ? c.series.length * c.xLabels.length : c.series[0]?.values ? c.xLabels.length : c.series.length);
 
 export function mountChart(el, chart, { height = 180 } = {}) {
@@ -353,6 +367,7 @@ export function mountChart(el, chart, { height = 180 } = {}) {
     else if (e.key === "Escape") hide();
   });
   el.addEventListener("blur", hide);
+  const stopAutoHide = autoHideTip(el, hide);
 
   // Resize: re-layout in place; rebuild only when a layout decision flips.
   const ro = new ResizeObserver(() => {
@@ -377,6 +392,7 @@ export function mountChart(el, chart, { height = 180 } = {}) {
     destroy() {
       ro.disconnect();
       mo.disconnect();
+      stopAutoHide();
       inst?.dispose();
       inst = null;
     },
@@ -458,6 +474,7 @@ export function mountComposite(el, { metrics, date, windowRange }, { onReadout }
   }
   const ro = new ResizeObserver(() => inst?.resize());
   ro.observe(el);
+  const stopAutoHide = autoHideTip(el, () => inst?.dispatchAction({ type: "hideTip" }));
   const mo = new MutationObserver(render);
   mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-tm-theme"] });
   render();
@@ -467,6 +484,6 @@ export function mountComposite(el, { metrics, date, windowRange }, { onReadout }
     setPeak(v) { showPeak = v; render(); },
     setWindow(v) { showWindow = v; render(); },
     toggle(name) { hidden.has(name) ? hidden.delete(name) : hidden.add(name); render(); return !hidden.has(name); },
-    destroy() { ro.disconnect(); mo.disconnect(); inst?.dispose(); },
+    destroy() { ro.disconnect(); mo.disconnect(); stopAutoHide(); inst?.dispose(); },
   };
 }

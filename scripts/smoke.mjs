@@ -267,6 +267,30 @@ try {
     await page.setViewportSize({ width: 1440, height: 900 });
   });
 
+  await check("chart tooltip: below sticky chrome, closes on scroll (touch phone)", async () => {
+    const c2 = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
+    const p2 = await c2.newPage();
+    await p2.goto(`${BASE}?theme=coffee#/analytics`, { waitUntil: "networkidle" });
+    await p2.evaluate(() => document.fonts.ready);
+    await p2.evaluate(() => scrollTo(0, 900));
+    await p2.waitForTimeout(400);
+    const box = await p2.locator('[data-chart="requests"]').boundingBox();
+    await p2.touchscreen.tap(box.x + box.width * 0.6, box.y + box.height * 0.4);
+    await p2.waitForTimeout(300);
+    const st = () => p2.evaluate(() => {
+      const t = document.querySelector('[data-chart="requests"] .pg-echarts-tip');
+      const cs = getComputedStyle(t);
+      return { vis: cs.display !== "none" && +cs.opacity > 0 && cs.visibility !== "hidden", z: +cs.zIndex, nav: +getComputedStyle(document.querySelector(".tm-topbar")).zIndex };
+    });
+    const a = await st();
+    assert(a.vis, "tooltip did not open on tap");
+    assert(a.z < a.nav, `tooltip z-index ${a.z} not below topbar ${a.nav}`);
+    await p2.evaluate(() => scrollBy(0, 300));
+    await p2.waitForTimeout(300);
+    assert(!(await st()).vis, "tooltip still visible after scroll");
+    await c2.close();
+  });
+
   /* ---- Content / gallery ---------------------------------------- */
   await check("content: TOC navigation moves focus to section heading", async () => {
     await go("content");

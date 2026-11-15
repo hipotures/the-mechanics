@@ -87,7 +87,8 @@ export function createEChartsTheme(t) {
       borderWidth: 1,
       padding: [6, 8],
       textStyle: { color: t.text, fontFamily: t.fontUi, fontSize: 12 },
-      extraCssText: "border-radius:0;box-shadow:var(--tm-shadow-raised);",
+      // ECharts defaults to z-index 9999999; keep tooltips below sticky app chrome (topbar/nav).
+      extraCssText: "border-radius:0;box-shadow:var(--tm-shadow-raised);z-index:var(--tm-z-sticky);",
       axisPointer: { lineStyle: { color: t.text2, type: [2, 2], width: 1 }, shadowStyle: { color: t.hover } },
     },
   };
