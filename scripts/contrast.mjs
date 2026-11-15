@@ -25,6 +25,10 @@ const T = 4.5, G = 3;
 const pairs = [
   ["text", "surface", T, "body text on panel"],
   ["text", "canvas", T, "body text on canvas"],
+  ["text", "chrome", T, "text in topbar/sidebar"],
+  ["text-2", "chrome", T, "nav items"],
+  ["text-3", "chrome", T, "sidebar meta text"],
+  ["line-1", "chrome", G, "shell boundary"],
   ["text-2", "surface", T, "secondary text on panel"],
   ["text-2", "head-1", T, "region header labels"],
   ["text-3", "surface", T, "muted/meta text on panel"],

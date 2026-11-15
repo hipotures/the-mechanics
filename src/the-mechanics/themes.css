@@ -6,6 +6,7 @@
  * color/surface/shadow roles; they never change geometry (see tokens.css).
  *
  * Surface ladder (Level 1 → 3):
+ *   chrome   application shell (topbar, sidebar)
  *   canvas   page background behind regions
  *   surface  Level 1 region and Level 2 panel body
  *   head-1   Level 1 region header band (strongest tint)
@@ -20,6 +21,7 @@
 
     /* Light / Paper-Stone — stony canvas, cream paper, green-black ink */
     --tm-canvas: #dcd9cf;
+    --tm-chrome: #e6e0cc;       /* app shell (topbar, sidebar): warm sand, distinct from canvas and paper */
     --tm-surface: #f6f3eb;
     --tm-surface-alt: #efebe1;
     --tm-head-1: #e6e2d5;
@@ -102,6 +104,7 @@
 
     /* Dark / Graphite — lifted graphite, never near-black */
     --tm-canvas: #26292c;
+    --tm-chrome: #33373b;
     --tm-surface: #33373b;
     --tm-surface-alt: #383c41;
     --tm-head-1: #3d4247;
@@ -184,6 +187,7 @@
 
     /* Coffee / Espresso-Mocha — warm mid-dark, cream ink, muted copper */
     --tm-canvas: #33261e;
+    --tm-chrome: #433228;
     --tm-surface: #433228;
     --tm-surface-alt: #48372c;
     --tm-head-1: #503c2f;

@@ -121,7 +121,7 @@
     gap: var(--tm-space-3);
     min-width: 0;
     padding: 0 var(--tm-space-4) 0 var(--tm-space-2);
-    background: var(--tm-surface);
+    background: var(--tm-chrome);
     border-bottom: var(--tm-bw-1) solid var(--tm-line-1);
   }
   .tm-brand {
@@ -151,7 +151,7 @@
   .tm-sidebar {
     grid-area: side;
     min-width: 0;
-    background: var(--tm-surface);
+    background: var(--tm-chrome);
     border-right: var(--tm-bw-1) solid var(--tm-line-1);
   }
   .tm-sidebar__inner {

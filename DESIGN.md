@@ -55,7 +55,7 @@ Contrast for 39 essential pairs per theme is computed by `pnpm check:contrast` �
 ## 4. Tokens (public API `--tm-*`)
 
 ### Color roles (per theme)
-`--tm-canvas`, `--tm-surface`, `--tm-surface-alt`, `--tm-head-1`, `--tm-head-2`, `--tm-sunken`, `--tm-inset`, `--tm-inverse` · `--tm-text`, `--tm-text-2`, `--tm-text-3`, `--tm-text-inverse`, `--tm-text-disabled` · `--tm-line-1/2/3`, `--tm-line-input`, `--tm-line-disabled` · `--tm-accent`, `-hover`, `-press`, `-text`, `-soft` · `--tm-link`, `--tm-link-hover` · `--tm-hover`, `--tm-press`, `--tm-select-bg`, `--tm-select-line`, `--tm-focus` · status `--tm-{success|warning|danger|info|pending|neutral|offline}` each with `-soft` and `-line` · charts `--tm-chart-1…8`, `--tm-chart-grid`, `--tm-chart-axis`, `--tm-chart-threshold`, `--tm-chart-target`, `--tm-chart-fill-opacity`, `--tm-heat-lo`, `--tm-heat-hi` · `--tm-shadow-overlay`, `--tm-shadow-raised`, `--tm-backdrop`.
+`--tm-chrome`, `--tm-canvas`, `--tm-surface`, `--tm-surface-alt`, `--tm-head-1`, `--tm-head-2`, `--tm-sunken`, `--tm-inset`, `--tm-inverse` · `--tm-text`, `--tm-text-2`, `--tm-text-3`, `--tm-text-inverse`, `--tm-text-disabled` · `--tm-line-1/2/3`, `--tm-line-input`, `--tm-line-disabled` · `--tm-accent`, `-hover`, `-press`, `-text`, `-soft` · `--tm-link`, `--tm-link-hover` · `--tm-hover`, `--tm-press`, `--tm-select-bg`, `--tm-select-line`, `--tm-focus` · status `--tm-{success|warning|danger|info|pending|neutral|offline}` each with `-soft` and `-line` · charts `--tm-chart-1…8`, `--tm-chart-grid`, `--tm-chart-axis`, `--tm-chart-threshold`, `--tm-chart-target`, `--tm-chart-fill-opacity`, `--tm-heat-lo`, `--tm-heat-hi` · `--tm-shadow-overlay`, `--tm-shadow-raised`, `--tm-backdrop`.
 
 ### Typography
 | Token | Value | Use |
