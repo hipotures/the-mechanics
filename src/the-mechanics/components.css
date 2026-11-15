@@ -529,8 +529,9 @@
     align-items: center;
     gap: var(--tm-space-2);
     min-height: var(--tm-row);
-    /* text sits where it would inside the selection block (same as nav items) */
-    padding: var(--tm-space-1) var(--tm-select-text);
+    /* content sits where it would inside the selection block, on both axes
+       (same insets as nav items): edge → 4px → 2px frame → 8px/5px → content */
+    padding: var(--tm-select-text-y) var(--tm-select-text);
     border-bottom: var(--tm-bw-3) solid var(--tm-line-3);
     color: var(--tm-text);
   }
@@ -563,7 +564,7 @@
   .tm-row.is-selected::before {
     content: "";
     position: absolute;
-    inset: 3px var(--tm-select-inset);
+    inset: var(--tm-select-inset);
     z-index: -1;
     border: var(--tm-bw-control) solid var(--tm-select-line);
     border-radius: var(--tm-radius-control);
