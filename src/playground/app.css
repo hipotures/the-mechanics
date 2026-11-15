@@ -160,8 +160,8 @@ html {
 }
 .pg-unit { gap: var(--tm-space-2); }
 .pg-unit__text { display: grid; flex: 1; min-width: 0; }
-.pg-unit__name { font-weight: var(--tm-weight-semibold); font-size: var(--tm-text-xs); letter-spacing: var(--tm-tracking-wide); overflow-wrap: anywhere; }
-.pg-unit__id { font-family: var(--tm-font-mono); font-size: var(--tm-text-2xs); color: var(--tm-text-3); }
+.pg-unit__name { font-weight: var(--tm-weight-semibold); font-size: var(--tm-text-xs); letter-spacing: var(--tm-tracking-wide); line-height: 1.25; overflow-wrap: anywhere; }
+.pg-unit__id { font-family: var(--tm-font-mono); font-size: var(--tm-text-2xs); line-height: 1.25; color: var(--tm-text-3); }
 .pg-unit__prog { width: 2.5rem; }
 .pg-icon-row { display: flex; gap: 2px; }
 .pg-preview-intro { display: grid; gap: 2px; margin-bottom: var(--tm-space-3); }

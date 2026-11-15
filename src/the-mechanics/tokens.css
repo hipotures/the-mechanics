@@ -78,9 +78,11 @@
     --tm-select-inset: 4px;
     --tm-select-pad: 8px;
     --tm-select-text: calc(var(--tm-select-inset) + var(--tm-bw-control) + var(--tm-select-pad));
-    /* vertical: frame → 5px → text (matches a 32px nav item with one text line) */
-    --tm-select-pad-y: 5px;
-    --tm-select-text-y: calc(var(--tm-select-inset) + var(--tm-bw-control) + var(--tm-select-pad-y));
+    /* vertical: like the side nav — blocks 2px from the row edge (4px between
+       neighbouring blocks, no separator lines), 4px from frame to content */
+    --tm-select-inset-y: 2px;
+    --tm-select-pad-y: 4px;
+    --tm-select-text-y: calc(var(--tm-select-inset-y) + var(--tm-bw-control) + var(--tm-select-pad-y));
 
     /* Control sizing */
     --tm-control-sm: 1.75rem;  /* 28 */

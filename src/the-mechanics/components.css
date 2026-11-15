@@ -548,13 +548,18 @@
     border-top: 0;
     cursor: pointer;
   }
+  /* Selectable rows behave like nav items: no separator lines between them;
+     the hover/selection blocks separate the items. */
+  .tm-row--interactive {
+    border-bottom-color: transparent;
+  }
   /* Hover = the same inset block as selection (fill only, no frame), exactly
      like nav items; a selected row keeps its selection block on hover. */
   .tm-row--interactive:hover::before,
   .tm-row--interactive.is-hover::before {
     content: "";
     position: absolute;
-    inset: var(--tm-select-inset);
+    inset: var(--tm-select-inset-y) var(--tm-select-inset);
     z-index: -1;
     border: var(--tm-bw-control) solid transparent;
     border-radius: var(--tm-radius-control);
@@ -572,7 +577,7 @@
   .tm-row.is-selected::before {
     content: "";
     position: absolute;
-    inset: var(--tm-select-inset);
+    inset: var(--tm-select-inset-y) var(--tm-select-inset);
     z-index: -1;
     border: var(--tm-bw-control) solid var(--tm-select-line);
     border-radius: var(--tm-radius-control);

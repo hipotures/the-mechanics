@@ -55,6 +55,7 @@ Round 3 (owner review):
 38. Owner: in the Content Site hierarchy figure the Level 2 panel frame looked thinner beside its header band (header fill painted over the inner half of the stroke; same for the Level 1 band) → SVG paint order fixed: fills, then dividers, then frames last. Verified at 3× zoom.
 39. Owner: the selected list row was vertically cramped versus the nav item; measured text −1px into the frame (overlapping) and the frame 3px from separators → vertical selection geometry tokens (`--tm-select-pad-y` 5px, frame 4px from the row edges). Measured after: frame 4px from separators, text 5px from the frame (nav 4.9px), list row height 40 → 54px (trade-off accepted for legibility).
 40. Owner: hovering a list row painted a full-bleed gray band, so a hovered selected row showed the green block inside a gray band; nav items use one inset block for both states → list-row hover is now the same inset block (fill only, transparent frame), and a selected row shows only its selection block on hover. Measured: hover block 4px inset; selected+hover = selection colors only.
+41. Owner: 54px rows made the spacing between items far too large; a one-line row does not fit (216px available vs 278px needed at 1440px) → selectable rows follow the side nav: no separator lines, blocks 2px from the row edge (4px between neighbouring blocks), 4px frame-to-text, tighter two-line leading. Measured: row 45px, text 4px from the frame.
 
 ### Interaction / keyboard checks — `pnpm smoke` (all pass, [`smoke-results.json`](smoke-results.json))
 Desktop 1440×900, Chromium:
