@@ -131,27 +131,35 @@ function histogramOption(c, t) {
   };
 }
 
-const DONUT_H = 156;
+const DONUT_H = 156; // ring + legend beside it
+const DONUT_LEGEND_TOP = 160; // stacked layout: legend list starts below the ring (76 + 70 + 14px)
+const DONUT_ROW = 20;
+const donutStackedHeight = (n) => DONUT_LEGEND_TOP + n * DONUT_ROW + 4; // ring on top, aligned list below
+const DONUT_SIDE_MIN = 300; // panel width needed for the legend beside the ring
 function donutOption(c, t, width) {
   const total = c.series.reduce((a, d) => a + d.value, 0);
-  const side = width >= 300; // legend beside the ring when there is room, else below
+  const side = width >= DONUT_SIDE_MIN; // legend beside the ring when there is room, else below
   const totalLabel = c.unit === "USD" ? `$${fmtNum(total, 2)}` : c.unit === "%" ? `${fmtNum(total)}%` : fmtNum(total);
-  const center = side ? [78, DONUT_H / 2] : ["50%", 74];
+  const center = side ? [78, DONUT_H / 2] : ["50%", 76];
   const pct = (name) => fmtNum((c.series.find((d) => d.label === name).value / total) * 100, 1);
   return {
     tooltip: { trigger: "item" },
     legend: {
       selectedMode: false,
       icon: "rect",
-      ...(side ? { orient: "vertical", left: 170, right: 4, top: "middle", itemGap: 8 } : { orient: "horizontal", left: "center", bottom: 0 }),
-      formatter: (name) => (side ? `{n|${name}}{p|${pct(name)}%}` : `${name} ${pct(name)}%`),
-      textStyle: { rich: { n: { width: Math.max(64, width - 170 - 64), color: t.text2 }, p: { align: "right", width: 44, color: t.text, fontWeight: 600 } } },
+      // Stacked: legend starts below the ring's bottom edge (76 + 70 + 14px), never on it.
+      // Same aligned list in both layouts: beside the ring, or below it on narrow panels.
+      orient: "vertical",
+      itemGap: DONUT_ROW - 12,
+      ...(side ? { left: 170, right: 4, top: "middle" } : { left: 12, right: 12, top: DONUT_LEGEND_TOP }),
+      formatter: (name) => `{n|${name}}{p|${pct(name)}%}`,
+      textStyle: { rich: { n: { width: Math.max(64, (side ? width - 170 : width - 24) - 64), color: t.text2 }, p: { align: "right", width: 44, color: t.text, fontWeight: 600 } } },
     },
     title: {
       text: `{a|TOTAL}\n{b|${totalLabel}}`,
-      left: side ? center[0] : "center",
-      top: (side ? DONUT_H / 2 : 74) - 18,
-      textAlign: "center",
+      // Side layout anchors the text at the ring center x; stacked layout centers the title box.
+      ...(side ? { left: center[0], textAlign: "center" } : { left: "center" }),
+      top: (side ? DONUT_H / 2 : 76) - 18,
       textStyle: {
         rich: {
           a: { fontFamily: t.fontMono, fontSize: 10, fontWeight: 500, color: t.text3, lineHeight: 16, align: "center" },
@@ -271,7 +279,7 @@ export function mountChart(el, chart, { height = 180 } = {}) {
   // Long category labels switch grouped bars to a horizontal layout.
   const horizontalGrouped = () => chart.kind === "grouped-bar" && Math.max(...chart.xLabels.map(textW)) + 6 > (width() - 50) / chart.xLabels.length;
   // Layout decisions that need a rebuild (not just resize): orientation, donut legend side, label thinning.
-  const key = () => `${horizontalGrouped()}|${chart.kind === "donut" ? width() >= 300 : ""}|${Math.round(width() / 40)}`;
+  const key = () => `${horizontalGrouped()}|${chart.kind === "donut" ? width() >= DONUT_SIDE_MIN : ""}|${Math.round(width() / 40)}`;
 
   function option() {
     const t = readChartTokens(el);
@@ -299,7 +307,7 @@ export function mountChart(el, chart, { height = 180 } = {}) {
     if (chart.kind === "grouped-bar" && horizontalGrouped()) return chart.xLabels.length * (chart.series.length * 13 + 12) + 30;
     if (chart.kind === "horizontal-bar") return chart.series.length * 26 + 10;
     if (chart.kind === "heatmap") return chart.series.length * 24 + 26;
-    if (chart.kind === "donut") return DONUT_H;
+    if (chart.kind === "donut") return width() >= DONUT_SIDE_MIN ? DONUT_H : donutStackedHeight(chart.series.length);
     return height;
   }
 
