@@ -273,7 +273,7 @@ try {
     await page.click('#toc [data-scroll="guides"]');
     assert(await page.evaluate(() => document.activeElement.id === "guides-h"), "focus");
   });
-  await check("gallery: popover menu arrow keys + Escape; dialog; tooltip on focus", async () => {
+  await check("gallery: popover menu arrow keys + Escape; dialog; tooltip on focus; drag-to-sum", async () => {
     await go("components");
     await page.click('[popovertarget="g-menu"]');
     await page.waitForFunction(() => document.activeElement.getAttribute("role") === "menuitem");
@@ -286,6 +286,16 @@ try {
     assert(await page.locator("#gt1").isVisible(), "tooltip not shown on focus");
     await page.keyboard.press("Escape");
     assert(!(await page.locator("#gt1").isVisible()), "tooltip not dismissed with Escape");
+    // Composite chart: drag across 09:00–15:00 sums the stacked buckets.
+    await page.locator("#cx-chart").scrollIntoViewIfNeeded();
+    const bb = await page.locator("#cx-chart").boundingBox();
+    await page.mouse.move(bb.x + bb.width * 0.42, bb.y + 120);
+    await page.mouse.down();
+    await page.mouse.move(bb.x + bb.width * 0.75, bb.y + 120, { steps: 8 });
+    await page.mouse.up();
+    await page.waitForFunction(() => document.querySelector("#cx-readout").textContent.startsWith("Selected"));
+    const ro = await page.textContent("#cx-readout");
+    assert(ro.includes("09:00–15:00") && ro.includes("796"), `readout: ${ro}`);
     await page.click("#g-dialog");
     await page.waitForSelector("#g-dlg[open]");
     await shot("gallery-dialog");

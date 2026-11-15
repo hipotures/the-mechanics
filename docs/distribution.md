@@ -133,6 +133,8 @@ const chart = echarts.init(el, "tm", { renderer: "svg" });
 chart.setOption({ /* … */ series: [{ type: "line", data, markLine: referenceLine(tokens, 750, "750 ms") }] });
 ```
 
+Composite-chart helpers from the same module: `peakMarker(tokens, { coord, label })` → `series.markPoint`, `rangeArea(tokens, [[from, to, name]], tone)` → `series.markArea`, `rangeBrush(tokens)` → top-level `brush` (activate with `dispatchAction({ type: "takeGlobalCursor", key: "brush", brushOption: { brushType: "lineX" } })` and listen to `brushSelected`), `dayBoundaryLabels(tokens, dateFor)` → category `axisLabel`. CSS: `.tm-panel__head--rich`, `.tm-panel__heading`, `.tm-panel__subtitle`, `.tm-panel__actions`, `.tm-chart-readout`, `.tm-chart-options`.
+
 After switching `data-tm-theme`, re-read tokens, register the theme again and re-create the charts (see `mountChart` in `src/playground/charts.js` for a complete example with keyboard tooltips and HTML legends).
 
 ## 9. Versioning

@@ -119,6 +119,7 @@ Reading width 68ch; content max 1600 px; narrow 1120 px; sidebar 232 px (56 px c
 - Bars with long category labels automatically switch to horizontal layout so labels are never rotated or clipped. Zero values render as a visible 1 px tick.
 - Donuts always carry a value + percentage legend; heatmaps print the value in every cell.
 - Tooltips: hover **or** keyboard (focus chart, ←/→/Home/End, Escape); values are mirrored into a polite live region.
+- **Building blocks for composite time charts** (e.g. “cost over time, stacked by model, 30-minute buckets”): rich panel head `.tm-panel__head--rich` (`.tm-panel__heading` = title + `.tm-panel__subtitle`, `.tm-panel__actions` = legend + metric `.tm-segmented--sm`); ECharts adapter helpers `peakMarker()` (boxed “peak 12:00 285 k tokens” callout), `rangeArea()` (labelled band for quota windows / incidents, tone neutral|warning|danger|success), `rangeBrush()` (drag along x to select a span) and `dayBoundaryLabels()` (midnight shown as the bold date); `.tm-chart-readout` for the live sum of a selection and `.tm-chart-options` for overlay toggles under the chart. Leave ~25 % headroom above the tallest value for the peak callout. A working composition is in the Component Gallery › Data graphics (fixture data only); concrete product charts are assembled from these pieces when needed.
 - States: data, no data (`.tm-state`), stale (warning badge + hatched body + reduced opacity), error (`.tm-state--error` + retry).
 
 ## 7. Permitted variations

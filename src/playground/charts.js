@@ -5,13 +5,13 @@
 // chart definitions to options and adds the shared keyboard/legend contract.
 import * as echarts from "echarts/core";
 import { LineChart, BarChart, PieChart, HeatmapChart, ScatterChart } from "echarts/charts";
-import { GridComponent, TooltipComponent, MarkLineComponent, VisualMapComponent, LegendComponent, TitleComponent } from "echarts/components";
+import { GridComponent, TooltipComponent, MarkLineComponent, VisualMapComponent, LegendComponent, TitleComponent, MarkPointComponent, MarkAreaComponent, BrushComponent } from "echarts/components";
 import { LabelLayout } from "echarts/features";
 import { SVGRenderer } from "echarts/renderers";
-import { readChartTokens, createEChartsTheme, seriesLineType, referenceLine } from "../the-mechanics/adapters/echarts.js";
+import { readChartTokens, createEChartsTheme, seriesLineType, referenceLine, peakMarker, rangeArea, rangeBrush, dayBoundaryLabels } from "../the-mechanics/adapters/echarts.js";
 import { esc, fmtNum } from "./lib.js";
 
-echarts.use([LineChart, BarChart, PieChart, HeatmapChart, ScatterChart, GridComponent, TooltipComponent, MarkLineComponent, VisualMapComponent, LegendComponent, TitleComponent, LabelLayout, SVGRenderer]);
+echarts.use([LineChart, BarChart, PieChart, HeatmapChart, ScatterChart, GridComponent, TooltipComponent, MarkLineComponent, VisualMapComponent, LegendComponent, TitleComponent, MarkPointComponent, MarkAreaComponent, BrushComponent, LabelLayout, SVGRenderer]);
 
 const CHAR_W = 6.4; // approx. advance of 10.5px IBM Plex Mono, used for layout decisions
 const textW = (s) => String(s).length * CHAR_W;
@@ -51,7 +51,7 @@ const valueAxis = (unit, extra = {}) => ({ type: "value", name: unit, nameLocati
 function niceCeil(v) {
   const p = 10 ** Math.floor(Math.log10(v || 1));
   const f = v / p;
-  return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 3 ? 3 : f <= 5 ? 5 : 10) * p;
+  return (f <= 1 ? 1 : f <= 1.5 ? 1.5 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 3 ? 3 : f <= 4 ? 4 : f <= 5 ? 5 : f <= 6 ? 6 : f <= 8 ? 8 : 10) * p;
 }
 const selected = (c, hidden) => ({ show: false, selected: Object.fromEntries(c.series.map((s) => [s.name, !hidden.has(s.name)])) });
 
@@ -392,4 +392,81 @@ export function sparkline(values, { w = 84, h = 22, tone = "tm-series-1" } = {})
   const y = (v) => h - 2 - ((v - min) / (max - min || 1)) * (h - 4);
   const d = values.map((v, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join("");
   return `<svg class="pg-spark ${tone}" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" preserveAspectRatio="none" aria-hidden="true"><path class="tm-chart__area" d="${d}L${w - 1},${h}L1,${h}Z"/><path class="tm-chart__line" style="stroke-width:1.5" d="${d}"/><circle class="tm-chart__point tm-chart__point--solid" cx="${x(values.length - 1)}" cy="${y(values.at(-1))}" r="2"/></svg>`;
+}
+
+/* ---------- Composite example: building blocks together -------------
+ * Stacked time buckets + metric switcher + peak callout + optional range
+ * overlay + drag-to-sum + day boundary on the axis. Used by the gallery to
+ * prove the building blocks compose; real apps assemble their own.
+ */
+export function mountComposite(el, { metrics, date, windowRange }, { onReadout } = {}) {
+  let metric = Object.keys(metrics)[0];
+  let showPeak = true;
+  let showWindow = false;
+  const hidden = new Set();
+  let inst = null;
+  el.tabIndex = 0;
+  el.setAttribute("role", "img");
+  el.setAttribute("aria-roledescription", "chart");
+  const host = document.createElement("div");
+  host.style.height = "230px";
+  el.append(host);
+
+  const c = () => metrics[metric];
+  const totals = () => c().xLabels.map((_, i) => c().series.reduce((a, s) => a + (hidden.has(s.name) ? 0 : s.values[i]), 0));
+
+  function option() {
+    const t = readChartTokens(el);
+    const tot = totals();
+    const peakIdx = tot.indexOf(Math.max(...tot));
+    const lastVisible = c().series.map((s, i) => i).filter((i) => !hidden.has(c().series[i].name)).at(-1) ?? 0;
+    return {
+      animation: !reducedMotion(),
+      grid: baseGrid({ top: 40 }),
+      xAxis: { type: "category", data: c().xLabels, axisLabel: { interval: 0, ...dayBoundaryLabels(t, () => date) } },
+      // ~25% headroom above the tallest stack keeps the peak callout inside the plot.
+      yAxis: valueAxis(c().unit, { min: 0, max: niceCeil(Math.max(...totals()) * 1.25) }),
+      legend: selected(c(), hidden),
+      tooltip: { trigger: "axis", axisPointer: { type: "shadow" }, confine: true, className: "pg-echarts-tip", formatter: formatter({ ...c(), kind: "stacked-bar" }) },
+      brush: rangeBrush(t),
+      series: c().series.map((s, i) => ({
+        type: "bar",
+        name: s.name,
+        data: s.values,
+        stack: "total",
+        barWidth: "62%",
+        ...(i === lastVisible && showPeak ? { markPoint: peakMarker(t, { coord: [peakIdx, tot[peakIdx]], label: `peak ${c().xLabels[peakIdx]}  ${fmtNum(tot[peakIdx])} ${c().unit}` }) } : {}),
+        ...(i === 0 && showWindow ? { markArea: rangeArea(t, [[windowRange[0], windowRange[1], windowRange[2]]], "warning") } : {}),
+      })),
+    };
+  }
+
+  function render() {
+    inst?.dispose();
+    inst = echarts.init(host, themeName(), { renderer: "svg" });
+    inst.setOption(option());
+    // Drag along x to select a span; the selection is summed below the chart.
+    inst.dispatchAction({ type: "takeGlobalCursor", key: "brush", brushOption: { brushType: "lineX", brushMode: "single" } });
+    inst.on("brushSelected", (e) => {
+      const sel = e.batch?.[0]?.selected || [];
+      const idx = [...new Set(sel.flatMap((s) => s.dataIndex))].sort((a, b) => a - b);
+      if (!idx.length) return onReadout?.(null);
+      const sum = idx.reduce((a, i) => a + totals()[i], 0);
+      onReadout?.({ from: c().xLabels[idx[0]], to: c().xLabels[idx.at(-1)], buckets: idx.length, sum, unit: c().unit });
+    });
+    el.setAttribute("aria-label", `${metric}: stacked bars by ${c().series.map((s) => s.name).join(", ")}. Peak ${fmtNum(Math.max(...totals()))} ${c().unit}.`);
+  }
+  const ro = new ResizeObserver(() => inst?.resize());
+  ro.observe(el);
+  const mo = new MutationObserver(render);
+  mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-tm-theme"] });
+  render();
+  return {
+    series: () => c().series.map((s, i) => ({ name: s.name, cls: seriesCls(i) })),
+    setMetric(m) { metric = m; hidden.clear(); onReadout?.(null); render(); },
+    setPeak(v) { showPeak = v; render(); },
+    setWindow(v) { showWindow = v; render(); },
+    toggle(name) { hidden.has(name) ? hidden.delete(name) : hidden.add(name); render(); return !hidden.has(name); },
+    destroy() { ro.disconnect(); mo.disconnect(); inst?.dispose(); },
+  };
 }

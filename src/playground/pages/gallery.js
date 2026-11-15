@@ -1,5 +1,5 @@
 import { esc, icon, badge, toast, wireMenus, confirmDialog, rangeFill, fmtMoney } from "../lib.js";
-import { mountChart } from "../charts.js";
+import { mountChart, mountComposite } from "../charts.js";
 import { media, bindMedia } from "./catalog.js";
 
 const spec = (label, body, cls = "") => `<div class="pg-spec ${cls}"><div class="tm-label pg-spec__label">${label}</div><div class="pg-spec__body">${body}</div></div>`;
@@ -195,6 +195,21 @@ export default {
           <div class="tm-kpi"><div class="tm-kpi__label">No comparison</div><div class="tm-kpi__value">5<span class="tm-kpi__unit">/ 6</span></div><div class="tm-kpi__foot"><span class="tm-trend">— n/a</span></div></div></div>`, "pg-spec--wide")}
         ${spec("Legend with many series · threshold", `<ul class="tm-legend">${legendChart.series.map((s, i) => `<li><span class="tm-legend__item"><span class="tm-legend__swatch tm-series-${i + 1} tm-legend__swatch--line ${i ? `tm-dash-${Math.min(i + 1, 4)}` : ""}"></span>${esc(s.name)}</span></li>`).join("")}<li><button class="tm-legend__item" aria-pressed="false"><span class="tm-legend__swatch tm-series-6"></span>Hidden series</button></li><li><span class="tm-legend__item"><span class="tm-legend__swatch tm-legend__swatch--rule" style="--_series:var(--tm-chart-threshold)"></span>Threshold</span></li></ul>
           <div class="tm-chart pg-mt" id="g-chart"></div>`, "pg-spec--wide")}
+        ${spec("Composite time chart · building blocks", `<div class="tm-panel">
+          <header class="tm-panel__head tm-panel__head--rich">
+            <div class="tm-panel__heading"><h3 class="tm-panel__title">Activity over time</h3><span class="tm-panel__subtitle">3-hour buckets · stacked by series · drag across the chart to sum a span</span></div>
+            <div class="tm-panel__actions"><ul class="tm-legend" id="cx-legend" aria-label="Series"></ul>
+              <fieldset class="tm-segmented tm-segmented--sm" aria-label="Metric"><legend class="tm-sr-only">Metric</legend>
+                <label class="tm-segmented__option"><input type="radio" name="cx-metric" value="Tokens" checked>Tokens</label>
+                <label class="tm-segmented__option"><input type="radio" name="cx-metric" value="Requests">Requests</label></fieldset></div>
+          </header>
+          <div class="tm-panel__body"><div class="tm-chart" id="cx-chart"></div>
+            <div class="tm-chart-readout" id="cx-readout" aria-live="polite"></div>
+            <div class="tm-chart-options">
+              <label class="tm-choice"><input class="tm-check" type="checkbox" id="cx-peak" checked><span class="tm-choice__label">Peak marker</span></label>
+              <label class="tm-choice"><input class="tm-check" type="checkbox" id="cx-window"><span class="tm-choice__label">Busy-hours window (09:00–15:00)</span></label>
+            </div></div></div>
+          <p class="tm-meta pg-mt">Pieces: <code>.tm-panel__head--rich</code> (title + subtitle + actions), legend and metric switcher in the head, ECharts adapter helpers <code>peakMarker</code>, <code>rangeArea</code>, <code>rangeBrush</code>, <code>dayBoundaryLabels</code>, plus <code>.tm-chart-readout</code> and <code>.tm-chart-options</code>. Data: fixture “Token volume” and “Request throughput”.</p>`, "pg-spec--wide")}
         ${spec("Tooltip (static)", `<div class="tm-chart-tooltip pg-static-tip"><div class="tm-chart-tooltip__title">12:00</div><div class="tm-chart-tooltip__row"><span class="tm-legend__swatch tm-series-1"></span><span>p50</span><span>315 ms</span></div><div class="tm-chart-tooltip__row"><span class="tm-legend__swatch tm-series-2"></span><span>p95</span><span>805 ms</span></div></div>`)}
         ${spec("Chart states", `<div class="pg-stack-sm"><div class="tm-panel"><div class="tm-panel__head"><span class="tm-panel__title">No data</span></div><div class="tm-state"><div class="tm-state__title">${esc(data.analytics.emptyPanel.title)}</div><div class="tm-state__body">${esc(data.analytics.emptyPanel.message)}</div></div></div>
           <div class="tm-panel"><div class="tm-panel__head"><span class="tm-panel__title">Stale</span>${badge("warning", `Delayed ${data.analytics.stalePanel.ageMinutes} min`)}</div><div class="tm-panel__body pg-stale"><span class="tm-skeleton" style="animation:none;height:2rem"></span></div></div></div>`)}
@@ -261,6 +276,27 @@ export default {
     wireMenus(main);
     bindMedia(main);
     const chart = mountChart($("#g-chart"), sampleChart, { height: 160 });
-    return () => chart.destroy();
+    const byId = Object.fromEntries(data.analytics.charts.map((c) => [c.id, c]));
+    const readout = $("#cx-readout");
+    const idle = "Drag across the chart to sum a span.";
+    readout.textContent = idle;
+    const cx = mountComposite(
+      $("#cx-chart"),
+      {
+        metrics: { Tokens: byId.tokens, Requests: byId.requests },
+        date: new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "2-digit", timeZone: "UTC" }).format(new Date(data.meta.asOf)).replace("/", "."),
+        windowRange: ["09:00", "15:00", "busy hours"],
+      },
+      { onReadout: (r) => (readout.textContent = r ? `Selected ${r.from}–${r.to} · ${r.buckets} buckets · sum ${r.sum.toLocaleString("en-US")} ${r.unit}` : idle) },
+    );
+    const drawLegend = () => {
+      $("#cx-legend").innerHTML = cx.series().map((s) => `<li><button class="tm-legend__item" type="button" aria-pressed="true" data-cx="${esc(s.name)}"><span class="tm-legend__swatch ${s.cls}"></span>${esc(s.name)}</button></li>`).join("");
+    };
+    drawLegend();
+    $("#cx-legend").addEventListener("click", (e) => { const b = e.target.closest("[data-cx]"); if (b) b.setAttribute("aria-pressed", String(cx.toggle(b.dataset.cx))); });
+    main.querySelectorAll('input[name="cx-metric"]').forEach((r) => r.addEventListener("change", () => { cx.setMetric(r.value); drawLegend(); }));
+    $("#cx-peak").addEventListener("change", (e) => cx.setPeak(e.target.checked));
+    $("#cx-window").addEventListener("change", (e) => cx.setWindow(e.target.checked));
+    return () => { chart.destroy(); cx.destroy(); };
   },
 };

@@ -113,3 +113,73 @@ export function referenceLine(t, value, label, kind = "threshold") {
     data: [{ yAxis: value }],
   };
 }
+
+/* ---------- Composite-chart building blocks ---------------------------
+ * Pieces for richer time charts (e.g. "cost over time, stacked by model"):
+ * peak callout, highlighted ranges (quota windows, incidents), drag-to-sum
+ * range selection and day boundaries on a time-of-day axis. Each returns a
+ * plain ECharts option fragment styled from the resolved tokens.
+ */
+
+/** Callout above the highest point/stack: "peak 12:00  $11.86". Use as series.markPoint. */
+export function peakMarker(t, { coord, label }) {
+  return {
+    silent: true,
+    symbol: "rect",
+    symbolSize: 1,
+    itemStyle: { color: "transparent" },
+    label: {
+      show: true,
+      position: "top",
+      distance: 8,
+      formatter: label,
+      color: t.text,
+      fontFamily: t.fontMono,
+      fontSize: 11,
+      fontWeight: 600,
+      backgroundColor: t.surface,
+      borderColor: t.line1,
+      borderWidth: 1,
+      padding: [3, 6],
+    },
+    data: [{ coord }],
+  };
+}
+
+/** Highlighted x-range band with a label (quota window, maintenance, incident). Use as series.markArea. */
+export function rangeArea(t, ranges, kind = "neutral") {
+  const tone = { neutral: t.text3, warning: t.warning, danger: t.danger, success: t.success }[kind] || t.text3;
+  return {
+    silent: true,
+    itemStyle: { color: tone, opacity: 0.1, borderColor: tone, borderWidth: 1, borderType: [3, 3] },
+    // Label at the band's top-left corner, away from a centered peak callout.
+    label: { position: "insideTopLeft", color: tone, fontFamily: t.fontMono, fontSize: 10.5, fontWeight: 600, distance: 4 },
+    data: ranges.map(([from, to, name]) => [{ xAxis: from, name }, { xAxis: to }]),
+  };
+}
+
+/** Drag-to-select along x (sum a span). Pair with dispatchAction({type:"takeGlobalCursor", key:"brush", brushOption:{brushType:"lineX"}}). */
+export function rangeBrush(t) {
+  return {
+    xAxisIndex: 0,
+    brushType: "lineX",
+    brushMode: "single",
+    transformable: false,
+    throttleType: "debounce",
+    throttleDelay: 60,
+    brushStyle: { color: t.hover, borderColor: t.line1, borderWidth: 1 },
+    outOfBrush: { colorAlpha: 0.35 },
+  };
+}
+
+/**
+ * Axis label formatter for a time-of-day category axis: midnight ("00:00")
+ * is replaced by the date in bold so day boundaries are visible.
+ * dateFor(index) returns the date string for a midnight label.
+ */
+export function dayBoundaryLabels(t, dateFor) {
+  return {
+    formatter: (value, index) => (value === "00:00" ? `{day|${dateFor(index)}}` : value),
+    rich: { day: { color: t.text, fontFamily: t.fontMono, fontSize: 10.5, fontWeight: 700 } },
+  };
+}
