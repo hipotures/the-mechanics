@@ -54,6 +54,7 @@ Round 3 (owner review):
 37. Owner: nav item and selected list row should share spacing → shared tokens `--tm-select-inset`/`--tm-select-pad`/`--tm-select-text`. Measured: edge→frame 4/4px, frame→content 10px, text at 14px for nav items, list rows, column header and nav section labels; positions/sizes identical before and after changing the selection.
 38. Owner: in the Content Site hierarchy figure the Level 2 panel frame looked thinner beside its header band (header fill painted over the inner half of the stroke; same for the Level 1 band) → SVG paint order fixed: fills, then dividers, then frames last. Verified at 3× zoom.
 39. Owner: the selected list row was vertically cramped versus the nav item; measured text −1px into the frame (overlapping) and the frame 3px from separators → vertical selection geometry tokens (`--tm-select-pad-y` 5px, frame 4px from the row edges). Measured after: frame 4px from separators, text 5px from the frame (nav 4.9px), list row height 40 → 54px (trade-off accepted for legibility).
+40. Owner: hovering a list row painted a full-bleed gray band, so a hovered selected row showed the green block inside a gray band; nav items use one inset block for both states → list-row hover is now the same inset block (fill only, transparent frame), and a selected row shows only its selection block on hover. Measured: hover block 4px inset; selected+hover = selection colors only.
 
 ### Interaction / keyboard checks — `pnpm smoke` (all pass, [`smoke-results.json`](smoke-results.json))
 Desktop 1440×900, Chromium:
