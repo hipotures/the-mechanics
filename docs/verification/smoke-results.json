@@ -48,6 +48,14 @@
     "ok": true
   },
   {
+    "name": "no horizontal overflow at 28 widths (360–1920px) on all pages",
+    "ok": true
+  },
+  {
+    "name": "analytics panel grids have no empty cells at 900/1440/2000px",
+    "ok": true
+  },
+  {
     "name": "content: TOC navigation moves focus to section heading",
     "ok": true
   },

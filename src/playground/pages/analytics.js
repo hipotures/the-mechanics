@@ -1,4 +1,4 @@
-import { esc, icon, fmtInt, fmtNum, fmtMoney, fmtSigned, fmtDateTime, badge, toast, wait } from "../lib.js";
+import { esc, icon, fmtInt, fmtNum, fmtMoney, fmtSigned, fmtDateTime, badge, toast, wait, balanceGrid } from "../lib.js";
 import { mountChart, legendItems, sparkline, isTimeSeries } from "../charts.js";
 import { KPI_META, SERVICE_TAGS, ANALYTICS_REGIONS, STALE_CHART } from "../derived.js";
 
@@ -197,6 +197,7 @@ export default {
       });
       main.querySelector("#filter-note").textContent =
         service === "All services" ? "" : `Showing ${shown} of ${total} panels tagged “${service}”.`;
+      grids.forEach((g) => g.apply());
     }
 
     main.querySelectorAll('input[name="range"]').forEach((i) =>
@@ -234,8 +235,12 @@ export default {
       toast({ tone: "danger", title: a.errorPanel.title, body: "Retry failed. The fixture simulates a persistent outage.", timeout: 0 });
     });
 
+    const grids = [...main.querySelectorAll(".tm-panel-grid")].map((g) => balanceGrid(g));
     applyFilter();
     mountAll();
-    return () => mounts.forEach((m) => m.destroy());
+    return () => {
+      mounts.forEach((m) => m.destroy());
+      grids.forEach((g) => g.destroy());
+    };
   },
 };

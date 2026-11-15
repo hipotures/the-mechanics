@@ -38,8 +38,11 @@ Round 3 (owner review):
 21. Light theme shell (topbar, sidebar) used the same cream as the panels and read as colorless white → new `--tm-chrome` token; Light uses warm sand `#e6e0cc` (Dark/Coffee unchanged). Contrast check covers text on chrome (45 pairs per theme).
 22. Light panels (`#f6f3eb`) and controls (`#fbfaf5`, even brighter) glared against the gray canvas → two variants were served side by side for owner review; chosen variant tones panels to `#efebe1` and controls to `#f2efe6` (heads/sunken shifted proportionally, canvas unchanged). All contrast pairs pass.
 23. Analytics panel dividers rendered unevenly (1px grid gap on fractional column widths antialiased into 1–2px lines) and used the faint Level 3 color, reading as chart gridlines → dividers are real right/bottom panel borders in the Level 2 color, pixel-snapped; measured exactly 1px `#767b6f` at 1440 and 2000px widths; outer-edge borders clipped under the region frame.
+24. Wide screens (owner uses 4K): 6 panels laid out 5 + 1 orphan, 3 charts left an empty column → panel grids keep the 1600px content cap but balance rows (column count from width, then reduced so rows fill evenly; a remaining gap is covered by stretching the last panel). Smoke check asserts no incomplete rows at 900/1440/2000px.
+25. Paired horizontal bars (Requests by route) were 1px apart, so small value labels touched the bar above → 12px pitch, 9px bars, 3px gap.
+26. Width sweep found pre-existing overflow at 1200px (8-column KPI strip with fixed sparklines) and 640–660px (topbar fixture badge) → KPI strip goes 8-wide only from 1360px and sparklines shrink; badge hidden below 800px. Smoke check now sweeps 28 widths (360–1920px) on all 6 pages.
 
-### Interaction / keyboard checks — `pnpm smoke` (15/15 pass, [`smoke-results.json`](smoke-results.json))
+### Interaction / keyboard checks — `pnpm smoke` (all pass, [`smoke-results.json`](smoke-results.json))
 Desktop 1440×900, Chromium:
 - Theme switch: instant, reflected in `?theme=`, persisted across reload; **page width/height identical across Light/Dark/Coffee on all 6 pages**.
 - Keyboard: first Tab reaches the skip link; focus ring is `solid 2px`.

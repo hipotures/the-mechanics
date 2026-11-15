@@ -232,6 +232,41 @@ try {
     }
   });
 
+  await check("no horizontal overflow at 28 widths (360–1920px) on all pages", async () => {
+    const bad = [];
+    for (const r of ["analytics", "workspace", "data", "catalog", "content", "components"]) {
+      await go(r);
+      for (const w of [360, 390, 414, 480, 560, 600, 620, 640, 660, 700, 768, 800, 820, 880, 900, 960, 1024, 1100, 1180, 1200, 1240, 1280, 1366, 1440, 1536, 1600, 1700, 1920]) {
+        await page.setViewportSize({ width: w, height: 900 });
+        await page.waitForTimeout(40);
+        const sw = await page.evaluate(() => document.documentElement.scrollWidth);
+        if (sw > w) bad.push(`${r}@${w}=${sw}`);
+      }
+    }
+    await page.setViewportSize({ width: 1440, height: 900 });
+    assert(!bad.length, bad.join(" "));
+  });
+  await check("analytics panel grids have no empty cells at 900/1440/2000px", async () => {
+    for (const w of [900, 1440, 2000]) {
+      await page.setViewportSize({ width: w, height: 900 });
+      await go("analytics");
+      await page.waitForTimeout(200);
+      const holes = await page.evaluate(() =>
+        [...document.querySelectorAll(".tm-panel-grid")].map((g) => {
+          const cols = getComputedStyle(g).gridTemplateColumns.split(" ").length;
+          const rows = new Map();
+          g.querySelectorAll(":scope > :not([hidden])").forEach((el) => {
+            const b = el.getBoundingClientRect();
+            rows.set(Math.round(b.top), (rows.get(Math.round(b.top)) || 0) + Math.round(b.width / (g.clientWidth / cols)));
+          });
+          return [...rows.values()].filter((n) => n !== cols).length;
+        }).reduce((a, b) => a + b, 0),
+      );
+      assert(holes === 0, `${w}px: ${holes} incomplete rows`);
+    }
+    await page.setViewportSize({ width: 1440, height: 900 });
+  });
+
   /* ---- Content / gallery ---------------------------------------- */
   await check("content: TOC navigation moves focus to section heading", async () => {
     await go("content");

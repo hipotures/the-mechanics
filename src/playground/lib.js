@@ -229,3 +229,40 @@ export function rovingList(container, selector) {
 }
 
 export const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+
+// Balanced panel grid: choose the column count from the available width
+// (min column width = minPx), then reduce it so rows fill evenly — e.g. six
+// panels that would fit five-per-row become 3 + 3 instead of 5 + 1 orphan.
+// Full-width items (.pg-span-full) take their own row; span-2 items count twice.
+// If the count still cannot divide evenly, the last item stretches over the gap.
+export function balanceGrid(grid, minPx = 304) {
+  const apply = () => {
+    const width = grid.clientWidth;
+    if (!width) return;
+    const max = Math.max(1, Math.floor(width / minPx));
+    let units = 0;
+    let widest = 1;
+    let last = null;
+    grid.querySelectorAll(":scope > *").forEach((el) => el.style.removeProperty("grid-column"));
+    grid.querySelectorAll(":scope > :not([hidden])").forEach((el) => {
+      if (el.classList.contains("pg-span-full")) return;
+      last = el;
+      const cs = getComputedStyle(el);
+      const span = /span 2/.test(`${cs.gridColumnStart} ${cs.gridColumnEnd}`) ? 2 : 1;
+      units += span;
+      widest = Math.max(widest, span);
+    });
+    if (!units) return;
+    const rows = Math.ceil(units / max);
+    const cols = Math.min(max, Math.max(widest, Math.ceil(units / rows)));
+    grid.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
+    // Still uneven (e.g. 3 panels in 2 columns)? Stretch the last panel over
+    // the empty cells instead of leaving a hole.
+    const gap = Math.ceil(units / cols) * cols - units;
+    if (gap > 0 && last) last.style.gridColumn = `span ${Math.min(cols, gap + 1)}`;
+  };
+  const ro = new ResizeObserver(apply);
+  ro.observe(grid);
+  apply();
+  return { apply, destroy: () => ro.disconnect() };
+}

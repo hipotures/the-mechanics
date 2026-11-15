@@ -50,7 +50,7 @@ app.innerHTML = `
   <header class="tm-topbar">
     <button class="tm-btn tm-btn--ghost tm-btn--icon pg-collapse" id="sidebar-toggle" aria-controls="sidebar" aria-expanded="true" aria-label="Collapse navigation">${icon("collapse")}</button>
     <a class="tm-brand" href="#/analytics"><span class="tm-brand__mark" aria-hidden="true">TM</span><span class="pg-brand-text">The Mechanics</span></a>
-    <span class="tm-badge tm-badge--plain pg-hide-sm" title="Fixture as-of time">fixture ${esc(data.meta.version)} · ${esc(data.meta.asOf.replace("T", " ").replace(":00Z", " UTC"))}</span>
+    <span class="tm-badge tm-badge--plain pg-hide-md" title="Fixture as-of time">fixture ${esc(data.meta.version)} · ${esc(data.meta.asOf.replace("T", " ").replace(":00Z", " UTC"))}</span>
     <span class="tm-toolbar__spacer"></span>
     <fieldset class="tm-segmented tm-segmented--sm" id="theme-switcher" aria-label="Theme" data-testid="theme-switcher">
       <legend class="tm-sr-only">Theme</legend>

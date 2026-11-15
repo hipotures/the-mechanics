@@ -156,7 +156,8 @@ function hGroupedChart(c, w, hidden) {
   const labW = Math.min(w * 0.38, Math.max(...c.xLabels.map(textW)) + 10);
   const max = Math.max(...c.series.flatMap((s) => s.values));
   const sc = niceScale(0, max);
-  const rowH = Math.max(18, vis.length * 9 + 8);
+  const PITCH = 12; // bar-to-bar pitch inside a group: 9px bar + 3px gap, fits a 10.5px value label
+  const rowH = Math.max(18, vis.length * PITCH + 10);
   const m = { t: 6, r: 40, b: 20, l: labW };
   const h = m.t + rowH * c.xLabels.length + m.b;
   const plotW = w - m.l - m.r;
@@ -171,13 +172,13 @@ function hGroupedChart(c, w, hidden) {
   const stops = [];
   c.xLabels.forEach((lab, i) => {
     const y0 = m.t + i * rowH + 4;
-    body += `<text class="${TICK} tm-chart__tick--strong" x="${m.l - 6}" y="${y0 + (rowH - 8) / 2 + 3.5}" text-anchor="end">${esc(lab)}</text>`;
-    const bh = (rowH - 8) / Math.max(1, vis.length);
+    body += `<text class="${TICK} tm-chart__tick--strong" x="${m.l - 6}" y="${y0 + (vis.length * PITCH - 3) / 2 + 3.5}" text-anchor="end">${esc(lab)}</text>`;
+    const bh = PITCH;
     vis.forEach((s, k) => {
       const v = s.values[i] ?? 0;
       const yy = y0 + k * bh;
-      body += `<rect class="tm-chart__bar ${seriesCls(s.si)}" x="${m.l + 1}" y="${yy}" width="${Math.max(1, x(v) - m.l - 1)}" height="${Math.max(2, bh - 1)}"/>`;
-      body += `<text class="tm-chart__value" x="${x(v) + 4}" y="${yy + bh / 2 + 3}">${fmtNum(v)}</text>`;
+      body += `<rect class="tm-chart__bar ${seriesCls(s.si)}" x="${m.l + 1}" y="${yy}" width="${Math.max(1, x(v) - m.l - 1)}" height="${bh - 3}"/>`;
+      body += `<text class="tm-chart__value" x="${x(v) + 4}" y="${yy + (bh - 3) / 2 + 3.5}">${fmtNum(v)}</text>`;
     });
     stops.push({
       x: m.l + plotW / 2,
