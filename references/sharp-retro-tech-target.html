@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en" data-theme="paper">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Mechanics — Sharp Retro-Tech Reference</title>
+<style>
+/*
+ * Frozen visual reference for the design exploration in The Mechanics.
+ * This is NOT a production component library or a final theme specification.
+ * All sample content is fictional. Values are illustrative, not approved tokens.
+ */
+:root {
+  --canvas: #eeeae0; --paper: #f6f2e8; --panel: #f4f0e6;
+  --ink: #2c322d; --muted: #5c645c; --line: #394039;
+  --internal: #b9beb0; --record: #e2e5d5; --selected: #cfd9a8;
+  --positive: #577a4d; --shadow: #d7d8cd;
+  font-family: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  color: var(--ink); background: var(--canvas);
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-size: 13px; line-height: 1.4; }
+button { font: inherit; color: inherit; cursor: pointer; }
+.topbar { display:flex; align-items:center; justify-content:space-between; padding:10px 26px; border-bottom:1px solid var(--line); background:var(--paper); }
+.back { font-weight:700; letter-spacing:.01em; }
+.switch { border:1.5px solid var(--ink); display:flex; }
+.switch span { padding:6px 20px; }
+.switch .active { background:var(--selected); border-right:1.5px solid var(--ink); font-weight:700; }
+main { max-width:1490px; padding:26px 28px 40px; margin:auto; }
+.eyebrow,.small-heading { text-transform:uppercase; letter-spacing:.095em; font-size:11px; font-weight:700; }
+.heading { display:flex; justify-content:space-between; gap:16px; align-items:center; margin-bottom:17px; }
+h1 { font-size:29px; line-height:1.15; margin:7px 0 3px; letter-spacing:-.04em; }
+.subtitle { color:var(--muted); font-size:12px; }
+.badge { background:#d7e5c6; border:1.5px solid #3b5340; font-weight:700; padding:7px 13px; }
+.metrics { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:10px; margin:20px 0 14px; }
+.metric { min-height:66px; background:var(--paper); border:1.6px solid var(--ink); padding:10px 15px; }
+.metric span { display:block; font-size:10px; letter-spacing:.08em; font-weight:700; }
+.metric strong { display:block; margin-top:2px; font-size:20px; letter-spacing:-.04em; }
+.workspace { display:grid; grid-template-columns:minmax(310px,.93fr) minmax(460px,1.07fr); align-items:start; gap:12px; }
+.panel { background:var(--paper); border:1.8px solid var(--ink); min-width:0; }
+.panel-title { min-height:42px; border-bottom:1.5px solid var(--ink); padding:10px 13px; font-size:14px; font-weight:700; background:#e9e8da; display:flex; justify-content:space-between; align-items:center; }
+.panel-title small { color:var(--muted); font-size:11px; font-weight:400; }
+.list-head,.preview-cols { background:#e6e7d9; font-size:11px; font-weight:700; border-bottom:1px solid var(--internal); padding:8px 14px; display:flex; justify-content:space-between; }
+.unit { min-height:40px; display:grid; grid-template-columns:minmax(0,1fr) 26px 26px; gap:7px; align-items:center; padding:5px 11px 5px 15px; border-bottom:1px solid var(--internal); }
+.unit:last-child { border-bottom:0; }
+.unit.is-selected { background:var(--selected); box-shadow:inset 4px 0 0 #7b9650; }
+.unit .name { font-weight:700; font-size:12px; }
+.unit .id { font-size:10px; color:var(--muted); }
+.unit button { border:1px solid #a1ab91; border-radius:3px; background:transparent; width:24px; height:24px; padding:0; color:var(--positive); }
+.unit button:last-child { border-color:#b6b9ac; color:var(--ink); }
+.preview { padding:12px 14px 18px; }
+.preview-intro { padding:2px 3px 13px; }
+.preview-intro .small-heading { margin:0 0 5px; }
+.preview-intro p { margin:0; font-size:12px; }
+.table { border:1px solid var(--internal); background:#f7f4ea; }
+.preview-cols { padding:8px 10px; background:#e6e7d9; gap:10px; }
+.preview-cols > span { width:50%; }
+.record-label { padding:3px 7px; margin:8px 6px 0; background:var(--record); border-bottom:1px solid #c5cbb8; font-size:10px; font-weight:700; }
+.record { display:grid; grid-template-columns:1fr 1fr; border-bottom:1px solid var(--internal); }
+.record:last-child { border-bottom:0; }
+.record > div { min-width:0; padding:9px 10px 12px; font-size:11px; line-height:1.55; }
+.record > div + div { border-left:1px solid #cbd0c3; }
+.record p { margin:0 0 6px; }
+.record .term { font-weight:700; }
+.record .meta { color:var(--muted); font-size:10px; }
+.preview-footer { display:flex; justify-content:space-between; align-items:center; padding:18px 0 3px; font-size:11px; color:var(--muted); }
+.preview-footer button { background:transparent; border:1px solid var(--ink); padding:7px 12px; color:var(--ink); font-weight:700; }
+.note { margin-top:16px; color:var(--muted); max-width:78ch; font-size:11px; }
+@media (max-width:950px) { .metrics { grid-template-columns:repeat(3,minmax(0,1fr)); } .workspace { grid-template-columns:1fr; } }
+@media (max-width:520px) { .topbar { padding:10px 14px; } main { padding:18px 12px; } h1 { font-size:24px; } .metrics { grid-template-columns:repeat(2,minmax(0,1fr)); } .heading { align-items:start; } .metric { padding:9px; } }
+</style>
+</head>
+<body>
+<header class="topbar"><div class="back">← Workspace</div><div class="switch" aria-label="Demo navigation"><span class="active">Work</span><span>Reader</span></div></header>
+<main>
+  <div class="heading"><div><div class="eyebrow">ANALYSE · SAMPLE PROJECT</div><h1>Analyse · P1</h1><div class="subtitle">Whole-project analysis · 58/58 required units · 175 entities</div></div><div class="badge">✓ Complete</div></div>
+  <div class="metrics">
+    <div class="metric"><span>INPUT</span><strong>748,378</strong></div>
+    <div class="metric"><span>CACHE</span><strong>490,240</strong></div>
+    <div class="metric"><span>REASON</span><strong>9,307</strong></div>
+    <div class="metric"><span>OUTPUT</span><strong>66,563</strong></div>
+    <div class="metric"><span>COST</span><strong>$1.2309</strong></div>
+  </div>
+  <div class="workspace">
+    <section class="panel"><div class="panel-title">▤ Analysis units</div><div class="list-head"><span>SECTION / UNIT</span><span>P1</span></div>
+      <div class="unit is-selected"><div><div class="name">PROLOGUE</div><div class="id">ch0001_a001</div></div><button aria-label="Completed">✓</button><button aria-label="Open">▷</button></div>
+      <div class="unit"><div><div class="name">SIX YEARS LATER</div><div class="id">ch0002_a001</div></div><button>✓</button><button>▷</button></div>
+      <div class="unit"><div><div class="name">ONE</div><div class="id">ch0003_a001</div></div><button>✓</button><button>▷</button></div>
+      <div class="unit"><div><div class="name">TWO</div><div class="id">ch0004_a001</div></div><button>✓</button><button>▷</button></div>
+      <div class="unit"><div><div class="name">THREE</div><div class="id">ch0005_a001</div></div><button>✓</button><button>▷</button></div>
+      <div class="unit"><div><div class="name">FOUR</div><div class="id">ch0006_a001</div></div><button>✓</button><button>▷</button></div>
+      <div class="unit"><div><div class="name">FIVE</div><div class="id">ch0007_a001</div></div><button>✓</button><button>▷</button></div>
+      <div class="unit"><div><div class="name">SIX</div><div class="id">ch0008_a001</div></div><button>✓</button><button>▷</button></div>
+      <div class="unit"><div><div class="name">SEVEN</div><div class="id">ch0009_a001</div></div><button>✓</button><button>▷</button></div>
+      <div class="unit"><div><div class="name">EIGHT</div><div class="id">ch0010_a001</div></div><button>✓</button><button>▷</button></div>
+      <div class="unit"><div><div class="name">NINE</div><div class="id">ch0011_a001</div></div><button>✓</button><button>▷</button></div>
+      <div class="unit"><div><div class="name">TEN</div><div class="id">ch0012_a001</div></div><button>✓</button><button>▷</button></div>
+      <div class="unit"><div><div class="name">ELEVEN</div><div class="id">ch0013_a001</div></div><button>✓</button><button>▷</button></div>
+      <div class="unit"><div><div class="name">TWELVE</div><div class="id">ch0014_a001</div></div><button>✓</button><button>▷</button></div>
+      <div class="unit"><div><div class="name">THIRTEEN</div><div class="id">ch0015_a001</div></div><button>✓</button><button>▷</button></div>
+      <div class="unit"><div><div class="name">FOURTEEN</div><div class="id">ch0016_a001</div></div><button>✓</button><button>▷</button></div>
+    </section>
+    <section class="panel"><div class="panel-title"><span>▣ P1 preview · ch0001_a001</span><small>⊞  ▣  ···</small></div>
+      <div class="preview"><div class="preview-intro"><div class="small-heading">PROLOGUE</div><p>Saved P1 terms and observations for this unit.</p></div>
+        <div class="table"><div class="preview-cols"><span>English</span><span>Terms and observations</span></div>
+          <div class="record-label">B0000218</div><div class="record"><div>PROLOGUE</div><div>No new terms or observations for this block.</div></div>
+          <div class="record-label">B0000219</div><div class="record"><div>Several years later, the distant survey station began transmitting again.</div><div>No new terms or observations for this block.</div></div>
+          <div class="record-label">B0000220</div><div class="record"><div>The autonomous research team evaluated the results before preparing another expedition to the uncharted region.</div>
+            <div><p><span class="term">Frontier</span> <span class="meta">term · place · high</span><br>Use consistently for the outer research region.</p><p><span class="term">Survey station</span> <span class="meta">term · facility · high</span><br>Keep the technical designation unchanged across chapters.</p></div></div>
+          <div class="record-label">B0000221</div><div class="record"><div>The new discovery changed the team's priorities for the entire season.</div><div><span class="term">Director</span> <span class="meta">observation · high</span><br>Role name: preserve the distinction between title and personal name.</div></div>
+          <div class="record-label">B0000222</div><div class="record"><div>The next report arrived at dawn.</div><div>No new terms or observations for this block.</div></div>
+        </div>
+        <div class="preview-footer"><span>5 blocks shown</span><button>↓ Load next 5 blocks</button></div>
+      </div>
+    </section>
+  </div>
+  <p class="note">The Mechanics · Concept reference only. Synthetic content, illustrative geometry and colors. Do not copy these HTML/CSS structures into the eventual component package; build the real system from the design principles and test it across all app archetypes.</p>
+</main>
+</body>
+</html>
