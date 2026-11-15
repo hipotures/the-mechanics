@@ -261,10 +261,23 @@ export function summarize(c) {
 // (they would drift away from their chart) and on a tap/click outside the chart
 // (touch has no "mouse leave").
 function autoHideTip(el, hide) {
-  const onScroll = () => hide();
+  // Scrolling: hide at once (class skips ECharts' hide delay + fade, so the
+  // tooltip never rides along with the page); the next interaction with the
+  // chart lifts the class so ECharts can show tooltips normally again.
+  const onScroll = () => {
+    // Keyboard users keep their tooltip: focusing a chart scrolls it into view,
+    // and the tooltip stays inside the chart (and below sticky chrome) anyway.
+    if (el.matches(":focus-visible")) return; // keyboard focus only; a tap also focuses the chart
+    const tip = el.querySelector(".pg-echarts-tip");
+    if (!tip || getComputedStyle(tip).visibility === "hidden") return;
+    tip.classList.add("is-scroll-hidden");
+    hide();
+  };
+  const reveal = () => el.querySelector(".pg-echarts-tip.is-scroll-hidden")?.classList.remove("is-scroll-hidden");
   const onDown = (e) => { if (!el.contains(e.target)) hide(); };
   window.addEventListener("scroll", onScroll, { passive: true, capture: true });
   document.addEventListener("pointerdown", onDown, true);
+  ["pointermove", "pointerdown", "keydown"].forEach((t) => el.addEventListener(t, reveal, true));
   return () => {
     window.removeEventListener("scroll", onScroll, { capture: true });
     document.removeEventListener("pointerdown", onDown, true);

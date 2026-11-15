@@ -362,3 +362,10 @@ h1:focus { outline: 0; }
   .pg-2col { grid-template-columns: minmax(0, 1fr); }
 }
 .pg-states .tm-panel { min-height: 100%; }
+
+/* Chart tooltip hidden instantly while the page scrolls (see autoHideTip in charts.js). */
+.pg-echarts-tip.is-scroll-hidden {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transition: none !important;
+}

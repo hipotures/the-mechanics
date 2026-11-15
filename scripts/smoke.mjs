@@ -272,21 +272,22 @@ try {
     const p2 = await c2.newPage();
     await p2.goto(`${BASE}?theme=coffee#/analytics`, { waitUntil: "networkidle" });
     await p2.evaluate(() => document.fonts.ready);
-    await p2.evaluate(() => scrollTo(0, 900));
-    await p2.waitForTimeout(400);
+    await p2.locator('[data-chart="requests"]').scrollIntoViewIfNeeded();
+    await p2.waitForTimeout(400); // let the scroll settle (scrolling closes tooltips by design)
     const box = await p2.locator('[data-chart="requests"]').boundingBox();
     await p2.touchscreen.tap(box.x + box.width * 0.6, box.y + box.height * 0.4);
     await p2.waitForTimeout(300);
     const st = () => p2.evaluate(() => {
       const t = document.querySelector('[data-chart="requests"] .pg-echarts-tip');
       const cs = getComputedStyle(t);
-      return { vis: cs.display !== "none" && +cs.opacity > 0 && cs.visibility !== "hidden", z: +cs.zIndex, nav: +getComputedStyle(document.querySelector(".tm-topbar")).zIndex };
+      // Visible = actually shown with content (a never-opened tooltip element is empty).
+      return { vis: !!t && cs.display !== "none" && +cs.opacity > 0 && cs.visibility !== "hidden" && t.textContent.trim().length > 0, z: +cs.zIndex, nav: +getComputedStyle(document.querySelector(".tm-topbar")).zIndex };
     });
     const a = await st();
     assert(a.vis, "tooltip did not open on tap");
     assert(a.z < a.nav, `tooltip z-index ${a.z} not below topbar ${a.nav}`);
     await p2.evaluate(() => scrollBy(0, 300));
-    await p2.waitForTimeout(300);
+    await p2.waitForTimeout(150);
     assert(!(await st()).vis, "tooltip still visible after scroll");
     await c2.close();
   });
