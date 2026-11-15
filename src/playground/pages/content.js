@@ -3,17 +3,22 @@ import { esc, icon, fmtDate, toast } from "../lib.js";
 // Original illustration: three nested frames = the three-level hierarchy.
 const hierarchyFigure = `<svg class="pg-illus" viewBox="0 0 480 220" role="img" aria-labelledby="fig-h-t">
   <title id="fig-h-t">Diagram: a strong outer region contains a medium panel, which contains subtle records.</title>
-  <rect x="8" y="8" width="464" height="204" fill="var(--tm-surface)" stroke="var(--tm-line-1)" stroke-width="3"/>
-  <rect x="8" y="8" width="464" height="30" fill="var(--tm-head-1)" stroke="var(--tm-line-1)" stroke-width="3"/>
+  <!-- Paint order: fills first, then dividers, then outer frames last, so header bands never cover a frame. -->
+  <rect x="8" y="8" width="464" height="204" fill="var(--tm-surface)"/>
+  <rect x="8" y="8" width="464" height="30" fill="var(--tm-head-1)"/>
+  <line x1="8" x2="472" y1="38" y2="38" stroke="var(--tm-line-1)" stroke-width="3"/>
   <text x="22" y="28" style="font:700 12px var(--tm-font-mono);fill:var(--tm-text)">LEVEL 1 · REGION</text>
-  <rect x="28" y="54" width="250" height="140" fill="var(--tm-surface)" stroke="var(--tm-line-2)" stroke-width="1.5"/>
+  <rect x="28" y="54" width="250" height="140" fill="var(--tm-surface)"/>
   <rect x="28" y="54" width="250" height="24" fill="var(--tm-head-2)"/>
   <line x1="28" x2="278" y1="78" y2="78" stroke="var(--tm-line-3)"/>
   <text x="40" y="70" style="font:600 11px var(--tm-font-ui);fill:var(--tm-text)">Level 2 · Panel</text>
   ${[0, 1, 2].map((i) => `<rect x="40" y="${90 + i * 32}" width="226" height="12" fill="var(--tm-sunken)"/><text x="46" y="${99 + i * 32}" style="font:600 8.5px var(--tm-font-mono);fill:var(--tm-text-2)">B${String(218 + i).padStart(7, "0")}</text><line x1="40" x2="266" y1="${116 + i * 32}" y2="${116 + i * 32}" stroke="var(--tm-line-3)"/>`).join("")}
-  <rect x="298" y="54" width="154" height="140" fill="var(--tm-surface)" stroke="var(--tm-line-2)" stroke-width="1.5"/>
+  <rect x="298" y="54" width="154" height="140" fill="var(--tm-surface)"/>
   ${[0, 1, 2, 3].map((i) => `<rect x="${316 + i * 32}" y="${150 - [40, 70, 55, 90][i]}" width="22" height="${[40, 70, 55, 90][i] + 30}" fill="var(--tm-chart-${i + 1})"/>`).join("")}
   <line x1="306" x2="444" y1="180.5" y2="180.5" stroke="var(--tm-chart-axis)"/>
+  <rect x="28" y="54" width="250" height="140" fill="none" stroke="var(--tm-line-2)" stroke-width="1.5"/>
+  <rect x="298" y="54" width="154" height="140" fill="none" stroke="var(--tm-line-2)" stroke-width="1.5"/>
+  <rect x="8" y="8" width="464" height="204" fill="none" stroke="var(--tm-line-1)" stroke-width="3"/>
 </svg>`;
 
 const heroFigure = `<svg class="pg-hero-illus" viewBox="0 0 360 260" role="img" aria-labelledby="hero-t">
