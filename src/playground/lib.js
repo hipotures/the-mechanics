@@ -311,3 +311,105 @@ export function stepperHTML({ id, name = "", value = "", min, max, step = 1, uni
     <button type="button" class="tm-stepper__btn" data-tm-step="1" aria-label="Increase ${esc(label)}"${disabled ? " disabled" : ""}>${icon("plus", "tm-icon--sm")}</button>
   </div>`;
 }
+
+// Select option list fallback for browsers without `appearance: base-select`
+// (e.g. Firefox): the native <select> stays the source of truth (value, form,
+// change events, labels), but its OS popup is replaced by a styled listbox
+// (.tm-menu .tm-listbox). Mouse: click opens. Keyboard on the closed select:
+// Enter / Space / Alt+ArrowDown open it. In the list: ArrowUp/Down, Home/End,
+// type-ahead, Enter/Space to choose, Escape/Tab to close (focus returns).
+// Test hook: ?select=fallback forces this path in any browser.
+export function enhanceSelects(root = document) {
+  const forced = new URLSearchParams(location.search).get("select") === "fallback";
+  if (!forced && CSS.supports("appearance", "base-select")) return;
+  document.documentElement.classList.add("tm-select-fallback");
+  // Selects rendered later (re-rendered forms, dialogs) are enhanced too.
+  if (!enhanceSelects.observer) {
+    let queued = false;
+    enhanceSelects.observer = new MutationObserver(() => {
+      if (queued) return;
+      queued = true;
+      queueMicrotask(() => { queued = false; enhanceSelects(document); });
+    });
+    enhanceSelects.observer.observe(document.body, { childList: true, subtree: true });
+  }
+  root.querySelectorAll("select.tm-select:not([data-tm-enhanced])").forEach((sel) => {
+    sel.dataset.tmEnhanced = "1";
+    let list = null;
+    const close = (focus = true) => {
+      if (!list) return;
+      list.remove();
+      list = null;
+      sel.setAttribute("aria-expanded", "false");
+      if (focus) sel.focus();
+    };
+    const choose = (i) => {
+      if (sel.selectedIndex !== i) {
+        sel.selectedIndex = i;
+        sel.dispatchEvent(new Event("input", { bubbles: true }));
+        sel.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+      close();
+    };
+    const open = () => {
+      if (list || sel.disabled) return;
+      list = document.createElement("div");
+      list.className = "tm-menu tm-listbox";
+      list.setAttribute("role", "listbox");
+      list.setAttribute("popover", "manual");
+      list.setAttribute("aria-label", sel.labels?.[0]?.textContent?.trim() || sel.getAttribute("aria-label") || "Options");
+      [...sel.options].forEach((o, i) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "tm-menu__item tm-listbox__option";
+        b.setAttribute("role", "option");
+        b.setAttribute("aria-selected", String(i === sel.selectedIndex));
+        b.disabled = o.disabled;
+        b.textContent = o.textContent;
+        b.addEventListener("click", () => choose(i));
+        list.append(b);
+      });
+      document.body.append(list);
+      list.showPopover();
+      list.style.minWidth = `${sel.offsetWidth}px`;
+      anchorPopover(list, sel);
+      sel.setAttribute("aria-expanded", "true");
+      list.querySelectorAll('[role="option"]')[Math.max(0, sel.selectedIndex)]?.focus();
+      list.addEventListener("keydown", (e) => {
+        const items = [...list.querySelectorAll('[role="option"]:not(:disabled)')];
+        const i = items.indexOf(document.activeElement);
+        if (e.key === "ArrowDown") { e.preventDefault(); items[Math.min(items.length - 1, i + 1)].focus(); }
+        else if (e.key === "ArrowUp") { e.preventDefault(); items[Math.max(0, i - 1)].focus(); }
+        else if (e.key === "Home") { e.preventDefault(); items[0].focus(); }
+        else if (e.key === "End") { e.preventDefault(); items.at(-1).focus(); }
+        else if (e.key === "Escape") { e.preventDefault(); close(); }
+        else if (e.key === "Tab") close(false);
+        else if (e.key.length === 1) {
+          const k = e.key.toLowerCase();
+          const next = items.find((b, j) => j > i && b.textContent.toLowerCase().startsWith(k)) || items.find((b) => b.textContent.toLowerCase().startsWith(k));
+          next?.focus();
+        }
+      });
+      // Light dismiss: pointer outside the list or scrolling closes it.
+      setTimeout(() => {
+        const away = (e) => { if (list && !list.contains(e.target) && e.target !== sel) { close(false); document.removeEventListener("pointerdown", away, true); } };
+        document.addEventListener("pointerdown", away, true);
+        window.addEventListener("scroll", () => close(false), { once: true, capture: true, passive: true });
+      });
+    };
+    sel.setAttribute("aria-haspopup", "listbox");
+    sel.setAttribute("aria-expanded", "false");
+    sel.addEventListener("mousedown", (e) => {
+      if (e.button !== 0) return;
+      e.preventDefault(); // suppress the OS popup
+      sel.focus();
+      list ? close() : open();
+    });
+    sel.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " " || (e.altKey && e.key === "ArrowDown")) {
+        e.preventDefault();
+        open();
+      }
+    });
+  });
+}

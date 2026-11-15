@@ -60,6 +60,10 @@
     "ok": true
   },
   {
+    "name": "select option list: scripted fallback (no base-select) opens, keyboard selects, Escape closes",
+    "ok": true
+  },
+  {
     "name": "content: TOC navigation moves focus to section heading",
     "ok": true
   },

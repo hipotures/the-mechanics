@@ -1,6 +1,6 @@
 import "./app.css";
 import data from "../../fixtures/demo-data.json";
-import { icon, esc } from "./lib.js";
+import { icon, esc, enhanceSelects } from "./lib.js";
 import analytics from "./pages/analytics.js";
 import workspace from "./pages/workspace.js";
 import dataManagement from "./pages/data.js";
@@ -130,3 +130,4 @@ document.addEventListener("pointerover", (e) => {
 
 setTheme(currentTheme());
 route();
+enhanceSelects(document);

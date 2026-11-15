@@ -292,6 +292,21 @@ try {
     await c2.close();
   });
 
+  await check("select option list: scripted fallback (no base-select) opens, keyboard selects, Escape closes", async () => {
+    await page.goto("about:blank");
+    await page.goto(`${BASE}?theme=light&select=fallback#/analytics`, { waitUntil: "networkidle" });
+    await page.click("#svc");
+    assert((await page.locator(".tm-listbox").count()) === 1, "listbox did not open");
+    await page.keyboard.press("ArrowDown");
+    await page.keyboard.press("Enter");
+    assert((await page.inputValue("#svc")) === "API", `value ${await page.inputValue("#svc")}`);
+    assert(await page.evaluate(() => document.activeElement.id === "svc"), "focus not returned");
+    await page.keyboard.press("Enter");
+    await page.keyboard.press("Escape");
+    assert((await page.locator(".tm-listbox").count()) === 0, "listbox still open");
+    assert((await page.inputValue("#svc")) === "API", "Escape changed the value");
+  });
+
   /* ---- Content / gallery ---------------------------------------- */
   await check("content: TOC navigation moves focus to section heading", async () => {
     await go("content");
