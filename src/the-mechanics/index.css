@@ -1,0 +1,10 @@
+/*
+ * The Mechanics — public CSS entry.
+ * Layer order: tokens < themes < base < components. Unlayered consumer CSS
+ * always wins, so applications can override without specificity battles.
+ */
+@layer tm.tokens, tm.themes, tm.base, tm.components;
+@import "./tokens.css";
+@import "./themes.css";
+@import "./base.css";
+@import "./components.css";

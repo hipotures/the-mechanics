@@ -1,0 +1,80 @@
+/*
+ * The Mechanics — opt-in base layer.
+ * Scoped to `.tm-root` so the library never restyles a host app globally.
+ */
+@layer tm.base {
+  .tm-root {
+    font-family: var(--tm-font-ui);
+    font-size: var(--tm-text-sm);
+    line-height: var(--tm-leading-ui);
+    color: var(--tm-text);
+    background: var(--tm-canvas);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-synthesis-weight: none;
+  }
+  .tm-root *,
+  .tm-root *::before,
+  .tm-root *::after {
+    box-sizing: border-box;
+  }
+  .tm-root :where(h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd) {
+    margin: 0;
+  }
+  .tm-root :where(button, input, select, textarea) {
+    font: inherit;
+    color: inherit;
+  }
+  .tm-root :where(a) {
+    color: var(--tm-link);
+    text-underline-offset: 0.18em;
+    text-decoration-thickness: 1px;
+  }
+  .tm-root :where(a:hover) {
+    color: var(--tm-link-hover);
+  }
+  .tm-root :where(:focus-visible) {
+    outline: var(--tm-bw-focus) solid var(--tm-focus);
+    outline-offset: var(--tm-focus-offset);
+  }
+  .tm-root :where(::selection) {
+    background: var(--tm-select-bg);
+    color: var(--tm-text);
+  }
+  .tm-root :where(svg) {
+    flex-shrink: 0;
+  }
+  .tm-root :where(code, kbd, samp, pre) {
+    font-family: var(--tm-font-mono);
+  }
+  .tm-root [hidden]:not([hidden="until-found"]) {
+    display: none !important;
+  }
+  /* Add to <html> for one frame while switching themes so the change is instant. */
+  .tm-theme-switching *,
+  .tm-theme-switching *::before,
+  .tm-theme-switching *::after {
+    transition: none !important;
+  }
+  .tm-sr-only {
+    position: absolute !important;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tm-root *,
+    .tm-root *::before,
+    .tm-root *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

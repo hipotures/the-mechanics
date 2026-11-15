@@ -1,0 +1,368 @@
+[
+  {
+    "page": "analytics",
+    "theme": "light",
+    "viewport": "desktop",
+    "file": "analytics-light-desktop.png",
+    "overflowX": false,
+    "offenders": [],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "workspace",
+    "theme": "light",
+    "viewport": "desktop",
+    "file": "workspace-light-desktop.png",
+    "overflowX": false,
+    "offenders": [],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "data",
+    "theme": "light",
+    "viewport": "desktop",
+    "file": "data-light-desktop.png",
+    "overflowX": false,
+    "offenders": [],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "catalog",
+    "theme": "light",
+    "viewport": "desktop",
+    "file": "catalog-light-desktop.png",
+    "overflowX": false,
+    "offenders": [],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "content",
+    "theme": "light",
+    "viewport": "desktop",
+    "file": "content-light-desktop.png",
+    "overflowX": false,
+    "offenders": [],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "components",
+    "theme": "light",
+    "viewport": "desktop",
+    "file": "components-light-desktop.png",
+    "overflowX": false,
+    "offenders": [],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "analytics",
+    "theme": "dark",
+    "viewport": "desktop",
+    "file": "analytics-dark-desktop.png",
+    "overflowX": false,
+    "offenders": [],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "workspace",
+    "theme": "dark",
+    "viewport": "desktop",
+    "file": "workspace-dark-desktop.png",
+    "overflowX": false,
+    "offenders": [],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "data",
+    "theme": "dark",
+    "viewport": "desktop",
+    "file": "data-dark-desktop.png",
+    "overflowX": false,
+    "offenders": [],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "catalog",
+    "theme": "dark",
+    "viewport": "desktop",
+    "file": "catalog-dark-desktop.png",
+    "overflowX": false,
+    "offenders": [],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "content",
+    "theme": "dark",
+    "viewport": "desktop",
+    "file": "content-dark-desktop.png",
+    "overflowX": false,
+    "offenders": [],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "components",
+    "theme": "dark",
+    "viewport": "desktop",
+    "file": "components-dark-desktop.png",
+    "overflowX": false,
+    "offenders": [],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "analytics",
+    "theme": "coffee",
+    "viewport": "desktop",
+    "file": "analytics-coffee-desktop.png",
+    "overflowX": false,
+    "offenders": [],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "workspace",
+    "theme": "coffee",
+    "viewport": "desktop",
+    "file": "workspace-coffee-desktop.png",
+    "overflowX": false,
+    "offenders": [],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "data",
+    "theme": "coffee",
+    "viewport": "desktop",
+    "file": "data-coffee-desktop.png",
+    "overflowX": false,
+    "offenders": [],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "catalog",
+    "theme": "coffee",
+    "viewport": "desktop",
+    "file": "catalog-coffee-desktop.png",
+    "overflowX": false,
+    "offenders": [],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "content",
+    "theme": "coffee",
+    "viewport": "desktop",
+    "file": "content-coffee-desktop.png",
+    "overflowX": false,
+    "offenders": [],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "components",
+    "theme": "coffee",
+    "viewport": "desktop",
+    "file": "components-coffee-desktop.png",
+    "overflowX": false,
+    "offenders": [],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "analytics",
+    "theme": "light",
+    "viewport": "mobile",
+    "file": "analytics-light-mobile.png",
+    "overflowX": false,
+    "offenders": [],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "workspace",
+    "theme": "light",
+    "viewport": "mobile",
+    "file": "workspace-light-mobile.png",
+    "overflowX": false,
+    "offenders": [],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "data",
+    "theme": "light",
+    "viewport": "mobile",
+    "file": "data-light-mobile.png",
+    "overflowX": false,
+    "offenders": [],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "catalog",
+    "theme": "light",
+    "viewport": "mobile",
+    "file": "catalog-light-mobile.png",
+    "overflowX": false,
+    "offenders": [],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "content",
+    "theme": "light",
+    "viewport": "mobile",
+    "file": "content-light-mobile.png",
+    "overflowX": false,
+    "offenders": [
+      "code."
+    ],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "components",
+    "theme": "light",
+    "viewport": "mobile",
+    "file": "components-light-mobile.png",
+    "overflowX": false,
+    "offenders": [],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "analytics",
+    "theme": "dark",
+    "viewport": "mobile",
+    "file": "analytics-dark-mobile.png",
+    "overflowX": false,
+    "offenders": [],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "workspace",
+    "theme": "dark",
+    "viewport": "mobile",
+    "file": "workspace-dark-mobile.png",
+    "overflowX": false,
+    "offenders": [],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "data",
+    "theme": "dark",
+    "viewport": "mobile",
+    "file": "data-dark-mobile.png",
+    "overflowX": false,
+    "offenders": [],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "catalog",
+    "theme": "dark",
+    "viewport": "mobile",
+    "file": "catalog-dark-mobile.png",
+    "overflowX": false,
+    "offenders": [],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "content",
+    "theme": "dark",
+    "viewport": "mobile",
+    "file": "content-dark-mobile.png",
+    "overflowX": false,
+    "offenders": [
+      "code."
+    ],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "components",
+    "theme": "dark",
+    "viewport": "mobile",
+    "file": "components-dark-mobile.png",
+    "overflowX": false,
+    "offenders": [],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "analytics",
+    "theme": "coffee",
+    "viewport": "mobile",
+    "file": "analytics-coffee-mobile.png",
+    "overflowX": false,
+    "offenders": [],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "workspace",
+    "theme": "coffee",
+    "viewport": "mobile",
+    "file": "workspace-coffee-mobile.png",
+    "overflowX": false,
+    "offenders": [],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "data",
+    "theme": "coffee",
+    "viewport": "mobile",
+    "file": "data-coffee-mobile.png",
+    "overflowX": false,
+    "offenders": [],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "catalog",
+    "theme": "coffee",
+    "viewport": "mobile",
+    "file": "catalog-coffee-mobile.png",
+    "overflowX": false,
+    "offenders": [],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "content",
+    "theme": "coffee",
+    "viewport": "mobile",
+    "file": "content-coffee-mobile.png",
+    "overflowX": false,
+    "offenders": [
+      "code."
+    ],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "components",
+    "theme": "coffee",
+    "viewport": "mobile",
+    "file": "components-coffee-mobile.png",
+    "overflowX": false,
+    "offenders": [],
+    "themeApplied": true,
+    "errors": []
+  }
+]

@@ -1,0 +1,30 @@
+{
+  "name": "the-mechanics",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Sharp Retro-Tech design system and multi-application visual playground.",
+  "license": "CC0-1.0",
+  "type": "module",
+  "packageManager": "pnpm@10.34.9",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "node scripts/build-css.mjs && vite build",
+    "build:css": "node scripts/build-css.mjs",
+    "preview": "vite preview --port 4173 --strictPort",
+    "check:contrast": "node scripts/contrast.mjs",
+    "shots": "node scripts/screenshots.mjs",
+    "smoke": "node scripts/smoke.mjs"
+  },
+  "devDependencies": {
+    "@fontsource/ibm-plex-mono": "5.3.0",
+    "@fontsource/ibm-plex-sans": "5.3.0",
+    "@tailwindcss/vite": "4.3.5",
+    "daisyui": "5.8.1",
+    "playwright": "1.65.1",
+    "tailwindcss": "4.3.5",
+    "vite": "8.3.8"
+  }
+}

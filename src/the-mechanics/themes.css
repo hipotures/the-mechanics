@@ -1,0 +1,263 @@
+/*
+ * The Mechanics — color themes.
+ *
+ * Select with `data-tm-theme="light" | "dark" | "coffee"` on <html> (or any
+ * subtree). Light is also the unattributed default. Themes only assign
+ * color/surface/shadow roles; they never change geometry (see tokens.css).
+ *
+ * Surface ladder (Level 1 → 3):
+ *   canvas   page background behind regions
+ *   surface  Level 1 region and Level 2 panel body
+ *   head-1   Level 1 region header band (strongest tint)
+ *   head-2   Level 2 panel header band
+ *   sunken   Level 3 record / group label background
+ *   inset    form-field and code wells
+ */
+@layer tm.themes {
+  :root,
+  [data-tm-theme="light"] {
+    color-scheme: light;
+
+    /* Light / Paper-Stone — stony canvas, cream paper, green-black ink */
+    --tm-canvas: #dcd9cf;
+    --tm-surface: #f6f3eb;
+    --tm-surface-alt: #efebe1;
+    --tm-head-1: #e6e2d5;
+    --tm-head-2: #ebe7dc;
+    --tm-sunken: #e8e5d9;
+    --tm-inset: #fbfaf5;
+    --tm-inverse: #2a2f2b;
+
+    --tm-text: #22271f;
+    --tm-text-2: #434a41;
+    --tm-text-3: #575e55;
+    --tm-text-inverse: #f6f3eb;
+    --tm-text-disabled: #8a8d84;
+
+    --tm-line-1: #2b312a;       /* Level 1 — ink */
+    --tm-line-2: #858a7d;       /* Level 2 — graphite pencil */
+    --tm-line-3: #cbc8bb;       /* Level 3 — hairline */
+    --tm-line-input: #737a6f;
+    --tm-line-disabled: #b9b8ae;
+
+    --tm-accent: #44622a;
+    --tm-accent-hover: #38521f;
+    --tm-accent-press: #2d4318;
+    --tm-accent-text: #f6f8ee;
+    --tm-accent-soft: #dfe6c8;
+    --tm-link: #22577f;
+    --tm-link-hover: #163f5e;
+
+    --tm-hover: rgb(43 49 42 / 0.06);
+    --tm-press: rgb(43 49 42 / 0.12);
+    --tm-select-bg: #dbe3bd;
+    --tm-select-line: #5f7d34;
+    --tm-focus: #1d5fb0;
+
+    --tm-success: #2f6b37;
+    --tm-success-soft: #dbe8d3;
+    --tm-success-line: #6f9a6c;
+    --tm-warning: #7f5200;
+    --tm-warning-soft: #f2e2bd;
+    --tm-warning-line: #c39a45;
+    --tm-danger: #a2311f;
+    --tm-danger-soft: #f3d8d0;
+    --tm-danger-line: #cc7a6a;
+    --tm-info: #22608f;
+    --tm-info-soft: #d6e3ee;
+    --tm-info-line: #6f9cc2;
+    --tm-pending: #5f4a8c;
+    --tm-pending-soft: #e2dcee;
+    --tm-pending-line: #9887bd;
+    --tm-neutral: #4a5048;
+    --tm-neutral-soft: #e4e2d8;
+    --tm-neutral-line: #a5a79b;
+    --tm-offline: #5e615b;
+    --tm-offline-soft: #dfded8;
+    --tm-offline-line: #a3a49d;
+
+    --tm-chart-1: #2c6d8e;
+    --tm-chart-2: #b9652a;
+    --tm-chart-3: #4f7f30;
+    --tm-chart-4: #7d4c96;
+    --tm-chart-5: #8b7310;
+    --tm-chart-6: #a2311f;
+    --tm-chart-7: #4b5966;
+    --tm-chart-8: #237a70;
+    --tm-chart-grid: #d8d5c9;
+    --tm-chart-axis: #6d7268;
+    --tm-chart-threshold: #a2311f;
+    --tm-chart-target: #4f7f30;
+    --tm-chart-fill-opacity: 0.18;
+    --tm-heat-lo: #eceadf;
+    --tm-heat-hi: #2c6d8e;
+
+    --tm-shadow-overlay: 4px 4px 0 rgb(43 49 42 / 0.22);
+    --tm-shadow-raised: 2px 2px 0 rgb(43 49 42 / 0.14);
+    --tm-backdrop: rgb(34 39 31 / 0.42);
+  }
+
+  [data-tm-theme="dark"] {
+    color-scheme: dark;
+
+    /* Dark / Graphite — lifted graphite, never near-black */
+    --tm-canvas: #26292c;
+    --tm-surface: #33373b;
+    --tm-surface-alt: #383c41;
+    --tm-head-1: #3d4247;
+    --tm-head-2: #3a3f44;
+    --tm-sunken: #2e3235;
+    --tm-inset: #2b2e32;
+    --tm-inverse: #e3e5e0;
+
+    --tm-text: #e9ebe6;
+    --tm-text-2: #c9cdc6;
+    --tm-text-3: #aeb3ab;
+    --tm-text-inverse: #25282b;
+    --tm-text-disabled: #7c8279;
+
+    --tm-line-1: #a9aea6;
+    --tm-line-2: #646a71;
+    --tm-line-3: #4a4f55;
+    --tm-line-input: #7c838a;
+    --tm-line-disabled: #50555b;
+
+    --tm-accent: #aac67b;
+    --tm-accent-hover: #bcd68f;
+    --tm-accent-press: #98b468;
+    --tm-accent-text: #1d2412;
+    --tm-accent-soft: #414c37;
+    --tm-link: #93c3ea;
+    --tm-link-hover: #b9d8f2;
+
+    --tm-hover: rgb(233 235 230 / 0.06);
+    --tm-press: rgb(233 235 230 / 0.12);
+    --tm-select-bg: #44503a;
+    --tm-select-line: #aac67b;
+    --tm-focus: #7db3ff;
+
+    --tm-success: #94c78d;
+    --tm-success-soft: #36473a;
+    --tm-success-line: #5f8a5d;
+    --tm-warning: #e3b862;
+    --tm-warning-soft: #4b4332;
+    --tm-warning-line: #93773d;
+    --tm-danger: #f29180;
+    --tm-danger-soft: #503a39;
+    --tm-danger-line: #a2594d;
+    --tm-info: #8dbde6;
+    --tm-info-soft: #34434f;
+    --tm-info-line: #5a82a3;
+    --tm-pending: #bca7e6;
+    --tm-pending-soft: #423d52;
+    --tm-pending-line: #7c6ba3;
+    --tm-neutral: #c3c7c0;
+    --tm-neutral-soft: #3f4348;
+    --tm-neutral-line: #6b7176;
+    --tm-offline: #adb2b8;
+    --tm-offline-soft: #3b3f44;
+    --tm-offline-line: #62676d;
+
+    --tm-chart-1: #72b2d8;
+    --tm-chart-2: #e39c5c;
+    --tm-chart-3: #9fcc76;
+    --tm-chart-4: #c69de2;
+    --tm-chart-5: #e2c862;
+    --tm-chart-6: #f08879;
+    --tm-chart-7: #aab6c0;
+    --tm-chart-8: #5ec4b5;
+    --tm-chart-grid: #464b51;
+    --tm-chart-axis: #9aa09a;
+    --tm-chart-threshold: #f08879;
+    --tm-chart-target: #9fcc76;
+    --tm-chart-fill-opacity: 0.22;
+    --tm-heat-lo: #3a3f44;
+    --tm-heat-hi: #72b2d8;
+
+    --tm-shadow-overlay: 4px 4px 0 rgb(10 12 14 / 0.45);
+    --tm-shadow-raised: 2px 2px 0 rgb(10 12 14 / 0.3);
+    --tm-backdrop: rgb(16 18 20 / 0.6);
+  }
+
+  [data-tm-theme="coffee"] {
+    color-scheme: dark;
+
+    /* Coffee / Espresso-Mocha — warm mid-dark, cream ink, muted copper */
+    --tm-canvas: #33261e;
+    --tm-surface: #433228;
+    --tm-surface-alt: #48372c;
+    --tm-head-1: #503c2f;
+    --tm-head-2: #4b392d;
+    --tm-sunken: #3b2c23;
+    --tm-inset: #3a2b22;
+    --tm-inverse: #f1e5d3;
+
+    --tm-text: #f3e8d8;
+    --tm-text-2: #dccab2;
+    --tm-text-3: #c4ad91;
+    --tm-text-inverse: #33261e;
+    --tm-text-disabled: #8f7a66;
+
+    --tm-line-1: #c9a985;
+    --tm-line-2: #7c624e;
+    --tm-line-3: #5d4739;
+    --tm-line-input: #937660;
+    --tm-line-disabled: #5f4b3e;
+
+    --tm-accent: #d79560;
+    --tm-accent-hover: #e3a874;
+    --tm-accent-press: #c4824d;
+    --tm-accent-text: #2b1a0f;
+    --tm-accent-soft: #5a4031;
+    --tm-link: #edc48f;
+    --tm-link-hover: #f6d9b2;
+
+    --tm-hover: rgb(243 232 216 / 0.06);
+    --tm-press: rgb(243 232 216 / 0.12);
+    --tm-select-bg: #604431;
+    --tm-select-line: #d79560;
+    --tm-focus: #83cfc6;
+
+    --tm-success: #b0c986;
+    --tm-success-soft: #46452e;
+    --tm-success-line: #7c8a55;
+    --tm-warning: #ecb85f;
+    --tm-warning-soft: #574129;
+    --tm-warning-line: #9a7339;
+    --tm-danger: #f3977f;
+    --tm-danger-soft: #5a3530;
+    --tm-danger-line: #a95c4c;
+    --tm-info: #96c4dc;
+    --tm-info-soft: #3e4446;
+    --tm-info-line: #637f8e;
+    --tm-pending: #d0afdc;
+    --tm-pending-soft: #4d3a48;
+    --tm-pending-line: #8b6c88;
+    --tm-neutral: #dccab2;
+    --tm-neutral-soft: #4c3a2f;
+    --tm-neutral-line: #7c624e;
+    --tm-offline: #bcab98;
+    --tm-offline-soft: #48392f;
+    --tm-offline-line: #76655a;
+
+    --tm-chart-1: #d79560;
+    --tm-chart-2: #92c2dc;
+    --tm-chart-3: #b0c986;
+    --tm-chart-4: #d0a2dc;
+    --tm-chart-5: #e8c873;
+    --tm-chart-6: #f08e7a;
+    --tm-chart-7: #bba893;
+    --tm-chart-8: #74c3b4;
+    --tm-chart-grid: #57443a;
+    --tm-chart-axis: #b39d85;
+    --tm-chart-threshold: #f08e7a;
+    --tm-chart-target: #b0c986;
+    --tm-chart-fill-opacity: 0.22;
+    --tm-heat-lo: #4a382d;
+    --tm-heat-hi: #e8b06f;
+
+    --tm-shadow-overlay: 4px 4px 0 rgb(20 12 8 / 0.5);
+    --tm-shadow-raised: 2px 2px 0 rgb(20 12 8 / 0.35);
+    --tm-backdrop: rgb(24 16 11 / 0.62);
+  }
+}

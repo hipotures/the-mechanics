@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300" role="img" aria-label="Document stand">
+<rect width="400" height="300" fill="#d8cdb9"/>
+<rect y="214" width="400" height="86" fill="#c1b298"/>
+<g stroke="#2b2f2a" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><path d="M140 210l40-130h50l-25 130z" fill="#b8874f"/><path d="M175 95h60" stroke-width="3"/>
+    <rect x="182" y="70" width="70" height="95" fill="#f2eee4" transform="rotate(14 217 117)"/><path d="M196 96l42 10M193 110l42 10M190 124l30 7" stroke-width="2" transform="rotate(0)"/>
+    <path d="M150 210h110" stroke-width="5"/></g>
+<path d="M0 214H400" stroke="#2b2f2a" stroke-opacity=".25" stroke-width="2"/>
+</svg>

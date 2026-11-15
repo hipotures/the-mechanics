@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300" role="img" aria-label="SSD case">
+<rect width="400" height="300" fill="#c3c6c8"/>
+<rect y="214" width="400" height="86" fill="#abb0b3"/>
+<g stroke="#2b2f2a" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><rect x="125" y="110" width="150" height="96" rx="10" fill="#4e555c"/><rect x="140" y="124" width="120" height="68" rx="4" fill="#3f454b"/>
+    <path d="M275 140h20v36h-20" fill="#4e555c"/><rect x="160" y="140" width="80" height="36" fill="#9aa3ab" stroke-width="2"/></g>
+<path d="M0 214H400" stroke="#2b2f2a" stroke-opacity=".25" stroke-width="2"/>
+</svg>

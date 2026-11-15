@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300" role="img" aria-label="Wall clock">
+<rect width="400" height="300" fill="#c5c9bf"/>
+<rect y="214" width="400" height="86" fill="#aeb3a7"/>
+<g stroke="#2b2f2a" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><circle cx="200" cy="120" r="78" fill="#f2eee4" stroke-width="7"/>
+    <path d="M262 120L270 120" stroke-width="3"/><path d="M253.69357503463522 151L260.6217782649107 155" stroke-width="3"/><path d="M231 173.6935750346352L235 180.6217782649107" stroke-width="3"/><path d="M200 182L200 190" stroke-width="3"/><path d="M169 173.69357503463522L165 180.62177826491072" stroke-width="3"/><path d="M146.30642496536478 151L139.37822173508928 155" stroke-width="3"/><path d="M138 120.00000000000001L130 120.00000000000001" stroke-width="3"/><path d="M146.30642496536478 89.00000000000001L139.37822173508928 85.00000000000003" stroke-width="3"/><path d="M168.99999999999997 66.30642496536481L164.99999999999997 59.378221735089305" stroke-width="3"/><path d="M200 58L200 50" stroke-width="3"/><path d="M231 66.30642496536481L235 59.3782217350893" stroke-width="3"/><path d="M253.6935750346352 88.99999999999997L260.6217782649107 84.99999999999997" stroke-width="3"/>
+    <path d="M200 120V72M200 120l30 18" stroke-width="5"/><circle cx="200" cy="120" r="5" fill="#2b2f2a"/></g>
+<path d="M0 214H400" stroke="#2b2f2a" stroke-opacity=".25" stroke-width="2"/>
+</svg>

@@ -1,0 +1,62 @@
+[
+  {
+    "name": "theme switch is instant, reflected in URL and persisted",
+    "ok": true
+  },
+  {
+    "name": "theme geometry identical across all themes (6 pages)",
+    "ok": true
+  },
+  {
+    "name": "keyboard: first Tab reaches skip link; focus ring visible",
+    "ok": true
+  },
+  {
+    "name": "navigation + sidebar collapse",
+    "ok": true
+  },
+  {
+    "name": "analytics: 16 charts + 2 state panels, legend toggle, keyboard tooltip",
+    "ok": true
+  },
+  {
+    "name": "analytics: service filter + time range empty state + refresh",
+    "ok": true
+  },
+  {
+    "name": "workspace: search empty state, unit select, tab keys, load next",
+    "ok": true
+  },
+  {
+    "name": "data: sort, empty search, select all/indeterminate, pagination",
+    "ok": true
+  },
+  {
+    "name": "data: confirmation dialog — Escape closes and returns focus; confirm applies",
+    "ok": true
+  },
+  {
+    "name": "data: row menu keyboard, inline edit, editor validation, loading/error states",
+    "ok": true
+  },
+  {
+    "name": "catalog: no results, detail drawer with missing image, cart discount error",
+    "ok": true
+  },
+  {
+    "name": "content: TOC navigation moves focus to section heading",
+    "ok": true
+  },
+  {
+    "name": "gallery: popover menu arrow keys + Escape; dialog; tooltip on focus",
+    "ok": true
+  },
+  {
+    "name": "reduced motion: animations neutralised",
+    "ok": true
+  },
+  {
+    "name": "no uncaught page errors",
+    "ok": true
+  }
+]

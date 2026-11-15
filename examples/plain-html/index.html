@@ -1,0 +1,75 @@
+<!doctype html>
+<!--
+  CSS-only consumer example: no Tailwind, no daisyUI, no framework.
+  Build the distribution first:  corepack pnpm build:css
+  Then open this file directly (file://) or serve the repository root.
+-->
+<html lang="en" data-tm-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Mechanics — plain HTML consumer</title>
+  <link rel="stylesheet" href="../../dist/the-mechanics/fonts.css">
+  <link rel="stylesheet" href="../../dist/the-mechanics/the-mechanics.css">
+  <style>
+    /* App-owned layout only; components come from the-mechanics.css */
+    main { max-width: 960px; margin: 0 auto; padding: 24px 16px; display: grid; gap: 16px; }
+    .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  </style>
+</head>
+<body class="tm-root">
+  <main>
+    <header class="tm-page-head">
+      <div class="tm-page-head__text">
+        <div class="tm-eyebrow">Consumer example · plain HTML</div>
+        <h1 class="tm-page-title">Job queue</h1>
+        <p class="tm-subtitle">Only <code>the-mechanics.css</code> and <code>fonts.css</code> are loaded.</p>
+      </div>
+      <fieldset class="tm-segmented tm-segmented--sm" aria-label="Theme">
+        <legend class="tm-sr-only">Theme</legend>
+        <label class="tm-segmented__option"><input type="radio" name="t" value="light" checked>Light</label>
+        <label class="tm-segmented__option"><input type="radio" name="t" value="dark">Dark</label>
+        <label class="tm-segmented__option"><input type="radio" name="t" value="coffee">Coffee</label>
+      </fieldset>
+    </header>
+
+    <section class="tm-region" aria-labelledby="q">
+      <header class="tm-region__head"><h2 class="tm-region__title" id="q">Workers</h2><span class="tm-badge tm-badge--warning">1 offline</span></header>
+      <div class="tm-toolbar">
+        <div class="tm-input-group" style="flex:1 1 14rem;max-width:20rem"><input class="tm-input" type="search" placeholder="Filter jobs" aria-label="Filter jobs"></div>
+        <span class="tm-toolbar__spacer"></span>
+        <button class="tm-btn tm-btn--sm tm-btn--outline">Pause</button>
+        <button class="tm-btn tm-btn--sm tm-btn--primary" id="open">Run job…</button>
+      </div>
+      <div class="tm-table-wrap tm-table-wrap--flush">
+        <table class="tm-table tm-table--stack">
+          <thead><tr><th scope="col">Job</th><th scope="col">Status</th><th scope="col" class="tm-col-num">Duration</th></tr></thead>
+          <tbody>
+            <tr><td class="tm-cell-primary" data-label="Job"><span class="tm-table__primary">export-usage</span></td><td data-label="Status"><span class="tm-badge tm-badge--success">Done</span></td><td class="tm-num" data-label="Duration">1.8 s</td></tr>
+            <tr aria-selected="true"><td class="tm-cell-primary" data-label="Job"><span class="tm-table__primary">reindex-catalog</span></td><td data-label="Status"><span class="tm-badge tm-badge--pending">Pending</span></td><td class="tm-num" data-label="Duration">—</td></tr>
+            <tr><td class="tm-cell-primary" data-label="Job"><span class="tm-table__primary">sync-provider-b</span></td><td data-label="Status"><span class="tm-badge tm-badge--danger">Failed</span></td><td class="tm-num" data-label="Duration">12.0 s</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <div class="tm-alert tm-alert--danger" role="alert">
+      <svg class="tm-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5l6.5 12h-13zM8 6v3.5M8 11.5v.01"/></svg>
+      <div><div class="tm-alert__title">sync-provider-b failed</div><div class="tm-alert__body">Provider unavailable. Retry from the job menu.</div></div>
+    </div>
+
+    <dialog class="tm-dialog" id="dlg" aria-labelledby="dlg-t">
+      <form method="dialog">
+        <div class="tm-dialog__head"><h2 class="tm-dialog__title" id="dlg-t">Run job</h2></div>
+        <div class="tm-dialog__body"><div class="tm-field"><label class="tm-field__label" for="name">Job name</label><input class="tm-input" id="name" value="reindex-catalog"></div></div>
+        <div class="tm-dialog__foot"><button class="tm-btn tm-btn--outline" value="cancel">Cancel</button><button class="tm-btn tm-btn--primary" value="ok">Run</button></div>
+      </form>
+    </dialog>
+  </main>
+  <script>
+    document.querySelectorAll('input[name="t"]').forEach((r) =>
+      r.addEventListener("change", () => document.documentElement.setAttribute("data-tm-theme", r.value)));
+    document.getElementById("open").addEventListener("click", () => document.getElementById("dlg").showModal());
+  </script>
+</body>
+</html>
