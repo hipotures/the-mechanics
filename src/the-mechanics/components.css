@@ -205,7 +205,6 @@
     background: var(--tm-select-bg);
     border-color: var(--tm-line-2);
     color: var(--tm-text);
-    font-weight: var(--tm-weight-semibold);
     box-shadow: inset 3px 0 0 var(--tm-select-line);
   }
   .tm-nav__label {
@@ -760,7 +759,6 @@
   .tm-segmented__option:has(input:checked) {
     background: var(--tm-select-bg);
     color: var(--tm-text);
-    font-weight: var(--tm-weight-bold);
     box-shadow: inset 0 -3px 0 var(--tm-select-line);
   }
   .tm-segmented__option:disabled,
@@ -1535,7 +1533,6 @@
   }
   .tm-tab[aria-selected="true"] {
     color: var(--tm-text);
-    font-weight: var(--tm-weight-bold);
   }
   .tm-tab[aria-selected="true"]::after {
     content: "";
@@ -1595,6 +1592,8 @@
   }
 
   /* Filter / search chip */
+  /* Selection never changes font-weight: bolder text is wider and would
+     shift neighbouring items. State is shown by fill, border, bar and color. */
   .tm-chip {
     display: inline-flex;
     align-items: center;
@@ -1618,7 +1617,7 @@
   .tm-chip--toggle[aria-pressed="true"] {
     background: var(--tm-select-bg);
     border-color: var(--tm-select-line);
-    font-weight: var(--tm-weight-semibold);
+    box-shadow: inset 0 -2px 0 var(--tm-select-line);
   }
   .tm-chip__remove {
     display: inline-grid;
@@ -2585,7 +2584,6 @@
   .tm-toc a[aria-current="location"] {
     border-left-color: var(--tm-select-line);
     color: var(--tm-text);
-    font-weight: var(--tm-weight-semibold);
   }
 
   .tm-footer {

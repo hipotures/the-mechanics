@@ -210,6 +210,28 @@ try {
     assert((await page.locator(".tm-product").count()) === 2, "category filter");
   });
 
+  await check("selection never shifts neighbours (chips, segmented, tabs, theme switcher)", async () => {
+    // Clicking an option must not change any sibling's position or size.
+    const groups = [
+      ["catalog", "[data-cat]"],
+      ["analytics", '.tm-segmented:has(input[name="range"]) .tm-segmented__option'],
+      ["analytics", "#theme-switcher .tm-segmented__option"],
+      ["data", '.tm-segmented:has(input[name="mode"]) .tm-segmented__option'],
+      ["workspace", "[data-tab]"],
+    ];
+    for (const [route, sel] of groups) {
+      await go(route, "coffee");
+      const boxes = () => page.$$eval(sel, (els) => els.map((e) => { const r = e.getBoundingClientRect(); return `${r.x.toFixed(1)},${r.width.toFixed(1)}`; }).join("|"));
+      const ref = await boxes();
+      const n = await page.locator(sel).count();
+      for (let i = 0; i < n; i++) {
+        await page.locator(sel).nth(i).click();
+        const now = await boxes();
+        assert(now === ref, `${route} ${sel} item ${i}: ${ref} -> ${now}`);
+      }
+    }
+  });
+
   /* ---- Content / gallery ---------------------------------------- */
   await check("content: TOC navigation moves focus to section heading", async () => {
     await go("content");

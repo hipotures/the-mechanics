@@ -89,7 +89,7 @@ Reading width 68ch; content max 1600 px; narrow 1120 px; sidebar 232 px (56 px c
 | Component | Rules |
 |---|---|
 | Button | Variants primary / secondary / outline / ghost / danger / danger-outline; sizes sm / md / lg; icon-only must have `aria-label`. Loading = `aria-busy="true"` (spinner + label kept). Disabled = muted surface, gray border and text, `not-allowed` cursor. Pressed = `aria-pressed="true"`. |
-| Segmented control | Radio inputs inside `.tm-segmented__option` (or `aria-pressed` buttons). Selected = selection tint + 3 px underline + bold — three cues. |
+| Segmented control | Radio inputs inside `.tm-segmented__option` (or `aria-pressed` buttons). Selected = selection tint + 3 px underline + full-strength text color. Selection never changes font weight, so widths never shift. |
 | Fields | Label above, hint below, error replaces nothing (both can show). Invalid = `aria-invalid="true"` → red border + 3 px inset bar + `.tm-field__error` with a “!” glyph. Read-only = dashed outline, transparent fill. Prefix/suffix via `.tm-input-group` + `.tm-affix`. |
 | Selection | Square checkbox (2 px radius), round radio, rectangular switch (not pill). Indeterminate shows a bar. Descriptions via `.tm-choice__desc`. |
 | Badge | Mono 11 px, 1 px tinted border, soft fill, **marker shape per tone** (✓ success, ▲ warning, ✕ danger, ● info, ○ pending, dashed □ offline, — disabled). Count badge is inverse. |
