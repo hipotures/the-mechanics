@@ -549,11 +549,23 @@
   .tm-row--interactive.is-hover {
     background: var(--tm-hover);
   }
-  .tm-row[aria-selected="true"],
-  .tm-row[aria-current="true"],
-  .tm-row.is-selected {
+  /* Selected row = an inset block (like the active side-nav item): selection
+     fill + selection-colored control frame, a few px away from the panel edges
+     and row separators so frames never stack. Drawn as a background layer, so
+     row height, separators and density are unchanged. */
+  .tm-row {
+    isolation: isolate;
+  }
+  .tm-row[aria-selected="true"]::before,
+  .tm-row[aria-current="true"]::before,
+  .tm-row.is-selected::before {
+    content: "";
+    position: absolute;
+    inset: 3px 4px;
+    z-index: -1;
+    border: var(--tm-bw-control) solid var(--tm-select-line);
+    border-radius: var(--tm-radius-control);
     background: var(--tm-select-bg);
-    box-shadow: inset 0 0 0 1px var(--tm-select-line);
   }
   .tm-row:focus-visible {
     outline-offset: -2px;
