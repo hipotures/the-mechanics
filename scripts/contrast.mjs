@@ -48,6 +48,8 @@ const pairs = [
   ["surface", "danger", T, "danger button label"],
   ["line-1", "surface", G, "Level 1 boundary"],
   ["line-1", "canvas", G, "Level 1 boundary vs canvas"],
+  ["line-2", "surface", G, "Level 2 boundary (panel, card, table)"],
+  ["line-2", "canvas", G, "Level 2 boundary vs canvas"],
   ["line-input", "inset", G, "form control boundary"],
   ["focus", "surface", G, "focus ring on panel"],
   ["focus", "canvas", G, "focus ring on canvas"],
@@ -58,7 +60,6 @@ const pairs = [
 ];
 // Informational (no WCAG minimum): hierarchy and disabled pairs.
 const info = [
-  ["line-2", "surface", "Level 2 boundary (graphic, intentionally softer)"],
   ["line-3", "surface", "Level 3 hairline (decorative separator)"],
   ["surface", "canvas", "surface vs canvas separation"],
   ["head-1", "surface", "region head band vs body"],

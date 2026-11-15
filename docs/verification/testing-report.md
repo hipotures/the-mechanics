@@ -30,6 +30,12 @@ Round 2 (interaction smoke + state screenshots):
 15. Threshold labels could collide with data points → surface-colored halo on chart labels.
 16. Theme switch animated colors for 90 ms → transitions suppressed for one frame during switches.
 
+Round 3 (owner review):
+17. Selected chips/segments/tabs switched to bold and shifted their neighbours by 2px → selection no longer changes font weight; new smoke check clicks every option and asserts no sibling moves (fails on the old CSS).
+18. Product card footer mixed three element types and heights → stock moved into the body as a bare text badge; footer is a fixed-height price | flush-button strip.
+19. Inconsistent hover (buttons filled, chips/pagination/cards changed border; cards are not clickable) → single rule: clickable controls get a fill tint, borders never change on hover, non-clickable containers do not react.
+20. Level-2 borders too faint (2.15:1 Coffee, 2.19:1 Dark, 2.51:1 Light on canvas) → raised to ≥3:1 on surface and canvas in all themes; now enforced by `check:contrast` (41 pairs per theme).
+
 ### Interaction / keyboard checks — `pnpm smoke` (15/15 pass, [`smoke-results.json`](smoke-results.json))
 Desktop 1440×900, Chromium:
 - Theme switch: instant, reflected in `?theme=`, persisted across reload; **page width/height identical across Light/Dark/Coffee on all 6 pages**.

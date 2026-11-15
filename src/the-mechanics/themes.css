@@ -35,7 +35,7 @@
     --tm-text-disabled: #8a8d84;
 
     --tm-line-1: #2b312a;       /* Level 1 — ink */
-    --tm-line-2: #858a7d;       /* Level 2 — graphite pencil */
+    --tm-line-2: #767b6f;       /* Level 2 — graphite pencil, ≥3:1 on surface and canvas */
     --tm-line-3: #cbc8bb;       /* Level 3 — hairline */
     --tm-line-input: #737a6f;
     --tm-line-disabled: #b9b8ae;
@@ -48,7 +48,7 @@
     --tm-link: #22577f;
     --tm-link-hover: #163f5e;
 
-    --tm-hover: rgb(43 49 42 / 0.06);
+    --tm-hover: rgb(43 49 42 / 0.07);
     --tm-press: rgb(43 49 42 / 0.12);
     --tm-select-bg: #dbe3bd;
     --tm-select-line: #5f7d34;
@@ -117,7 +117,7 @@
     --tm-text-disabled: #7c8279;
 
     --tm-line-1: #a9aea6;
-    --tm-line-2: #646a71;
+    --tm-line-2: #7f868d;
     --tm-line-3: #4a4f55;
     --tm-line-input: #7c838a;
     --tm-line-disabled: #50555b;
@@ -130,7 +130,7 @@
     --tm-link: #93c3ea;
     --tm-link-hover: #b9d8f2;
 
-    --tm-hover: rgb(233 235 230 / 0.06);
+    --tm-hover: rgb(233 235 230 / 0.08);
     --tm-press: rgb(233 235 230 / 0.12);
     --tm-select-bg: #44503a;
     --tm-select-line: #aac67b;
@@ -199,7 +199,7 @@
     --tm-text-disabled: #8f7a66;
 
     --tm-line-1: #c9a985;
-    --tm-line-2: #7c624e;
+    --tm-line-2: #9a7d66;
     --tm-line-3: #5d4739;
     --tm-line-input: #937660;
     --tm-line-disabled: #5f4b3e;
@@ -212,7 +212,7 @@
     --tm-link: #edc48f;
     --tm-link-hover: #f6d9b2;
 
-    --tm-hover: rgb(243 232 216 / 0.06);
+    --tm-hover: rgb(243 232 216 / 0.08);
     --tm-press: rgb(243 232 216 / 0.12);
     --tm-select-bg: #604431;
     --tm-select-line: #d79560;

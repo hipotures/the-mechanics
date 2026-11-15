@@ -15,7 +15,8 @@ Source of truth for values: `src/the-mechanics/tokens.css` (geometry, type, spac
 3. **Color means something.** Accent = primary action / selection. Status hues = state. Chart hues = series identity. Decoration uses neutrals.
 4. **Never color alone.** Every status badge has a marker shape; series have dash patterns or marker styles; selection adds a 3–4 px bar; invalid fields add an inset bar and an error message.
 5. **Themes change paint, never geometry.** Verified by the smoke test: page dimensions are identical in all three themes on all six pages.
-6. **Native first.** `<dialog>`, `<details>`, `popover`, real inputs and buttons. This keeps the CSS portable to any framework or server-rendered stack.
+6. **One hover language.** Every clickable control signals hover by a fill tint (`--tm-hover`), never by changing its border; selection never changes font weight (widths stay constant). Only form fields darken their border on hover. Containers that are not clickable (panels, product cards, regions) do not react to hover.
+7. **Native first.** `<dialog>`, `<details>`, `popover`, real inputs and buttons. This keeps the CSS portable to any framework or server-rendered stack.
 
 ## 2. Three-level visual hierarchy
 
@@ -46,7 +47,7 @@ Selected by `data-tm-theme` on `<html>` (or any subtree). Light is the default.
 Design choices:
 
 - The **focus ring is a different hue family from the accent/selection** in every theme (blue/blue/teal vs olive/olive/copper), so *selected* and *focused* are always distinguishable even on the same element.
-- Level-1 lines are dark ink in Light but a light gray / latte in the dark themes; Level-2 lines are intentionally softer (2.2–3.2:1) because they are subordinate; Level-1 boundaries and input outlines meet ≥3:1.
+- Level-1 lines are dark ink in Light but a light gray / latte in the dark themes. Level-2 lines are lighter in tone and 1px instead of 2px, but still meet ≥3:1 against both the panel surface and the page canvas in every theme, so every panel and card edge is clearly visible. Level 3 hairlines are decorative separators inside a panel.
 - The built-in daisyUI `retro`, `coffee`, `caramellatte`, `wireframe` and `cyberpunk` themes were inspected as references (radius/border/depth and base colors). None is used; all three themes are original values.
 
 Contrast for 39 essential pairs per theme is computed by `pnpm check:contrast` → [docs/verification/contrast.md](docs/verification/contrast.md). All pass (4.5:1 text, 3:1 graphics/control boundaries).
@@ -140,7 +141,7 @@ Reading width 68ch; content max 1600 px; narrow 1120 px; sidebar 232 px (56 px c
 ## 9. Decisions for owner review
 
 1. **Monospace display headings** (Plex Mono bold) give the retro-tech character; an alternative is Plex Sans headings with mono only for labels.
-2. **Level-2 line contrast** (2.2–3.2:1) is deliberately below the 3:1 non-text threshold for being *subordinate*; panels are also separated by header bands and spacing. If strict 1.4.11 compliance is required for every panel edge, raise `--tm-line-2`.
+2. **Level-2 line contrast** was raised after review (previously 2.2:1 in Dark/Coffee) to ≥3:1 on surface and canvas. If panels now feel too heavy, the alternative is to keep 3:1 only against the canvas.
 3. **Accent hues**: olive (Light/Dark) and copper (Coffee). Dark could alternatively use a cool steel accent.
 4. **Data table compact rows** show name + id/email on two lines (~54 px). A single-line variant could be added for 32 px rows.
 5. **Analytics `.tm-panel-grid`** (hairline-separated panels) vs individually framed panels — chosen to avoid “grid of equally heavy boxes”.

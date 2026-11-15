@@ -513,9 +513,13 @@
     background: var(--tm-surface);
     border: var(--tm-bw-2) solid var(--tm-line-2);
   }
+  /* Hover rule (all clickable controls): add a fill tint, never change the
+     border. Borders change on hover only for form fields. Non-clickable
+     containers (panels, product cards) do not react to hover at all. */
   .tm-card--interactive:hover,
   .tm-card--interactive.is-hover {
-    border-color: var(--tm-line-1);
+    background-image: linear-gradient(var(--tm-hover), var(--tm-hover));
+    cursor: pointer;
   }
 
   /* Metadata row */
@@ -1578,8 +1582,8 @@
     font-size: var(--tm-text-xs);
     cursor: pointer;
   }
-  .tm-pagination__page:hover {
-    border-color: var(--tm-line-1);
+  .tm-pagination__page:hover:not(:disabled):not([aria-current="page"]) {
+    background-image: linear-gradient(var(--tm-hover), var(--tm-hover));
     color: var(--tm-text);
   }
   .tm-pagination__page[aria-current="page"] {
@@ -1621,7 +1625,7 @@
     padding: 0 var(--tm-space-2);
   }
   .tm-chip--toggle:hover {
-    border-color: var(--tm-line-1);
+    background-image: linear-gradient(var(--tm-hover), var(--tm-hover));
   }
   .tm-chip--toggle[aria-pressed="true"] {
     background: var(--tm-select-bg);
@@ -2339,10 +2343,6 @@
     min-width: 0;
     background: var(--tm-surface);
     border: var(--tm-bw-2) solid var(--tm-line-2);
-  }
-  .tm-product:hover,
-  .tm-product.is-hover {
-    border-color: var(--tm-line-1);
   }
   .tm-product__body {
     display: grid;
