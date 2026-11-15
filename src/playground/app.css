@@ -46,7 +46,7 @@ html {
 }
 .pg-sidebar-foot {
   margin-top: auto;
-  padding: var(--tm-space-3) var(--tm-space-2) 0;
+  padding: var(--tm-space-3) calc(var(--tm-bw-control) + var(--tm-select-pad)) 0;
   border-top: 1px solid var(--tm-line-3);
 }
 .tm-shell[data-sidebar="collapsed"] .pg-sidebar-foot {
@@ -374,3 +374,6 @@ h1:focus { outline: 0; }
 .pg-compact .tm-table__secondary { display: none; }
 .pg-note-flag { display: none; color: var(--tm-info); }
 .pg-compact .pg-note-flag { display: inline-flex; }
+
+/* Unit list column header aligned with the row text (selection-block geometry). */
+.pg-units .tm-colhead { padding-inline: var(--tm-select-text); }

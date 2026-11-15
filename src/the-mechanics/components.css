@@ -163,7 +163,7 @@
     display: flex;
     flex-direction: column;
     gap: var(--tm-space-1);
-    padding: var(--tm-space-3) var(--tm-space-2);
+    padding: var(--tm-space-3) var(--tm-select-inset);
   }
   .tm-main {
     grid-area: main;
@@ -179,7 +179,8 @@
     list-style: none;
   }
   .tm-nav__section {
-    padding: var(--tm-space-3) var(--tm-space-2) var(--tm-space-1);
+    /* aligned with item text: inset + frame + pad */
+    padding: var(--tm-space-3) calc(var(--tm-bw-control) + var(--tm-select-pad)) var(--tm-space-1);
   }
   .tm-nav__item {
     position: relative;
@@ -187,7 +188,7 @@
     align-items: center;
     gap: var(--tm-space-2);
     min-height: var(--tm-control-md);
-    padding: 0 var(--tm-space-2);
+    padding: 0 var(--tm-select-pad);
     border: var(--tm-bw-control) solid transparent;
     border-radius: var(--tm-radius-control);
     color: var(--tm-text-2);
@@ -528,7 +529,8 @@
     align-items: center;
     gap: var(--tm-space-2);
     min-height: var(--tm-row);
-    padding: var(--tm-space-1) var(--tm-cell-pad-x);
+    /* text sits where it would inside the selection block (same as nav items) */
+    padding: var(--tm-space-1) var(--tm-select-text);
     border-bottom: var(--tm-bw-3) solid var(--tm-line-3);
     color: var(--tm-text);
   }
@@ -561,7 +563,7 @@
   .tm-row.is-selected::before {
     content: "";
     position: absolute;
-    inset: 3px 4px;
+    inset: 3px var(--tm-select-inset);
     z-index: -1;
     border: var(--tm-bw-control) solid var(--tm-select-line);
     border-radius: var(--tm-radius-control);

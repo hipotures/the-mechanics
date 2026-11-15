@@ -73,6 +73,12 @@
     --tm-bw-focus: 2px;
     --tm-focus-offset: 2px;
 
+    /* Selection block geometry, shared by nav items and list rows:
+       container edge → 4px gap → 2px frame → 8px → text (text at 14px). */
+    --tm-select-inset: 4px;
+    --tm-select-pad: 8px;
+    --tm-select-text: calc(var(--tm-select-inset) + var(--tm-bw-control) + var(--tm-select-pad));
+
     /* Control sizing */
     --tm-control-sm: 1.75rem;  /* 28 */
     --tm-control-md: 2rem;     /* 32 */
