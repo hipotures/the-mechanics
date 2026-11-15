@@ -15,9 +15,10 @@ Source of truth for values: `src/the-mechanics/tokens.css` (geometry, type, spac
 3. **Color means something.** Accent = primary action / selection. Status hues = state. Chart hues = series identity. Decoration uses neutrals.
 4. **Never color alone.** Every status badge has a marker shape; series have dash patterns or marker styles; selection adds a 3–4 px bar; invalid fields add an inset bar and an error message.
 5. **Themes change paint, never geometry.** Verified by the smoke test: page dimensions are identical in all three themes on all six pages.
-6. **No side accent bars.** Elements never get a thick colored bar on their left edge (no `border-left` accents, no inset-shadow bars). State is shown by fill, a thin straight frame and typography: errors = 1px border in the error color + message; selected rows/items = selection fill + 1px selection-colored frame (tables: fill + checked checkbox); active navigation = fill + frame + full-strength text; alerts, toasts, code blocks = uniform 1px border. Allowed exceptions: the blockquote rule and the table-of-contents position indicator; horizontal indicators (tab/segment underlines) are fine.
-7. **One hover language.** Every clickable control signals hover by a fill tint (`--tm-hover`), never by changing its border; selection never changes font weight (widths stay constant). Only form fields darken their border on hover. Containers that are not clickable (panels, product cards, regions) do not react to hover.
-8. **Native first.** `<dialog>`, `<details>`, `popover`, real inputs and buttons. This keeps the CSS portable to any framework or server-rendered stack.
+6. **No side accent bars.** Elements never get a thick colored bar on their left edge (no `border-left` accents, no inset-shadow bars). State is shown by fill, a thin straight frame and typography: errors = 1px border in the error color + message; selected rows/items = selection fill + 1px selection-colored frame (tables: fill + checked checkbox); active navigation = fill + frame + full-strength text; alerts, toasts, code blocks = uniform 1px border. Allowed exceptions: the blockquote rule and the table-of-contents position indicator; the horizontal underline of frameless tabs.
+7. **Strong controls, calm structure.** Everything you operate is drawn at full strength: inputs, selects, steppers, buttons, segmented controls, toggle chips, checkboxes, radios and switches use a 2px border in `--tm-ink` (dark ink in Light, bright text color in Dark/Coffee); checked checkboxes/radios/switches are filled with ink and carry a surface-colored mark. Structure (regions, panels, rows) keeps its own, calmer hierarchy. Control heights do not change with border width (border-box). Selected segments and chips are marked by the selection fill inside the ink frame (chips also switch to a selection-colored frame) — no underline.
+8. **One hover language.** Every clickable control signals hover by a fill tint (`--tm-hover`), never by changing its border; selection never changes font weight (widths stay constant). Only form fields darken their border on hover. Containers that are not clickable (panels, product cards, regions) do not react to hover.
+9. **Native first.** `<dialog>`, `<details>`, `popover`, real inputs and buttons. This keeps the CSS portable to any framework or server-rendered stack.
 
 ## 2. Three-level visual hierarchy
 
@@ -56,7 +57,7 @@ Contrast for 39 essential pairs per theme is computed by `pnpm check:contrast` �
 ## 4. Tokens (public API `--tm-*`)
 
 ### Color roles (per theme)
-`--tm-chrome`, `--tm-canvas`, `--tm-surface`, `--tm-surface-alt`, `--tm-head-1`, `--tm-head-2`, `--tm-sunken`, `--tm-inset`, `--tm-inverse` · `--tm-text`, `--tm-text-2`, `--tm-text-3`, `--tm-text-inverse`, `--tm-text-disabled` · `--tm-line-1/2/3`, `--tm-line-input`, `--tm-line-disabled` · `--tm-accent`, `-hover`, `-press`, `-text`, `-soft` · `--tm-link`, `--tm-link-hover` · `--tm-hover`, `--tm-press`, `--tm-select-bg`, `--tm-select-line`, `--tm-focus` · status `--tm-{success|warning|danger|info|pending|neutral|offline}` each with `-soft` and `-line` · charts `--tm-chart-1…8`, `--tm-chart-grid`, `--tm-chart-axis`, `--tm-chart-threshold`, `--tm-chart-target`, `--tm-chart-fill-opacity`, `--tm-heat-lo`, `--tm-heat-hi` · `--tm-shadow-overlay`, `--tm-shadow-raised`, `--tm-backdrop`.
+`--tm-chrome`, `--tm-ink` (controls), `--tm-canvas`, `--tm-surface`, `--tm-surface-alt`, `--tm-head-1`, `--tm-head-2`, `--tm-sunken`, `--tm-inset`, `--tm-inverse` · `--tm-text`, `--tm-text-2`, `--tm-text-3`, `--tm-text-inverse`, `--tm-text-disabled` · `--tm-line-1/2/3`, `--tm-line-input`, `--tm-line-disabled` · `--tm-accent`, `-hover`, `-press`, `-text`, `-soft` · `--tm-link`, `--tm-link-hover` · `--tm-hover`, `--tm-press`, `--tm-select-bg`, `--tm-select-line`, `--tm-focus` · status `--tm-{success|warning|danger|info|pending|neutral|offline}` each with `-soft` and `-line` · charts `--tm-chart-1…8`, `--tm-chart-grid`, `--tm-chart-axis`, `--tm-chart-threshold`, `--tm-chart-target`, `--tm-chart-fill-opacity`, `--tm-heat-lo`, `--tm-heat-hi` · `--tm-shadow-overlay`, `--tm-shadow-raised`, `--tm-backdrop`.
 
 ### Typography
 | Token | Value | Use |
@@ -75,8 +76,8 @@ Why Plex: open license (OFL-1.1), a *soft* monospace with clear `0/O`, `1/l/I` d
 ### Spacing, geometry, density
 - Spacing: 4 px rhythm `--tm-space-1…16` (4, 8, 12, 16, 20, 24, 32, 40, 48, 64).
 - Radius: regions/panels **0**, controls/badges **2 px**, overlays **3 px**. No pills.
-- Border widths: `--tm-bw-1` 2 px, `--tm-bw-2` 1 px, `--tm-bw-3` 1 px (strength comes from color), focus 2 px + 2 px offset.
-- Controls: 28 / 32 / 40 px; checkbox 16 px; icons 14 / 16 / 20 px.
+- Border widths: `--tm-bw-1` 2 px, `--tm-bw-2` 1 px, `--tm-bw-3` 1 px (strength comes from color), `--tm-bw-control` 2 px (all interactive controls, in `--tm-ink`), focus 2 px + 2 px offset.
+- Controls: 28 / 32 / 40 px; checkbox/radio 18 px; icons 14 / 16 / 20 px.
 - Density: rows 32 px compact (default) / 40 px comfortable via `.tm-density-comfortable` on any subtree. Toolbar 44 px, topbar 48 px.
 - Media: product 4:3, thumbnail 1:1, hero 16:9.
 
@@ -91,7 +92,7 @@ Reading width 68ch; content max 1600 px; narrow 1120 px; sidebar 232 px (56 px c
 | Component | Rules |
 |---|---|
 | Button | Variants primary / secondary / outline / ghost / danger / danger-outline; sizes sm / md / lg; icon-only must have `aria-label`. Loading = `aria-busy="true"` (spinner + label kept). Disabled = muted surface, gray border and text, `not-allowed` cursor. Pressed = `aria-pressed="true"`. |
-| Segmented control | Radio inputs inside `.tm-segmented__option` (or `aria-pressed` buttons). Selected = selection tint + 3 px underline + full-strength text color. Selection never changes font weight, so widths never shift. |
+| Segmented control | Radio inputs inside `.tm-segmented__option` (or `aria-pressed` buttons) in a 2px ink frame with 2px ink dividers. Selected = selection fill + full-strength text color (no underline). Selection never changes font weight, so widths never shift. |
 | Fields | Label above, hint below, error replaces nothing (both can show). Invalid = `aria-invalid="true"` → red border + `.tm-field__error` with a “!” glyph. Native number spinners are always hidden; use `.tm-stepper` ([−] [unit value] [+], square buttons with full-height dividers, matching control height, buttons disabled at min/max). Read-only = dashed outline, transparent fill. Prefix/suffix via `.tm-input-group` + `.tm-affix`. |
 | Selection | Square checkbox (2 px radius), round radio, rectangular switch (not pill). Indeterminate shows a bar. Descriptions via `.tm-choice__desc`. |
 | Badge | Mono 11 px, 1 px tinted border, soft fill, **marker shape per tone** (✓ success, ▲ warning, ✕ danger, ● info, ○ pending, dashed □ offline, — disabled). Count badge is inverse. |

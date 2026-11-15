@@ -69,7 +69,7 @@
     --tm-bw-1: 2px;       /* Level 1 — major application region */
     --tm-bw-2: 1px;       /* Level 2 — functional panel / table */
     --tm-bw-3: 1px;       /* Level 3 — nested record / row separator */
-    --tm-bw-control: 1px;
+    --tm-bw-control: 2px;       /* controls are drawn in ink at full strength */
     --tm-bw-focus: 2px;
     --tm-focus-offset: 2px;
 
@@ -80,7 +80,7 @@
     --tm-control-pad-x-sm: 0.5rem;
     --tm-control-pad-x-md: 0.75rem;
     --tm-control-pad-x-lg: 1rem;
-    --tm-check-size: 1rem;
+    --tm-check-size: 1.125rem;
     --tm-switch-w: 2rem;
     --tm-switch-h: 1.125rem;
 
