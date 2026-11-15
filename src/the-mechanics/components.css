@@ -375,16 +375,27 @@
     font-size: var(--tm-text-xs);
   }
 
-  /* Level 2 inside Level 1 without boxes: panels share hairline gutters */
+  /* Level 2 inside Level 1 without boxes: panels share single dividers.
+     Dividers are real 1px borders (right + bottom of each panel), which the
+     browser snaps to device pixels; a 1px grid gap on fractional column
+     widths antialiases into uneven 1-2px lines. The grid is 1px wider/taller
+     than the region so the last column/row borders fall under the region's
+     own frame and are clipped. Dividers use the Level 2 line color so they
+     never read as chart gridlines. */
   .tm-panel-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
-    gap: 1px;
-    overflow: hidden; /* clips outer outlines so only inner hairlines remain */
+    gap: 0;
+    width: calc(100% + var(--tm-bw-2));
+    margin-bottom: calc(var(--tm-bw-2) * -1);
+  }
+  .tm-region:has(> .tm-panel-grid) {
+    overflow: clip;
   }
   .tm-panel-grid > .tm-panel {
     border: 0;
-    outline: 1px solid var(--tm-line-3);
+    border-right: var(--tm-bw-2) solid var(--tm-line-2);
+    border-bottom: var(--tm-bw-2) solid var(--tm-line-2);
   }
   .tm-panel-grid > .tm-panel[hidden] {
     display: none;
