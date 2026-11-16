@@ -2027,8 +2027,10 @@
     top: calc(100% + 6px);
     bottom: auto;
   }
+  /* Keyboard focus only (:focus-visible): focus that returns to a trigger
+     after a dialog closed, or a mouse click, must not leave a bubble open. */
   .tm-tip:hover > .tm-tip__bubble,
-  .tm-tip:focus-within > .tm-tip__bubble,
+  .tm-tip:has(:focus-visible) > .tm-tip__bubble,
   .tm-tip.is-open > .tm-tip__bubble {
     display: block;
     animation: tm-fade-in var(--tm-dur-fast) var(--tm-ease);
