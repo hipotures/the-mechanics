@@ -74,6 +74,7 @@ Test for anything new: *choice among siblings* → selection fill; *own on/off s
 - Stable facts (provider, name, plan) in the card head, lighter text next to the name; the body holds values that change between visits.
 - Sibling cards share levels: common rows start at the same height across a row of cards; controls only some cards have sit on an existing line in their small size, and the line reserves that height in every card.
 - Say each thing once: no text for what the visual state already shows; normal states are not stated, deviations are.
+- Busy starts after the decision: no spinner on a trigger while its confirmation dialog is open; busy only after confirm, work in the background, result as a toast.
 - Action feedback: a success toast after each user action (names object + result, leaves after ~4 s, pauses on hover); failures persist until closed; actions that open a dialog need no toast.
 - Inactive records (disabled, paused, expired, stale): the whole record goes quiet — neutral bars, muted figures, the dimmed treatment is the message — no extra "disabled" note that changes the card height (marker badges are for mixed-state table columns); actions that need an active record are hidden/disabled, the rest stay normal; never opacity on the whole card.
 
