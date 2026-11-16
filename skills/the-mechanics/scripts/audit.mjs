@@ -67,6 +67,11 @@ const RULES = [
     test: (l, ext) => [".js", ".mjs", ".jsx", ".ts", ".tsx", ".svelte", ".vue", ".html", ".htm"].includes(ext) && /(^|[^.\w])(window\.)?(confirm|alert|prompt)\s*\(/.test(l) && !/function\s+(confirm|alert|prompt)\b/.test(l),
   },
   {
+    id: "native-title",
+    why: "tooltips are .tm-tip (one look, keyboard reachable), not the browser title popup",
+    test: (l) => !/document\.title|<title>|\.tm-tip/.test(l) && (/(^|[\s<])title\s*=\s*["'`{$]/.test(l) || /\.title\s*=\s*[^=]/.test(l) || /setAttribute\(\s*["']title["']/.test(l)),
+  },
+  {
     id: "important",
     why: "app CSS outside layers already wins; !important usually hides a structure problem",
     test: (l, ext) => [".css", ".scss", ".less"].includes(ext) && /!important/.test(l),
