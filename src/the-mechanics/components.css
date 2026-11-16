@@ -750,6 +750,15 @@
     background: var(--_bg-press);
     box-shadow: inset 0 2px 0 rgb(0 0 0 / 0.12);
   }
+  /* A button group is a one-of-N choice: the chosen button takes the
+     selection fill (like a segmented control), not the grey press tint. */
+  .tm-btn-group > .tm-btn[aria-pressed="true"] {
+    --_bg: var(--tm-select-bg);
+    --_bg-press: var(--tm-select-bg);
+    background: var(--tm-select-bg);
+    color: var(--tm-text);
+    box-shadow: none;
+  }
   /* On/off toggle with a fixed label (the label never changes, so nothing
      shifts): on = ink fill like a checked checkbox, readable on any tinted
      bar, including the selection-colored bulk bar. */
