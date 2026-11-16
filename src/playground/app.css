@@ -244,12 +244,20 @@ tr:hover .pg-inline-edit,
 .pg-inline-label { margin: 0; }
 /* One framed product grid with structural dividers (frame = inset outline over the cell edges). */
 .pg-product-grid {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr));
   gap: 0;
-  outline: var(--tm-bw-1) solid var(--tm-line-1);
-  outline-offset: calc(var(--tm-bw-1) * -1);
   background: var(--tm-surface);
+}
+/* Frame as a layer above the cells (positioned image frames would cover an outline). */
+.pg-product-grid::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border: var(--tm-bw-1) solid var(--tm-line-1);
+  pointer-events: none;
 }
 .pg-product-grid > .tm-product {
   border: 0;
