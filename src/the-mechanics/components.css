@@ -3697,14 +3697,32 @@
      the item grammar: their block frame turns ink. Placed last so it
      overrides the per-component focus outlines above.
      ================================================================= */
-  :is(.tm-btn, .tm-input, .tm-select, .tm-textarea, .tm-chip--toggle, .tm-pagination__page, .tm-legend__item, .tm-picker-field__btn):is(:focus-visible, .is-focus),
+  :is(.tm-btn, .tm-input, .tm-select, .tm-textarea, .tm-chip--toggle, .tm-pagination__page, .tm-legend__item, .tm-picker-field__btn, .tm-check, .tm-radio, .tm-switch):is(:focus-visible, .is-focus),
   .tm-multiselect:is(:focus-within, .is-focus),
   .tm-input-group:focus-within,
+  .tm-stepper:is(:focus-within, .is-focus),
+  .tm-dropzone:has(input:focus-visible),
   .tm-segmented__option:has(input:focus-visible) {
     outline: 0;
     box-shadow: var(--tm-focus-lift);
   }
-  .tm-input-group > .tm-input:focus-visible {
+  /* Parts of a composite control: the whole control lifts; the focused part
+     is marked by the press tint, never by a second frame. */
+  :is(.tm-input-group, .tm-stepper, .tm-picker-field) > :is(.tm-input, .tm-btn, .tm-picker-field__btn):focus-visible,
+  .tm-stepper__btn:focus-visible {
+    outline: 0;
     box-shadow: none;
+  }
+  .tm-stepper__btn:focus-visible,
+  .tm-input-group > .tm-picker-field__btn:focus-visible {
+    background: var(--tm-press);
+  }
+
+  /* Text selection inside fields uses the selection colors instead of the
+     system blue. (The highlighted date/time segment is a browser system
+     color that cannot be styled.) */
+  :is(.tm-input, .tm-textarea, .tm-select, .tm-multiselect__input, .tm-palette__input)::selection {
+    background: var(--tm-select-bg);
+    color: var(--tm-text);
   }
 }
