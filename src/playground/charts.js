@@ -40,8 +40,12 @@ const tipHTML = (title, rows) =>
 
 /* ---------- Option builders ---------------------------------------- */
 // Show every n-th category label so neighbouring labels keep >= 12px between them.
+// Category labels (routes, models, ranges) are never thinned: every bar keeps its
+// name. If they do not fit, the chart switches to a horizontal layout instead.
+const ALL_LABELS = { interval: 0, hideOverlap: false };
+const LABEL_GAP = 16;
 function labelInterval(labels, plotWidth) {
-  const need = Math.max(...labels.map(textW)) + 12;
+  const need = Math.max(...labels.map(textW)) + LABEL_GAP;
   return Math.max(0, Math.ceil((need * labels.length) / Math.max(1, plotWidth)) - 1);
 }
 // Grid for charts with category labels on the y-axis: reserve the label width explicitly.
@@ -87,7 +91,9 @@ function lineOption(c, t, hidden, area, width) {
 }
 
 function barOption(c, t, hidden, mode, horizontal, width) {
-  const cat = { type: "category", data: c.xLabels, ...(horizontal ? { inverse: true, axisLabel: { color: t.text2 } } : { axisLabel: { interval: labelInterval(c.xLabels, width - 60) } }) };
+  // Time buckets may be thinned (order is implicit); named categories never are.
+  const xLabel = isTimeSeries(c) ? { interval: labelInterval(c.xLabels, width - 60) } : ALL_LABELS;
+  const cat = { type: "category", data: c.xLabels, ...(horizontal ? { inverse: true, axisLabel: { color: t.text2, ...ALL_LABELS } } : { axisLabel: xLabel }) };
   // Horizontal value axis: one tick per ~64px so numbers never crowd.
   const val = valueAxis(horizontal ? "" : c.unit, { min: 0, ...(horizontal ? { splitNumber: Math.max(2, Math.floor((width - Math.max(...c.xLabels.map(textW)) - 60) / 64)) } : {}) });
   return {
@@ -96,7 +102,7 @@ function barOption(c, t, hidden, mode, horizontal, width) {
     yAxis: horizontal ? cat : val,
     tooltip: { trigger: "axis", axisPointer: { type: "shadow" } },
     legend: selected(c, hidden),
-    labelLayout: { hideOverlap: true },
+    // Value labels are data: never hidden (tooltips are not a substitute).
     series: c.series.map((s, i) => ({
       type: "bar",
       name: s.name,
@@ -115,7 +121,7 @@ function hBarOption(c, t) {
   return {
     grid: catYGrid(c.series.map((d) => d.label), { right: 48 }),
     xAxis: { type: "value", min: 0, show: false },
-    yAxis: { type: "category", data: c.series.map((d) => d.label), inverse: true, axisLabel: { color: t.text2 } },
+    yAxis: { type: "category", data: c.series.map((d) => d.label), inverse: true, axisLabel: { color: t.text2, ...ALL_LABELS } },
     tooltip: { trigger: "axis", axisPointer: { type: "shadow" } },
     series: [{ type: "bar", data: c.series.map((d) => d.value), barWidth: 14, label: { show: true, position: "right", fontFamily: t.fontMono, fontSize: 10.5, color: t.text2, formatter: (p) => fmtNum(p.value) } }],
   };
@@ -124,7 +130,7 @@ function hBarOption(c, t) {
 function histogramOption(c, t) {
   return {
     grid: baseGrid(),
-    xAxis: { type: "category", data: c.series.map((d) => d.range) },
+    xAxis: { type: "category", data: c.series.map((d) => d.range), axisLabel: ALL_LABELS },
     yAxis: valueAxis(c.unit, { min: 0 }),
     tooltip: { trigger: "axis", axisPointer: { type: "shadow" } },
     series: [{ type: "bar", data: c.series.map((d) => d.count), barCategoryGap: "3%", label: { show: true, position: "top", fontFamily: t.fontMono, fontSize: 10.5, color: t.text2 } }],
@@ -175,7 +181,7 @@ function heatmapOption(c, t, width) {
   return {
     grid: catYGrid(c.series.map((r) => r.row), { right: 4, bottom: 22 }),
     xAxis: { type: "category", data: c.xLabels, axisLine: { show: false }, axisLabel: { interval: labelInterval(c.xLabels, width - 80) } },
-    yAxis: { type: "category", data: c.series.map((r) => r.row), inverse: true, axisLine: { show: false }, axisLabel: { color: t.text2 } },
+    yAxis: { type: "category", data: c.series.map((r) => r.row), inverse: true, axisLine: { show: false }, axisLabel: { color: t.text2, ...ALL_LABELS } },
     visualMap: { show: false, min: 0, max: 100, inRange: { color: [t.heatLo, t.heatHi] } },
     tooltip: { trigger: "item" },
     series: [
@@ -304,7 +310,8 @@ export function mountChart(el, chart, { height = 180 } = {}) {
 
   const width = () => Math.max(220, Math.round(el.clientWidth || 320));
   // Long category labels switch grouped bars to a horizontal layout.
-  const horizontalGrouped = () => chart.kind === "grouped-bar" && Math.max(...chart.xLabels.map(textW)) + 6 > (width() - 50) / chart.xLabels.length;
+  // Vertical only if every category name fits under its group with a clear gap.
+  const horizontalGrouped = () => chart.kind === "grouped-bar" && Math.max(...chart.xLabels.map(textW)) + LABEL_GAP > (width() - 60) / chart.xLabels.length;
   // Layout decisions that need a rebuild (not just resize): orientation, donut legend side, label thinning.
   const key = () => `${horizontalGrouped()}|${chart.kind === "donut" ? width() >= DONUT_SIDE_MIN : ""}|${Math.round(width() / 40)}`;
 

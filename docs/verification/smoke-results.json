@@ -64,6 +64,10 @@
     "ok": true
   },
   {
+    "name": "bar charts never hide category names or values (390–2560px)",
+    "ok": true
+  },
+  {
     "name": "content: TOC navigation moves focus to section heading",
     "ok": true
   },

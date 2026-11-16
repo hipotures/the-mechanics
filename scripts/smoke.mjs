@@ -307,6 +307,23 @@ try {
     assert((await page.inputValue("#svc")) === "API", "Escape changed the value");
   });
 
+  await check("bar charts never hide category names or values (390–2560px)", async () => {
+    const expect = { network: ["/api/models", "/api/usage", "/api/jobs", "/api/history", "/api/config", "74", "82", "91", "122", "140", "1", "0", "3", "8", "2"], "model-latency": ["Model Small", "Model Medium", "Model Large", "Model Vision", "Long Context", "43", "59", "62", "78", "89", "94", "110", "141", "180", "193"], durations: ["0–1s", "1–2s", "2–4s", "4–8s", "8–16s", ">16s"], endpoints: ["Read usage", "Model events", "Run tasks", "Get history", "Admin operations"] };
+    const bad = [];
+    for (const w of [390, 900, 1440, 2000, 2560]) {
+      await page.setViewportSize({ width: w, height: 900 });
+      await go("analytics");
+      await page.waitForTimeout(900);
+      const miss = await page.evaluate((expect) => Object.entries(expect).flatMap(([id, want]) => {
+        const texts = [...document.querySelectorAll(`[data-chart="${id}"] svg text`)].map((t) => t.textContent.trim());
+        return want.filter((x) => !texts.includes(x)).map((x) => `${id}:${x}`);
+      }), expect);
+      if (miss.length) bad.push(`${w}px ${miss.join(",")}`);
+    }
+    await page.setViewportSize({ width: 1440, height: 900 });
+    assert(!bad.length, bad.join(" | "));
+  });
+
   /* ---- Content / gallery ---------------------------------------- */
   await check("content: TOC navigation moves focus to section heading", async () => {
     await go("content");

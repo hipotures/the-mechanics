@@ -119,7 +119,7 @@ Reading width 68ch; content max 1600 px; narrow 1120 px; sidebar 232 px (56 px c
 - One grammar: hairline horizontal grid (`--tm-chart-grid`), ink baseline, mono 10.5 px ticks, unit label above the y-axis, no chart frame.
 - Series order is fixed: chart-1 blue/copper, chart-2 orange/blue, chart-3 green… Series 2–4 are dashed/dotted lines, alternate series use solid vs hollow point markers.
 - Thresholds are dashed `--tm-chart-threshold` lines, targets dotted `--tm-chart-target`. The line is named in the legend; the on-chart label is the short value (“750 ms”, “75% target”) at the left end, on a surface-colored background, away from the latest values.
-- Point labels that collide are moved apart by ECharts with a leader line; bar value labels that would overlap are hidden rather than drawn over each other. Category labels are thinned so neighbours keep ≥12 px; value axes get one tick per ~64 px.
+- Point labels that collide are moved apart by ECharts with a leader line; bar value labels that would overlap are hidden rather than drawn over each other. Time-axis labels may be thinned (order is implicit); named categories (routes, models, ranges) always show every label — bars switch to horizontal layout when names do not fit. Data value labels are never hidden. Value axes get one tick per ~64 px.
 - Bars with long category labels automatically switch to horizontal layout so labels are never rotated or clipped. Zero values render as a visible 1 px tick.
 - Donuts always carry a value + percentage legend; heatmaps print the value in every cell.
 - Tooltips sit below sticky app chrome (`--tm-z-sticky`) and close on scroll or a tap outside the chart, so they never drift away from their data.
