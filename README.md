@@ -74,6 +74,7 @@ fixtures/demo-data.json   deterministic synthetic data (single source of demo co
 public/products/          original generated product illustrations (scripts/gen-product-images.mjs)
 examples/plain-html/      CSS-only consumer example
 scripts/                  build-css, contrast, contrast-derived, screenshots, smoke, image generator
+skills/the-mechanics/     agent skill for applying the system in other projects (not installed)
 docs/                     coverage contract, component status, distribution, derived data, verification, screenshots
 references/               visual concept reference (not production code)
 ```
@@ -86,6 +87,12 @@ references/               visual concept reference (not production code)
 - [docs/derived-data.md](docs/derived-data.md) — how fixtures are used and every derived value.
 - [docs/verification/testing-report.md](docs/verification/testing-report.md) — what was tested, improvement passes, what was not tested.
 - Screenshots: [docs/screenshots/apps/](docs/screenshots/apps/) (all 42 view × theme × viewport captures) and [docs/screenshots/states/](docs/screenshots/states/).
+
+## Agent skill for other projects
+
+`skills/the-mechanics/` is a Claude Code skill that teaches an agent working in *another* project how to apply this design system: wiring the CSS, the owner-approved rules that are not visible in the CSS (structure rule, item grammar, two “on” signals, focus lift, fixed-label toggles, status plates, clear buttons, layout and chart rules), copy-ready markup (`references/recipes.md`) and a heuristic audit of the app's own source (`node skills/the-mechanics/scripts/audit.mjs <dir>`). It points to `DESIGN.md` and `docs/distribution.md` at the pinned version instead of copying them.
+
+It is **not installed anywhere yet**: using The Mechanics in another application needs the owner's approval. To try it in a project later, link it into that project's `.claude/skills/` (or `~/.claude/skills/` for all projects), e.g. `ln -s ~/DEV/the-mechanics/skills/the-mechanics <project>/.claude/skills/the-mechanics`.
 
 ## Provenance and licensing
 

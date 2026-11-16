@@ -1,0 +1,53 @@
+---
+name: the-mechanics
+description: Apply The Mechanics design system (Sharp Retro-Tech — ink-framed panels, IBM Plex Sans/Mono, Light/Dark/Coffee themes, `--tm-*` tokens, `.tm-*` classes) to an application's UI and verify the result. Use this whenever you build, restyle or review screens in a project that uses or adopts The Mechanics — it imports `the-mechanics.css`, uses `tm-` classes or `data-tm-theme`, or the user mentions The Mechanics, "TM styles", "retro-tech", ink frames, the gallery or the three themes — including tables, forms, dashboards, charts, dialogs or settings pages in that project, even if the user does not name the design system. Do not use it for projects that use a different design system.
+---
+
+# The Mechanics — applying the design system
+
+The Mechanics is a CSS-only design system: compiled CSS, three themes, no runtime JavaScript. A consuming app gets the look from **class names and native/ARIA state attributes**, never from re-creating the styles. The rules below are owner decisions; most are not visible in the CSS itself, which is why this skill exists: an agent that only reads the class list will invent rounded cards, blue focus rings and side bars that were explicitly rejected.
+
+Source of truth (pin the version you use; v0.1.0 at the time of writing):
+- Repository: `github.com/hipotures/the-mechanics` (local checkout often at `~/DEV/the-mechanics`)
+- `DESIGN.md` — full rules, tokens, component table, chart grammar, anti-patterns
+- `docs/distribution.md` — how to install and import per framework
+- Component Gallery — run the playground (`corepack pnpm build && corepack pnpm preview`) and open `#/components`; every component in every state, in all three themes
+
+If the checkout is available, read the relevant `DESIGN.md` section before inventing anything. This skill is the short version; when they disagree, `DESIGN.md` at the pinned version wins.
+
+## 1. Before you start
+
+1. **Confirm the project is allowed to use it.** Integration into another app is an owner decision. If the project does not already import The Mechanics and nobody asked for it, ask first.
+2. **Find how it is wired.** Look for `the-mechanics.css` / `fonts.css` imports, `class="tm-root"` on the body or app root, and `data-tm-theme` on `<html>`. If missing, follow `docs/distribution.md` (plain HTML, React, Svelte, Rust/Datastar, Tailwind+daisyUI bridge, ECharts adapter).
+3. **Do not add Tailwind/daisyUI (or any framework) just to get the styles.** The CSS is standalone.
+4. **Look up the component in the Gallery or `references/recipes.md` before writing markup.** Most needs are already covered; a new component is a last resort and must follow section 2.
+
+## 2. The rules that matter most
+
+Read `references/rules.md` for the reasoning and edge cases. In short:
+
+- **Structure:** free-standing objects (panels, tables, menus, dialogs, controls) get a **2px ink frame**; dividers that split a container are 2px ink; lines that touch other lines are thin. No rounded cards (radius ≤ 3px), no pills, no soft shadows on panels, **no colored side bars** anywhere.
+- **Three-level hierarchy:** region > panel > record. A nested header never competes with its parent.
+- **One item grammar** for everything pickable (nav, in-page nav, list rows, menu/select options, palette results, picker cells): hover = grey block; selected = **selection fill only** (no frame, no tick); keyboard focus = the block's frame in ink. Geometry never changes between states.
+- **Two "on" signals, never swapped:** *chosen among siblings* → **selection fill** (green/olive/copper: nav item, segmented option, category chip, selected row, the bulk bar). *A control's own on-state* → **ink fill** (checked checkbox, switch, count badge, `.tm-btn--toggle`, `.tm-meta-toggle`). Ink, because controls often sit inside a selected area and green on green would vanish.
+- **Toggles never relabel.** No "Show X / Hide X" swaps; keep label and icon fixed and change only the fill. Nothing in a toolbar may shift when state changes (fixed labels, reserved counter width, optional buttons appended last).
+- **Focus = lift:** controls keep their frame and get a hard ink shadow `--tm-focus-lift` (3px 3px, no blur); composites (stepper, input group, date field) lift as one piece and mark the focused part with the press tint; items get an ink block frame. Never a blue ring, never two focus looks.
+- **Status:** a standalone status (page head, panel head, KPI, image overlay) is a **status plate** `.tm-status` with a `.tm-mark`; small tinted `.tm-badge` only inside rows, cells and text. Alerts: 2px ink frame + tint + icon; a warning may be hidden and restored from a page-head status button.
+- **Text fields have a clear ✕** while they hold text (space reserved, click clears and keeps focus, Escape clears search). Not on number/date/code/read-only fields, or where a cancel ✕ already exists.
+- **Layout:** a filter sits next to what it filters; secondary information goes in collapsible sections; destructive actions last, in a danger zone; report real state — no invented progress bars. A small display option goes **on the existing element** (e.g. the unit in the panel head as `.tm-meta-toggle`), not in a new toolbar row.
+- **Charts:** Apache ECharts styled through `adapters/echarts.js`; mono 11px medium labels; named categories always fully labelled (switch to horizontal bars instead of rotating or hiding); every value also reachable by tooltip and keyboard.
+- **Themes change color only**, never geometry. Check every screen in Light, Dark and Coffee.
+- **Data in examples is synthetic.** Never real names, customers or copied text.
+
+## 3. Workflow
+
+1. Map each piece of the screen to an existing component (Gallery / `references/recipes.md`). Write markup with `tm-` classes and express state with attributes (`aria-pressed`, `aria-selected`, `aria-current`, `aria-invalid`, `aria-busy`, `disabled`, `[open]`).
+2. Put app-specific layout in the app's own CSS (unlayered, so it wins without `!important`). Use `--tm-*` tokens for every color, space, size and border, never hex values or ad-hoc pixel spacing.
+3. Behavior comes from native elements (`<dialog>`, `<details>`, `popover`, form controls). For richer behavior (select fallback, date/time picker, clear button, restorable alert, multi-select, command palette, chart tooltips), port the reference helpers from the playground (`src/playground/lib.js`, `p1.js`, `charts.js`) instead of writing new ones with a different feel.
+4. Run the audit: `node <skill-dir>/scripts/audit.mjs <app-src-dir>`. It flags the rejected patterns (large radii, pills, blurred panel shadows, colored side bars, blue focus rings, hard-coded colors, relabelling toggles). Treat its output as leads to inspect, not verdicts.
+5. **Look at it.** Take screenshots (Playwright or the project's own tooling) in Light, Dark and Coffee, at desktop and ~390px phone width, and inspect them yourself. Check: frames and hierarchy, nothing shifts when you toggle or select, focus by Tab looks like the lift everywhere, no horizontal page scroll, long text wraps or truncates with a tooltip, contrast of anything you colored. A successful build or passing DOM checks is not visual verification.
+6. Report what you inspected (themes, widths, interactions) and what you could not check. Do not claim accessibility compliance you did not measure.
+
+## 4. When the system does not cover it
+
+Prefer composition of existing pieces. If something new is unavoidable: build it from the same tokens and grammar (2px ink frame if free-standing, item grammar for pickable parts, the right "on" signal, lift focus), add it to the app, and tell the user it is a candidate for The Mechanics itself rather than silently diverging. Do not edit The Mechanics repository from another project.
