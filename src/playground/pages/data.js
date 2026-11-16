@@ -103,7 +103,7 @@ export default {
       switch (col.key) {
         case "name":
           if (st.inline === r.id)
-            return `<td class="tm-cell-primary" data-label=""><div class="pg-inline"><input class="tm-input tm-input--sm" id="inline-input" value="${esc(r.name)}" aria-label="Account name for ${esc(r.id)}"><button class="tm-btn tm-btn--sm tm-btn--primary tm-btn--icon" data-inline-save aria-label="Save name">${icon("check", "tm-icon--sm")}</button><button class="tm-btn tm-btn--sm tm-btn--ghost tm-btn--icon" data-inline-cancel aria-label="Cancel edit">${icon("x", "tm-icon--sm")}</button></div></td>`;
+            return `<td class="tm-cell-primary" data-label=""><div class="pg-inline"><input class="tm-input tm-input--sm" id="inline-input" data-no-clear value="${esc(r.name)}" aria-label="Account name for ${esc(r.id)}"><button class="tm-btn tm-btn--sm tm-btn--primary tm-btn--icon" data-inline-save aria-label="Save name">${icon("check", "tm-icon--sm")}</button><button class="tm-btn tm-btn--sm tm-btn--ghost tm-btn--icon" data-inline-cancel aria-label="Cancel edit">${icon("x", "tm-icon--sm")}</button></div></td>`;
           return `<td class="tm-cell-primary" data-label=""><div class="pg-acc"><span class="tm-table__primary" title="${esc(`${r.id} · ${r.email}`)}">${esc(r.name)}</span>
             ${r.note ? `<span class="pg-note-flag" title="${esc(r.note)}" aria-label="Has internal note">${icon("info", "tm-icon--sm")}</span>` : ""}
             <button class="tm-btn tm-btn--ghost tm-btn--icon tm-btn--sm pg-inline-edit" data-inline="${r.id}" aria-label="Rename ${esc(r.name)}">${icon("edit", "tm-icon--sm")}</button></div>

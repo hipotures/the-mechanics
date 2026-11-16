@@ -621,8 +621,11 @@ export function enhanceClearable(root = document) {
     } else {
       const wrap = document.createElement("span");
       wrap.className = "tm-clearable";
+      const hadFocus = document.activeElement === input;
+      const [a, z] = [input.selectionStart, input.selectionEnd];
       input.replaceWith(wrap);
       wrap.append(input, tip);
+      if (hadFocus) { input.focus(); try { input.setSelectionRange(a, z); } catch {} }
     }
     const clear = () => {
       input.value = "";
