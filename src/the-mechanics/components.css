@@ -1917,6 +1917,16 @@
     width: min(24rem, calc(100vw - 2rem));
     pointer-events: none;
   }
+  /* Without a leading icon the text takes the first two columns, and a
+     close button is always pinned to the last column, top right. */
+  .tm-alert:not(:has(> svg, > .tm-icon)) > div:first-child {
+    grid-column: 1 / 3;
+  }
+  .tm-alert > .tm-btn:last-of-type {
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: end;
+  }
   .tm-toast {
     pointer-events: auto;
     box-shadow: var(--tm-shadow-overlay);
