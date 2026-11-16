@@ -76,7 +76,7 @@ Design choices:
 - Ink lines (`--tm-line-1`, `--tm-ink`) are dark in Light and light gray / latte in the dark themes. `--tm-line-2` (1px header and table rules) meets ≥3:1 against surface and canvas in every theme. Level 3 hairlines are decorative separators inside a panel.
 - The built-in daisyUI `retro`, `coffee`, `caramellatte`, `wireframe` and `cyberpunk` themes were inspected as references (radius/border/depth and base colors). None is used; all three themes are original values.
 
-Contrast for 48 essential pairs per theme is computed by `pnpm check:contrast` → [docs/verification/contrast.md](docs/verification/contrast.md). All pass (4.5:1 text, 3:1 graphics/control boundaries).
+Contrast for 49 essential pairs per theme is computed by `pnpm check:contrast` → [docs/verification/contrast.md](docs/verification/contrast.md). All pass (4.5:1 text, 3:1 graphics/control boundaries).
 
 ## 4. Tokens (public API `--tm-*`)
 
