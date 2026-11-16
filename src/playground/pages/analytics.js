@@ -45,6 +45,9 @@ function incidentTable(c) {
       .join("")}</tbody></table></div>`;
 }
 
+// Heatmap label color preference (per viewer, remembered in this browser).
+const heatAuto = () => { try { return localStorage.getItem("tm-heat-labels") === "auto"; } catch { return false; } };
+
 function panel(c, staleMin) {
   const legend = legendItems(c);
   const stale = c.id === STALE_CHART;
@@ -71,6 +74,7 @@ function panel(c, staleMin) {
             : ""
       }
       ${c.kind === "table" ? incidentTable(c) : `<div class="tm-chart" data-chart="${esc(c.id)}"></div>`}
+      ${c.kind === "heatmap" ? `<div class="tm-chart-options"><button type="button" class="tm-btn tm-btn--sm tm-btn--outline tm-btn--toggle" data-heat-labels aria-pressed="${heatAuto()}" title="Off: every value in the text color. On: dark or light per cell.">Auto label color</button></div>` : ""}
     </div>
   </article>`;
 }
@@ -171,8 +175,14 @@ export default {
         }
         const el = p.querySelector("[data-chart]");
         el.innerHTML = "";
-        const m = mountChart(el, c, { height: c.kind === "donut" ? 150 : 168 });
+        const m = mountChart(el, c, { height: c.kind === "donut" ? 150 : 168, heatLabels: heatAuto() ? "auto" : "ink" });
         mounts.push(m);
+        p.querySelector("[data-heat-labels]")?.addEventListener("click", (e) => {
+          const on = e.currentTarget.getAttribute("aria-pressed") !== "true";
+          e.currentTarget.setAttribute("aria-pressed", String(on));
+          m.setHeatLabels(on ? "auto" : "ink");
+          try { localStorage.setItem("tm-heat-labels", on ? "auto" : "ink"); } catch {}
+        });
         p.querySelectorAll("[data-series]").forEach((b) =>
           b.addEventListener("click", () => b.setAttribute("aria-pressed", String(m.toggle(b.dataset.series)))),
         );

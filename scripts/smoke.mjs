@@ -110,6 +110,16 @@ try {
     await page.waitForFunction(() => { const t = document.querySelector('[data-chart="ttft"] .pg-echarts-tip'); return t && getComputedStyle(t).display !== "none" && getComputedStyle(t).opacity !== "0" && t.textContent.includes("p95"); }, null, { timeout: 3000 });
     await page.locator('[data-panel="ttft"]').screenshot({ path: join(shots, "chart-keyboard-tooltip.png") });
   });
+  await check("analytics: heatmap label toggle switches modes and is remembered", async () => {
+    await go("analytics");
+    const btn = '[data-heat-labels]';
+    assert((await page.getAttribute(btn, "aria-pressed")) === "false", "default is not ink");
+    await page.click(btn);
+    await page.reload({ waitUntil: "networkidle" });
+    assert((await page.getAttribute(btn, "aria-pressed")) === "true", "auto mode not remembered");
+    await page.click(btn);
+    assert((await page.getAttribute(btn, "aria-pressed")) === "false", "toggle back failed");
+  });
   await check("analytics: service filter + time range empty state + refresh", async () => {
     await go("analytics");
     await page.selectOption("#svc", "Queue");

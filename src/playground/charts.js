@@ -177,29 +177,23 @@ function donutOption(c, t, width) {
   };
 }
 
-// Heatmap cell label: the better of text/surface against the interpolated
-// cell color; mid-ramp cells, where neither reaches 4.5:1, get a 2px halo in the
-// opposite tone so the digits sit on a readable ground (see
-// docs/verification/contrast-derived.md).
+// Heatmap cell labels — contrast helpers (see docs/verification/contrast-derived.md).
 const hexRgb = (h) => (/^#[0-9a-f]{6}$/i.test(h) ? [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255) : null);
 const relLum = (c) => c.map((x) => (x <= 0.04045 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4)).reduce((s, x, i) => s + x * [0.2126, 0.7152, 0.0722][i], 0);
 const contrast = (a, b) => { const [x, y] = [relLum(a), relLum(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
-// Owner review switch (?heat=halo|plain|ink): halo = default; plain = better
-// color, no halo; ink = always the text color, no halo.
-const HEAT_MODE = new URLSearchParams(location.search).get("heat") || "halo";
-function heatLabel(t, v) {
-  if (HEAT_MODE === "ink") return { color: t.text };
+// Cell label modes (switchable per heatmap under the chart):
+//   "ink"  (default) — every value in the text color, no halo;
+//   "auto" — per cell, the better of text/surface, no halo.
+function heatLabel(t, v, mode = "ink") {
+  if (mode !== "auto") return { color: t.text };
   const lo = hexRgb(t.heatLo), hi = hexRgb(t.heatHi), tx = hexRgb(t.text), sf = hexRgb(t.surface);
   if (!lo || !hi || !tx || !sf) return { color: v >= 55 ? t.surface : t.text };
   const bg = lo.map((x, i) => x + (hi[i] - x) * (v / 100));
   const [rt, rs] = [contrast(tx, bg), contrast(sf, bg)];
-  const useText = rt >= rs;
-  return Math.max(rt, rs) >= 4.5 || HEAT_MODE === "plain"
-    ? { color: useText ? t.text : t.surface }
-    : { color: useText ? t.text : t.surface, textBorderColor: useText ? t.surface : t.text, textBorderWidth: 2 };
+  return { color: rt >= rs ? t.text : t.surface };
 }
 
-function heatmapOption(c, t, width) {
+function heatmapOption(c, t, width, mode) {
   return {
     grid: catYGrid(c.series.map((r) => r.row), { right: 4, bottom: 22 }),
     xAxis: { type: "category", data: c.xLabels, axisLine: { show: false }, axisLabel: { interval: labelInterval(c.xLabels, width - 80) } },
@@ -209,7 +203,7 @@ function heatmapOption(c, t, width) {
     series: [
       {
         type: "heatmap",
-        data: c.series.flatMap((r, ri) => r.values.map((v, i) => ({ value: [i, ri, v], label: heatLabel(t, v) }))),
+        data: c.series.flatMap((r, ri) => r.values.map((v, i) => ({ value: [i, ri, v], label: heatLabel(t, v, mode) }))),
         label: { show: true, fontFamily: t.fontMono, fontSize: 10.5, fontWeight: 500 },
       },
     ],
@@ -314,8 +308,9 @@ function autoHideTip(el, hide) {
 
 const pointCount = (c) => (c.kind === "heatmap" ? c.series.length * c.xLabels.length : c.series[0]?.values ? c.xLabels.length : c.series.length);
 
-export function mountChart(el, chart, { height = 180 } = {}) {
+export function mountChart(el, chart, { height = 180, heatLabels = "ink" } = {}) {
   const hidden = new Set();
+  let heatMode = heatLabels;
   let inst = null;
   let idx = -1;
   let layoutKey = "";
@@ -348,7 +343,7 @@ export function mountChart(el, chart, { height = 180 } = {}) {
       "horizontal-bar": () => hBarOption(chart, t),
       histogram: () => histogramOption(chart, t),
       donut: () => donutOption(chart, t, w),
-      heatmap: () => heatmapOption(chart, t, w),
+      heatmap: () => heatmapOption(chart, t, w, heatMode),
       scatter: () => scatterOption(chart, t),
     };
     const o = builders[chart.kind]?.() ?? {};
@@ -430,6 +425,11 @@ export function mountChart(el, chart, { height = 180 } = {}) {
       hidden.has(name) ? hidden.delete(name) : hidden.add(name);
       inst.dispatchAction({ type: hidden.has(name) ? "legendUnSelect" : "legendSelect", name });
       return !hidden.has(name);
+    },
+    // Heatmap only: "ink" (all labels in text color) or "auto" (per cell).
+    setHeatLabels(mode) {
+      heatMode = mode;
+      render();
     },
     destroy() {
       ro.disconnect();
