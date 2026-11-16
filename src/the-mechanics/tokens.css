@@ -83,6 +83,10 @@
     --tm-select-inset-y: 2px;
     --tm-select-pad-y: 4px;
     --tm-select-text-y: calc(var(--tm-select-inset-y) + var(--tm-bw-control) + var(--tm-select-pad-y));
+    /* Frame of the selected item block (nav, rows, menu items, options,
+       picker cells). Set to transparent for fill-only selection; keyboard
+       focus still draws its own frame. */
+    --tm-select-frame: transparent;
 
     /* Control sizing */
     --tm-control-sm: 1.75rem;  /* 28 */

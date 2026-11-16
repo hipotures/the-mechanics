@@ -1,4 +1,4 @@
-import { esc, icon, fmtMoney, fmtNum, badge, toast, rangeFill, stepperHTML, wireSteppers } from "../lib.js";
+import { esc, icon, fmtMoney, fmtNum, badge, toast, rangeFill, stepperHTML, wireSteppers, status } from "../lib.js";
 
 const BASE = import.meta.env.BASE_URL;
 const img = (key) => `${BASE}products/${key}.svg`;
@@ -25,7 +25,7 @@ export function bindMedia(root) {
 const STOCK_LABEL = (p) =>
   p.stockStatus === "limited" ? `Only ${p.stockCount} left` : p.stockStatus === "in-stock" ? `In stock · ${p.stockCount}` : p.stockStatus === "preorder" ? "Preorder" : "Out of stock";
 const AVAIL = { "in-stock": "In stock", limited: "Limited stock", preorder: "Preorder", "out-of-stock": "Out of stock" };
-const BADGE_TONE = { Featured: "accent", "Sold out": "danger", Preorder: "info" };
+const BADGE_TONE = { Featured: "none", "Sold out": "danger", Preorder: "info" };
 
 function rating(r) {
   return r == null
@@ -114,7 +114,7 @@ export default {
     }
 
     function card(p) {
-      const b = p.badge ? `<span class="tm-badge tm-badge--${BADGE_TONE[p.badge] || "neutral"}">${esc(p.badge)}</span>` : "";
+      const b = p.badge ? status(BADGE_TONE[p.badge], p.badge) : "";
       return `<article class="tm-product" aria-labelledby="t-${p.id}">
         ${media(p.imageKey, p.title, { badgeHTML: b })}
         <div class="tm-product__body">
@@ -173,7 +173,7 @@ export default {
         <div class="tm-dialog__head"><h2 class="tm-dialog__title tm-truncate" id="detail-title">Product detail</h2>
           <button class="tm-btn tm-btn--ghost tm-btn--icon tm-btn--sm" data-close aria-label="Close product detail">${icon("x")}</button></div>
         <div class="tm-dialog__body"><div class="pg-stack">
-          ${media(p.imageKey, p.title, { cls: "tm-media--framed", badgeHTML: p.badge ? `<span class="tm-badge tm-badge--${BADGE_TONE[p.badge] || "neutral"}">${esc(p.badge)}</span>` : "" })}
+          ${media(p.imageKey, p.title, { cls: "tm-media--framed", badgeHTML: p.badge ? status(BADGE_TONE[p.badge], p.badge) : "" })}
           <div class="pg-thumbs" role="group" aria-label="Views">
             <figure>${media(p.imageKey, `${p.title}, front view`, { cls: "tm-media--square tm-media--framed" })}<figcaption class="tm-meta">Front</figcaption></figure>
             <figure>${media(c.edgeCases.missingImageKey, `${p.title}, detail view`, { cls: "tm-media--square tm-media--framed" })}<figcaption class="tm-meta">Detail · missing</figcaption></figure>

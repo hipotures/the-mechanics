@@ -1,6 +1,6 @@
 import "./app.css";
 import data from "../../fixtures/demo-data.json";
-import { icon, esc, enhanceSelects } from "./lib.js";
+import { icon, esc, enhanceSelects, enhanceDateTime } from "./lib.js";
 import analytics from "./pages/analytics.js";
 import workspace from "./pages/workspace.js";
 import dataManagement from "./pages/data.js";
@@ -110,6 +110,7 @@ function route() {
     else a.removeAttribute("aria-current");
   });
   cleanup = entry.page.render(main, data) || null;
+  enhanceDateTime(main);
   window.scrollTo(0, 0);
   if (!first) main.focus({ preventScroll: true });
 }

@@ -109,6 +109,40 @@ export const badge = (status, label) => {
   return `<span class="tm-badge tm-badge--${s.tone}">${esc(label ?? s.label)}</span>`;
 };
 
+/* Status plate for standalone statuses (page/panel heads, KPI tiles, image
+   overlays). Small .tm-badge stays for statuses inside rows and lists. */
+const MARK_STATE = { success: "complete", complete: "complete", warning: "warning", danger: "error", error: "error", info: "info", pending: "pending", review: "review", active: "active" };
+export function status(tone, label, { sm = true, mark = true } = {}) {
+  const st = MARK_STATE[tone];
+  return `<span class="tm-status${sm ? " tm-status--sm" : ""}">${mark && st ? `<span class="tm-mark" data-state="${st}" aria-hidden="true"></span>` : ""}${esc(label)}</span>`;
+}
+
+/* Dismissible alert: closing never loses the message — a small status
+   button appears in restoreInto and brings it back. */
+export function dismissibleAlert(alertEl, restoreInto, { tone = "warning", label = "1 warning" } = {}) {
+  const close = document.createElement("button");
+  close.className = "tm-btn tm-btn--ghost tm-btn--icon tm-btn--sm";
+  close.setAttribute("aria-label", "Hide this message");
+  close.innerHTML = icon("x");
+  alertEl.append(close);
+  const restore = document.createElement("button");
+  restore.className = "tm-status tm-status--sm";
+  restore.hidden = true;
+  restore.setAttribute("aria-label", `Show hidden message: ${alertEl.querySelector(".tm-alert__title")?.textContent || label}`);
+  restore.innerHTML = `<span class="tm-mark" data-state="${MARK_STATE[tone] || "warning"}" aria-hidden="true"></span>${esc(label)}`;
+  restoreInto.prepend(restore);
+  close.addEventListener("click", () => {
+    alertEl.hidden = true;
+    restore.hidden = false;
+    restore.focus();
+  });
+  restore.addEventListener("click", () => {
+    alertEl.hidden = false;
+    restore.hidden = true;
+    close.focus();
+  });
+}
+
 /* ---------- Toasts ---------------------------------------------------- */
 let toastRegion;
 export function toast({ tone = "info", title, body = "", timeout = 5000 } = {}) {
@@ -411,5 +445,148 @@ export function enhanceSelects(root = document) {
         open();
       }
     });
+  });
+}
+
+/* ---------- Date / time picker ----------------------------------------
+   Keeps the native <input type="date|time"> (typing, validation) and
+   replaces only the browser popup with a .tm-picker popover. Dates use ISO
+   weeks (Monday first) and no weekend colouring; times are 24 h. */
+const pad2 = (n) => String(n).padStart(2, "0");
+const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+export function enhanceDateTime(root = document) {
+  root.querySelectorAll('input.tm-input:is([type="date"], [type="time"]):not([data-tm-picker])').forEach((input) => {
+    input.dataset.tmPicker = "1";
+    const isDate = input.type === "date";
+    const group = document.createElement("div");
+    group.className = "tm-input-group tm-picker-field";
+    input.replaceWith(group);
+    group.append(input);
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "tm-picker-field__btn";
+    btn.setAttribute("aria-haspopup", "dialog");
+    btn.setAttribute("aria-expanded", "false");
+    const label = input.labels?.[0]?.textContent?.trim() || (isDate ? "date" : "time");
+    btn.setAttribute("aria-label", `Choose ${label}`);
+    btn.innerHTML = icon(isDate ? "calendar" : "clock", "tm-icon--sm");
+    btn.disabled = input.disabled;
+    group.append(btn);
+
+    let pop = null;
+    const set = (v) => {
+      input.value = v;
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+    };
+    const close = (focus = true) => {
+      if (!pop) return;
+      pop.remove();
+      pop = null;
+      btn.setAttribute("aria-expanded", "false");
+      document.removeEventListener("pointerdown", outside, true);
+      if (focus) btn.focus();
+    };
+    const outside = (e) => { if (pop && !pop.contains(e.target) && !group.contains(e.target)) close(false); };
+
+    function drawDate(view, focusDay) {
+      const sel = input.value;
+      const y = view.getUTCFullYear(), m = view.getUTCMonth();
+      const first = new Date(Date.UTC(y, m, 1));
+      const start = new Date(first);
+      start.setUTCDate(1 - ((first.getUTCDay() + 6) % 7));
+      const days = Array.from({ length: 42 }, (_, i) => { const d = new Date(start); d.setUTCDate(start.getUTCDate() + i); return d; });
+      const iso = (d) => d.toISOString().slice(0, 10);
+      const target = focusDay || sel || iso(first);
+      pop.innerHTML = `<div class="tm-picker__head"><button type="button" class="tm-btn tm-btn--ghost tm-btn--icon tm-btn--sm" data-nav="-1" aria-label="Previous month">${icon("chevronLeft", "tm-icon--sm")}</button><span aria-live="polite">${MONTHS[m]} ${y}</span><button type="button" class="tm-btn tm-btn--ghost tm-btn--icon tm-btn--sm" data-nav="1" aria-label="Next month">${icon("chevronRight", "tm-icon--sm")}</button></div>
+        <div class="tm-picker__grid" role="grid" aria-label="${MONTHS[m]} ${y}">${["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"].map((d) => `<span class="tm-picker__dow" aria-hidden="true">${d}</span>`).join("")}${days
+          .map((d) => { const v = iso(d); return `<button type="button" class="tm-picker__cell" data-v="${v}" ${d.getUTCMonth() !== m ? "data-outside" : ""} aria-selected="${v === sel}" tabindex="${v === target ? 0 : -1}" aria-label="${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}">${d.getUTCDate()}</button>`; })
+          .join("")}</div>
+        <div class="tm-picker__foot"><button type="button" class="tm-btn tm-btn--ghost tm-btn--sm" data-clear>Clear</button><button type="button" class="tm-btn tm-btn--outline tm-btn--sm" data-done>Close</button></div>`;
+      (pop.querySelector(`[data-v="${target}"]`) || pop.querySelector(".tm-picker__cell:not([data-outside])")).focus();
+      pop.onclick = (e) => {
+        const nav = e.target.closest("[data-nav]");
+        if (nav) { drawDate(new Date(Date.UTC(y, m + Number(nav.dataset.nav), 1))); return; }
+        if (e.target.closest("[data-clear]")) { set(""); close(); return; }
+        if (e.target.closest("[data-done]")) { close(); return; }
+        const c = e.target.closest("[data-v]");
+        if (c) { set(c.dataset.v); close(); input.focus(); }
+      };
+      pop.onkeydown = (e) => {
+        const c = e.target.closest("[data-v]");
+        if (!c) return;
+        const step = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7 }[e.key];
+        const d = new Date(c.dataset.v + "T00:00:00Z");
+        if (step) d.setUTCDate(d.getUTCDate() + step);
+        else if (e.key === "PageUp" || e.key === "PageDown") d.setUTCMonth(d.getUTCMonth() + (e.key === "PageUp" ? -1 : 1));
+        else return;
+        e.preventDefault();
+        const v = iso(d);
+        const next = pop.querySelector(`[data-v="${v}"]:not([data-outside])`);
+        if (next) { c.tabIndex = -1; next.tabIndex = 0; next.focus(); }
+        else drawDate(new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1)), v);
+      };
+    }
+
+    function drawTime() {
+      const [h = "00", mi = "00"] = (input.value || "").split(":");
+      const col = (name, values, cur) => `<div><div class="tm-picker__dow tm-picker__col-label">${name}</div><div class="tm-picker__col" role="listbox" aria-label="${name}">${values
+        .map((v) => `<button type="button" class="tm-picker__cell" role="option" data-part="${name}" data-v="${v}" aria-selected="${v === cur}" tabindex="${v === cur ? 0 : -1}">${v}</button>`)
+        .join("")}</div></div>`;
+      const minutes = Array.from({ length: 12 }, (_, i) => pad2(i * 5));
+      if (!minutes.includes(mi)) minutes.push(mi), minutes.sort();
+      pop.innerHTML = `<div class="tm-picker__cols">${col("Hour", Array.from({ length: 24 }, (_, i) => pad2(i)), h)}<span class="tm-picker__dow" aria-hidden="true" style="align-self:center">:</span>${col("Min", minutes, mi)}</div>
+        <div class="tm-picker__foot"><button type="button" class="tm-btn tm-btn--ghost tm-btn--sm" data-clear>Clear</button><button type="button" class="tm-btn tm-btn--outline tm-btn--sm" data-done>Done</button></div>`;
+      pop.querySelectorAll('[aria-selected="true"]').forEach((c) => c.scrollIntoView({ block: "center" }));
+      (pop.querySelector('[data-part="Hour"][aria-selected="true"]') || pop.querySelector("[data-v]")).focus();
+      const update = (part, v) => {
+        const [ch = "00", cm = "00"] = (input.value || "00:00").split(":");
+        set(part === "Hour" ? `${v}:${cm}` : `${ch}:${v}`);
+        pop.querySelectorAll(`[data-part="${part}"]`).forEach((c) => { const on = c.dataset.v === v; c.setAttribute("aria-selected", String(on)); c.tabIndex = on ? 0 : -1; });
+      };
+      pop.onclick = (e) => {
+        if (e.target.closest("[data-clear]")) { set(""); close(); return; }
+        if (e.target.closest("[data-done]")) { close(); input.focus(); return; }
+        const c = e.target.closest("[data-v]");
+        if (c) { update(c.dataset.part, c.dataset.v); c.focus(); }
+      };
+      pop.onkeydown = (e) => {
+        const c = e.target.closest("[data-v]");
+        if (!c) return;
+        const items = [...pop.querySelectorAll(`[data-part="${c.dataset.part}"]`)];
+        const i = items.indexOf(c);
+        if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+          e.preventDefault();
+          const n = items[Math.max(0, Math.min(items.length - 1, i + (e.key === "ArrowDown" ? 1 : -1)))];
+          update(n.dataset.part, n.dataset.v); n.focus(); n.scrollIntoView({ block: "nearest" });
+        } else if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+          e.preventDefault();
+          pop.querySelector(`[data-part="${e.key === "ArrowRight" ? "Min" : "Hour"}"][aria-selected="true"]`)?.focus();
+        } else if (e.key === "Enter") { e.preventDefault(); close(); input.focus(); }
+      };
+    }
+
+    const open = () => {
+      if (pop || input.disabled || input.readOnly) return;
+      pop = document.createElement("div");
+      pop.className = "tm-menu tm-picker";
+      pop.setAttribute("role", "dialog");
+      pop.setAttribute("aria-label", `Choose ${label}`);
+      pop.setAttribute("popover", "manual");
+      document.body.append(pop);
+      pop.showPopover();
+      if (isDate) { const v = input.value ? new Date(input.value + "T00:00:00Z") : new Date(Date.UTC(2026, 10, 1)); drawDate(new Date(Date.UTC(v.getUTCFullYear(), v.getUTCMonth(), 1))); }
+      else drawTime();
+      anchorPopover(pop, group);
+      pop.addEventListener("keydown", (e) => { if (e.key === "Escape") { e.preventDefault(); close(); } });
+      btn.setAttribute("aria-expanded", "true");
+      document.addEventListener("pointerdown", outside, true);
+    };
+    btn.addEventListener("click", () => (pop ? close() : open()));
+    input.addEventListener("keydown", (e) => {
+      if ((e.altKey && e.key === "ArrowDown") || e.key === "F4") { e.preventDefault(); open(); }
+    });
+    // Chromium opens its own popup on click in some builds; keep it ours.
+    input.addEventListener("click", (e) => { if (input.showPicker) e.preventDefault(); });
   });
 }

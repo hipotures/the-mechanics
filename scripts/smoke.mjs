@@ -118,21 +118,32 @@ try {
   });
 
   /* ---- Workspace ------------------------------------------------ */
-  await check("workspace: search empty state, unit select, tab keys, load next", async () => {
+  await check("workspace overview: pipeline link, section filter, pass matrix", async () => {
     await go("workspace");
+    assert((await page.locator(".tm-pipeline .tm-stage").count()) === 6, "pipeline stages");
+    assert((await page.locator("#sec-rows tr").count()) === 22, "all sections");
+    await page.click('label:has(input[name="secf"][value="excluded"])');
+    assert((await page.locator("#sec-rows tr").count()) === 3, "excluded filter");
+    await page.click('label:has(input[name="secf"][value="all"])');
+    assert((await page.locator('#sec-rows .tm-mark[data-state="active"]').count()) === 1, "active pass marker");
+    await shot("workspace-overview");
+    await page.click('#sec-rows a[href*="ch0005_a001"]');
+    await page.waitForFunction(() => document.querySelector("main").dataset.view === "analyse");
+    assert((await page.textContent("#preview-title")).includes("ch0005_a001"), "section link did not open the unit");
+  });
+  await check("workspace analyse: search empty state, pass-cell select, terms, load next", async () => {
+    await go("workspace/analyse");
     await page.fill("#unit-search", "nonexistent-unit-xxxxx");
     assert(await page.locator("#unit-list .tm-state").isVisible(), "no empty state");
     await shot("workspace-search-empty");
     await page.fill("#unit-search", "");
-    await page.click('[data-unit="ch0005_a001"]');
+    await page.click('[data-select="ch0005_a001"]');
     assert((await page.textContent("#preview-title")).includes("ch0005_a001"), "unit not selected");
+    assert((await page.getAttribute('[data-select="ch0005_a001"]', "aria-pressed")) === "true", "pass cell not pressed");
     await page.click('[data-unit="ch0001_a001"]');
-    await page.focus('[data-tab="Preview"]');
-    await page.keyboard.press("ArrowRight");
-    assert((await page.getAttribute('[data-tab="Terms"]', "aria-selected")) === "true", "tab key nav");
-    assert((await page.textContent("#tabpanel")).includes("Hyperdimensional"), "long term missing");
-    await shot("workspace-terms-tab");
-    await page.keyboard.press("ArrowLeft");
+    await page.click("details.tm-collapsible > summary");
+    assert((await page.textContent("details.tm-collapsible[open]")).includes("Hyperdimensional"), "long term missing");
+    await shot("workspace-terms");
     await page.click("#load-next");
     await page.waitForSelector(".tm-alert--info", { timeout: 3000 });
   });
@@ -217,7 +228,7 @@ try {
       ["analytics", '.tm-segmented:has(input[name="range"]) .tm-segmented__option'],
       ["analytics", "#theme-switcher .tm-segmented__option"],
       ["data", '.tm-segmented:has(input[name="mode"]) .tm-segmented__option'],
-      ["workspace", "[data-tab]"],
+      ["workspace", ".tm-section-head .tm-segmented__option"],
     ];
     for (const [route, sel] of groups) {
       await go(route, "coffee");
@@ -234,7 +245,7 @@ try {
 
   await check("no horizontal overflow at 28 widths (360–1920px) on all pages", async () => {
     const bad = [];
-    for (const r of ["analytics", "workspace", "data", "catalog", "content", "components"]) {
+    for (const r of ["analytics", "workspace", "workspace/analyse", "data", "catalog", "content", "components"]) {
       await go(r);
       for (const w of [360, 390, 414, 480, 560, 600, 620, 640, 660, 700, 768, 800, 820, 880, 900, 960, 1024, 1100, 1180, 1200, 1240, 1280, 1366, 1440, 1536, 1600, 1700, 1920]) {
         await page.setViewportSize({ width: w, height: 900 });

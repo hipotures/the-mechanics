@@ -50,7 +50,7 @@ Hash routes, with the theme in the query string (instant switching, persisted in
 | Route | Destination |
 |---|---|
 | `#/analytics` | **Analytics** — AI operations monitoring: 8 KPIs with sparklines, 16 chart/data panels in 3 regions, stale/error/empty panels, time range, service filter, legend toggles, keyboard tooltips |
-| `#/workspace` | **Workspace** — multi-column analysis screen: unit list, block preview with nested record headers, EN/PL annotations, tabs, inspector, toolbar, run menu, load-next |
+| `#/workspace` | **Workspace** — pipeline overview (stage strip, sections × P0–P5 pass matrix, filter, collapsible models/activity) and `#/workspace/analyse` (unit list with P1 pass cells, block preview with EN/PL annotations, load-next, collapsible terms/costs, danger zone) |
 | `#/data` | **Data Management** — searchable/sortable/paginated accounts table, selection + bulk actions, filter chips, inline rename, editor form with validation, loading/error/empty states, confirmation dialog |
 | `#/catalog` | **Catalog / Commerce** — image-led product grid, category chips, filters, sort, product drawer (with missing-image view), cart with discount error |
 | `#/content` | **Content Site** — editorial landing/doc page: hero, scroll-spy TOC, long-form prose, quote, figure, callout, table, code, FAQ, CTA |

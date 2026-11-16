@@ -79,7 +79,7 @@ Informational:
 | `text-3` #aeb3ab | `surface` #33373b | 5.62 | 4.5 | pass | muted/meta text on panel |
 | `text-3` #aeb3ab | `canvas` #26292c | 6.85 | 4.5 | pass | muted text on canvas |
 | `text-3` #aeb3ab | `sunken` #2e3235 | 6.06 | 4.5 | pass | record label metadata |
-| `text` #e9ebe6 | `select-bg` #44503a | 7.13 | 4.5 | pass | text in selected row |
+| `text` #e9ebe6 | `select-bg` #4a5c3a | 6.07 | 4.5 | pass | text in selected row |
 | `text` #e9ebe6 | `inset` #2b2e32 | 11.36 | 4.5 | pass | input value |
 | `text-3` #aeb3ab | `inset` #2b2e32 | 6.39 | 4.5 | pass | input placeholder |
 | `accent-text` #1d2412 | `accent` #aac67b | 8.43 | 4.5 | pass | primary button label |
@@ -105,7 +105,7 @@ Informational:
 | `surface` #33373b | `ink` #dfe2dc | 9.17 | 3 | pass | check mark on checked fill |
 | `focus` #7db3ff | `surface` #33373b | 5.58 | 3 | pass | focus ring on panel |
 | `focus` #7db3ff | `canvas` #26292c | 6.80 | 3 | pass | focus ring on canvas |
-| `select-line` #aac67b | `select-bg` #44503a | 4.51 | 3 | pass | selection marker |
+| `select-line` #aac67b | `select-bg` #4a5c3a | 3.84 | 3 | pass | selection marker |
 | `chart-1` #72b2d8 | `surface` #33373b | 5.18 | 3 | pass | chart series 1 |
 | `chart-2` #e39c5c | `surface` #33373b | 5.24 | 3 | pass | chart series 2 |
 | `chart-3` #9fcc76 | `surface` #33373b | 6.50 | 3 | pass | chart series 3 |
@@ -141,7 +141,7 @@ Informational:
 | `text-3` #c4ad91 | `surface` #433228 | 5.64 | 4.5 | pass | muted/meta text on panel |
 | `text-3` #c4ad91 | `canvas` #33261e | 6.77 | 4.5 | pass | muted text on canvas |
 | `text-3` #c4ad91 | `sunken` #3b2c23 | 6.20 | 4.5 | pass | record label metadata |
-| `text` #f3e8d8 | `select-bg` #604431 | 7.32 | 4.5 | pass | text in selected row |
+| `text` #f3e8d8 | `select-bg` #74492a | 6.36 | 4.5 | pass | text in selected row |
 | `text` #f3e8d8 | `inset` #3a2b22 | 11.20 | 4.5 | pass | input value |
 | `text-3` #c4ad91 | `inset` #3a2b22 | 6.29 | 4.5 | pass | input placeholder |
 | `accent-text` #2b1a0f | `accent` #d79560 | 6.65 | 4.5 | pass | primary button label |
@@ -167,7 +167,7 @@ Informational:
 | `surface` #433228 | `ink` #ead9c2 | 8.81 | 3 | pass | check mark on checked fill |
 | `focus` #83cfc6 | `surface` #433228 | 6.78 | 3 | pass | focus ring on panel |
 | `focus` #83cfc6 | `canvas` #33261e | 8.15 | 3 | pass | focus ring on canvas |
-| `select-line` #d79560 | `select-bg` #604431 | 3.53 | 3 | pass | selection marker |
+| `select-line` #d79560 | `select-bg` #74492a | 3.06 | 3 | pass | selection marker |
 | `chart-1` #d79560 | `surface` #433228 | 4.84 | 3 | pass | chart series 1 |
 | `chart-2` #92c2dc | `surface` #433228 | 6.36 | 3 | pass | chart series 2 |
 | `chart-3` #b0c986 | `surface` #433228 | 6.69 | 3 | pass | chart series 3 |

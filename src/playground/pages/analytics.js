@@ -1,4 +1,4 @@
-import { esc, icon, fmtInt, fmtNum, fmtMoney, fmtSigned, fmtDateTime, badge, toast, wait, balanceGrid } from "../lib.js";
+import { esc, icon, fmtInt, fmtNum, fmtMoney, fmtSigned, fmtDateTime, badge, toast, wait, balanceGrid, status, dismissibleAlert } from "../lib.js";
 import { mountChart, legendItems, sparkline, isTimeSeries } from "../charts.js";
 import { KPI_META, SERVICE_TAGS, ANALYTICS_REGIONS, STALE_CHART } from "../derived.js";
 
@@ -21,7 +21,7 @@ function kpiTile(k, charts) {
     trend = `<span class="tm-trend ${tone}" title="${verdict} vs previous period">${icon(dir === "down" ? "arrowDown" : "arrowUp", "tm-icon--sm")}${fmtSigned(k.deltaPercent)}<span class="tm-sr-only"> (${verdict})</span></span>`;
   }
   const spark = meta.spark ? sparkline(meta.spark(charts), { tone: k.id === "errors" ? "tm-series-6" : "tm-series-1" }) : "";
-  const extra = k.id === "workers" ? badge("warning", `${k.denominator - k.value} offline`) : "";
+  const extra = k.id === "workers" ? status("warning", `${k.denominator - k.value} offline`) : "";
   return `<div class="tm-kpi" data-kpi="${esc(k.id)}">
     <div class="tm-kpi__label">${esc(k.label)}</div>
     <div class="tm-kpi__value">${value}</div>
@@ -51,7 +51,7 @@ function panel(c, staleMin) {
   return `<article class="tm-panel ${WIDE.has(c.id) ? "pg-span-2" : ""} ${FULL.has(c.id) ? "pg-span-full" : ""}" data-panel="${esc(c.id)}" aria-labelledby="p-${esc(c.id)}">
     <header class="tm-panel__head">
       <h3 class="tm-panel__title" id="p-${esc(c.id)}">${esc(c.title)}</h3>
-      ${stale ? badge("warning", `Delayed ${staleMin} min`) : `<span class="tm-panel__meta">${esc(c.unit)}</span>`}
+      ${stale ? status("warning", `Delayed ${staleMin} min`) : `<span class="tm-panel__meta">${esc(c.unit)}</span>`}
     </header>
     <div class="tm-panel__body ${c.kind === "table" ? "tm-panel__body--flush" : ""}" data-body>
       ${
@@ -78,7 +78,7 @@ function panel(c, staleMin) {
 function statePanel({ id, title, tone, stateTitle, message, action }) {
   return `<article class="tm-panel" data-panel="${id}" aria-labelledby="p-${id}">
     <header class="tm-panel__head"><h3 class="tm-panel__title" id="p-${id}">${esc(title)}</h3>${
-      tone === "error" ? badge("error", "Unavailable") : `<span class="tm-panel__meta">—</span>`
+      tone === "error" ? status("error", "Unavailable") : `<span class="tm-panel__meta">—</span>`
     }</header>
     <div class="tm-panel__body" data-body>
       <div class="tm-state ${tone === "error" ? "tm-state--error" : ""}" ${tone === "error" ? 'role="alert"' : ""}>
@@ -118,7 +118,7 @@ export default {
         <button class="tm-btn tm-btn--outline" id="refresh">${icon("refresh")}Refresh</button>
       </div>
     </header>
-    <div class="tm-alert tm-alert--warning pg-mb" role="status">
+    <div class="tm-alert tm-alert--warning pg-mb" role="status" id="stale-alert">
       ${icon("alert")}
       <div><div class="tm-alert__title">${esc(a.stalePanel.title)}</div>
       <div class="tm-alert__body">${esc(byId[STALE_CHART].title)} has not refreshed for ${a.stalePanel.ageMinutes} minutes. Other panels are current.</div></div>
@@ -211,6 +211,7 @@ export default {
       applyFilter();
       mountAll();
     });
+    dismissibleAlert(main.querySelector("#stale-alert"), main.querySelector(".pg-controls"), { tone: "warning", label: "1 warning" });
     main.querySelector("#refresh").addEventListener("click", async (e) => {
       const btn = e.currentTarget;
       btn.setAttribute("aria-busy", "true");

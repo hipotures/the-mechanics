@@ -994,6 +994,459 @@
       "searchNoResults": "nonexistent-unit-xxxxx",
       "missingAnnotationsBlock": "B0000219",
       "longTerm": "Hyperdimensional-Interoperability-Verification-Protocol"
+    },
+    "overview": {
+      "_note": "Synthetic workspace-overview data added for the pipeline / pass-matrix layout (owner request). Not real project data.",
+      "library": "Library",
+      "languagePair": "en → pl",
+      "words": 24007,
+      "status": "in-progress",
+      "passIds": [
+        "P0",
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5"
+      ],
+      "stages": [
+        {
+          "id": "prepare",
+          "label": "Prepare",
+          "status": "complete",
+          "note": "Source structure frozen"
+        },
+        {
+          "id": "preload",
+          "label": "Preload · P0",
+          "status": "skipped",
+          "note": "Not required"
+        },
+        {
+          "id": "analyse",
+          "label": "Analyse · P1",
+          "status": "complete",
+          "note": "Ready to continue · 58/58",
+          "view": "analyse"
+        },
+        {
+          "id": "review",
+          "label": "Review",
+          "status": "complete",
+          "note": "Confirmed"
+        },
+        {
+          "id": "translate",
+          "label": "Translate",
+          "status": "active",
+          "note": "P2–P5 · 7/58 in progress"
+        },
+        {
+          "id": "publish",
+          "label": "Publish",
+          "status": "pending",
+          "note": "Waiting for translation"
+        }
+      ],
+      "sectionFilters": [
+        "all",
+        "full",
+        "translate-only",
+        "excluded"
+      ],
+      "sections": [
+        {
+          "n": 1,
+          "id": "matter001",
+          "title": "Cover",
+          "processing": "excluded",
+          "words": 0,
+          "passes": [
+            "none",
+            "none",
+            "none",
+            "none",
+            "none",
+            "none"
+          ]
+        },
+        {
+          "n": 2,
+          "id": "matter002",
+          "title": "Contents",
+          "processing": "translate-only",
+          "words": 96,
+          "passes": [
+            "skipped",
+            "skipped",
+            "complete",
+            "complete",
+            "complete",
+            "complete"
+          ]
+        },
+        {
+          "n": 3,
+          "id": "ch0001_a001",
+          "title": "PROLOGUE",
+          "processing": "full",
+          "words": 2702,
+          "passes": [
+            "skipped",
+            "complete",
+            "complete",
+            "complete",
+            "complete",
+            "complete"
+          ]
+        },
+        {
+          "n": 4,
+          "id": "ch0002_a001",
+          "title": "SIX YEARS LATER",
+          "processing": "full",
+          "words": 4,
+          "passes": [
+            "skipped",
+            "complete",
+            "complete",
+            "complete",
+            "complete",
+            "complete"
+          ]
+        },
+        {
+          "n": 5,
+          "id": "ch0003_a001",
+          "title": "ONE",
+          "processing": "full",
+          "words": 1642,
+          "passes": [
+            "skipped",
+            "complete",
+            "complete",
+            "complete",
+            "complete",
+            "complete"
+          ]
+        },
+        {
+          "n": 6,
+          "id": "ch0004_a001",
+          "title": "TWO",
+          "processing": "full",
+          "words": 874,
+          "passes": [
+            "skipped",
+            "complete",
+            "complete",
+            "complete",
+            "complete",
+            "complete"
+          ]
+        },
+        {
+          "n": 7,
+          "id": "ch0005_a001",
+          "title": "THREE",
+          "processing": "full",
+          "words": 2084,
+          "passes": [
+            "skipped",
+            "review",
+            "complete",
+            "complete",
+            "complete",
+            "complete"
+          ]
+        },
+        {
+          "n": 8,
+          "id": "ch0006_a001",
+          "title": "FOUR",
+          "processing": "full",
+          "words": 1553,
+          "passes": [
+            "skipped",
+            "complete",
+            "complete",
+            "complete",
+            "complete",
+            "complete"
+          ]
+        },
+        {
+          "n": 9,
+          "id": "ch0007_a001",
+          "title": "FIVE",
+          "processing": "full",
+          "words": 910,
+          "passes": [
+            "skipped",
+            "complete",
+            "complete",
+            "active",
+            "pending",
+            "pending"
+          ]
+        },
+        {
+          "n": 10,
+          "id": "ch0008_a001",
+          "title": "SIX",
+          "processing": "full",
+          "words": 1178,
+          "passes": [
+            "skipped",
+            "complete",
+            "pending",
+            "pending",
+            "pending",
+            "pending"
+          ]
+        },
+        {
+          "n": 11,
+          "id": "ch0009_a001",
+          "title": "SEVEN",
+          "processing": "full",
+          "words": 1356,
+          "passes": [
+            "skipped",
+            "complete",
+            "pending",
+            "pending",
+            "pending",
+            "pending"
+          ]
+        },
+        {
+          "n": 12,
+          "id": "ch0010_a001",
+          "title": "EIGHT",
+          "processing": "full",
+          "words": 1283,
+          "passes": [
+            "skipped",
+            "complete",
+            "pending",
+            "pending",
+            "pending",
+            "pending"
+          ]
+        },
+        {
+          "n": 13,
+          "id": "ch0011_a001",
+          "title": "NINE",
+          "processing": "full",
+          "words": 1356,
+          "passes": [
+            "skipped",
+            "complete",
+            "pending",
+            "pending",
+            "pending",
+            "pending"
+          ]
+        },
+        {
+          "n": 14,
+          "id": "ch0012_a001",
+          "title": "TEN",
+          "processing": "full",
+          "words": 1340,
+          "passes": [
+            "skipped",
+            "complete",
+            "pending",
+            "pending",
+            "pending",
+            "pending"
+          ]
+        },
+        {
+          "n": 15,
+          "id": "ch0013_a001",
+          "title": "ELEVEN",
+          "processing": "full",
+          "words": 1346,
+          "passes": [
+            "skipped",
+            "warning",
+            "pending",
+            "pending",
+            "pending",
+            "pending"
+          ]
+        },
+        {
+          "n": 16,
+          "id": "ch0014_a001",
+          "title": "TWELVE",
+          "processing": "full",
+          "words": 660,
+          "passes": [
+            "skipped",
+            "complete",
+            "pending",
+            "pending",
+            "pending",
+            "pending"
+          ]
+        },
+        {
+          "n": 17,
+          "id": "ch0015_a001",
+          "title": "THIRTEEN",
+          "processing": "full",
+          "words": 1448,
+          "passes": [
+            "skipped",
+            "complete",
+            "pending",
+            "pending",
+            "pending",
+            "pending"
+          ]
+        },
+        {
+          "n": 18,
+          "id": "ch0016_a001",
+          "title": "FOURTEEN",
+          "processing": "full",
+          "words": 1558,
+          "passes": [
+            "skipped",
+            "complete",
+            "pending",
+            "pending",
+            "pending",
+            "pending"
+          ]
+        },
+        {
+          "n": 19,
+          "id": "ch0017_a001",
+          "title": "FIFTEEN",
+          "processing": "full",
+          "words": 1405,
+          "passes": [
+            "skipped",
+            "complete",
+            "pending",
+            "pending",
+            "pending",
+            "pending"
+          ]
+        },
+        {
+          "n": 20,
+          "id": "ch0018_a001",
+          "title": "SIXTEEN",
+          "processing": "full",
+          "words": 1212,
+          "passes": [
+            "skipped",
+            "complete",
+            "pending",
+            "pending",
+            "pending",
+            "pending"
+          ]
+        },
+        {
+          "n": 21,
+          "id": "matter021",
+          "title": "Copyright",
+          "processing": "excluded",
+          "words": 0,
+          "passes": [
+            "none",
+            "none",
+            "none",
+            "none",
+            "none",
+            "none"
+          ]
+        },
+        {
+          "n": 22,
+          "id": "matter022",
+          "title": "About the field team",
+          "processing": "excluded",
+          "words": 0,
+          "passes": [
+            "none",
+            "none",
+            "none",
+            "none",
+            "none",
+            "none"
+          ]
+        }
+      ],
+      "models": {
+        "P1": "model-medium",
+        "P2": "model-large",
+        "P3": "model-large",
+        "P4": "model-medium",
+        "P5": "model-small"
+      },
+      "modelOptions": [
+        "model-small",
+        "model-medium",
+        "model-large",
+        "model-vision"
+      ],
+      "activity": [
+        {
+          "at": "2026-11-14T11:31:07Z",
+          "event": "job state starting",
+          "tone": "neutral"
+        },
+        {
+          "at": "2026-11-14T11:31:07Z",
+          "event": "job state running",
+          "tone": "info"
+        },
+        {
+          "at": "2026-11-14T11:31:08Z",
+          "event": "publication library added",
+          "tone": "neutral"
+        },
+        {
+          "at": "2026-11-14T11:31:08Z",
+          "event": "job state succeeded",
+          "tone": "success"
+        },
+        {
+          "at": "2026-11-14T11:42:51Z",
+          "event": "P2 chunk ch0007_a001 started",
+          "tone": "info"
+        },
+        {
+          "at": "2026-11-14T11:44:02Z",
+          "event": "model wait: rate limit window 30 s",
+          "tone": "warning"
+        },
+        {
+          "at": "2026-11-14T11:45:19Z",
+          "event": "P3 chunk ch0007_a001 started",
+          "tone": "info"
+        },
+        {
+          "at": "2026-11-14T11:46:40Z",
+          "event": "job state failed: provider timeout (retry scheduled)",
+          "tone": "danger"
+        }
+      ],
+      "danger": {
+        "title": "P1 data",
+        "body": "Clear the current P1 plan, attempts, terminology and review draft. A versioned copy is kept in this workspace's history. Section choices remain.",
+        "action": "Clear P1",
+        "blocked": "P2–P5 depend on P1; clearing is disabled while translation is in progress."
+      }
     }
   },
   "dataManagement": {

@@ -43,6 +43,23 @@ Rules:
 3. **Lines that touch or sit next to other lines** (panel header rule, column header rule, table header rule, data rows, record rows) are **thin** (1px), so lines never stack into heavy bands.
 4. **Controls** are always 2px ink. Never nest a framed box flush inside another frame; split with dividers instead (`.tm-cells`, `.tm-panel-grid`).
 
+### Item grammar (one selection language)
+
+Every pickable item — side-nav link, selectable list row, menu item, select option, picker cell (day, hour, minute) — is the same inset block:
+
+| State | Look |
+|---|---|
+| hover | grey `--tm-hover` block, transparent frame |
+| selected / current | `--tm-select-bg` fill + 2px `--tm-select-line` frame |
+| keyboard focus | the same block's frame turns `--tm-focus` (never a second ring around it) |
+| selected + focus | selection fill + focus frame |
+
+Select options carry no tick: the framed block marks the choice, so option labels sit exactly where the closed field's text sits. Segmented controls follow the same rule — the selected cell is filled and its frame is the control's own outline and ink dividers. Lists and menus are free-standing, so their container has a 2px ink frame.
+
+### Standalone vs. inline status
+
+A status that stands on its own (page head, panel head, KPI tile, image overlay) is a **status plate** `.tm-status` (`--sm` in panel heads and overlays): control height, ink frame, state carried by `.tm-mark`. The small tinted `.tm-badge` is only for statuses inside table cells, list rows and lines of text. Alerts are free-standing: 2px ink frame, tone tint and icon, no side bars. A warning can be hidden; a status button then stays in the page head and brings it back (`dismissibleAlert`). Blocking errors cannot be hidden.
+
 ## 3. Themes
 
 Selected by `data-tm-theme` on `<html>` (or any subtree). Light is the default.

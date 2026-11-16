@@ -206,8 +206,16 @@
      thin straight frame in the selection color + full-strength text. */
   .tm-nav__item[aria-current="page"] {
     background: var(--tm-select-bg);
-    border-color: var(--tm-select-line);
+    border-color: var(--tm-select-frame);
     color: var(--tm-text);
+  }
+  /* Keyboard focus = the same block with a focus-colored frame (never a
+     second ring around it). Shared by nav items, list rows, menu items and
+     select options. */
+  .tm-nav__item:focus-visible,
+  .tm-nav__item.is-focus {
+    outline: 0;
+    border-color: var(--tm-focus);
   }
   .tm-nav__label {
     overflow: hidden;
@@ -584,12 +592,25 @@
     position: absolute;
     inset: var(--tm-select-inset-y) var(--tm-select-inset);
     z-index: -1;
-    border: var(--tm-bw-control) solid var(--tm-select-line);
+    border: var(--tm-bw-control) solid var(--tm-select-frame);
     border-radius: var(--tm-radius-control);
     background: var(--tm-select-bg);
   }
-  .tm-row:focus-visible {
-    outline-offset: -2px;
+  .tm-row:focus-visible,
+  .tm-row.is-focus {
+    outline: 0;
+  }
+  .tm-row:focus-visible::before,
+  .tm-row.is-focus::before {
+    content: "";
+    position: absolute;
+    inset: var(--tm-select-inset-y) var(--tm-select-inset);
+    z-index: -1;
+    border: var(--tm-bw-control) solid var(--tm-focus);
+    border-radius: var(--tm-radius-control);
+  }
+  .tm-row:is([aria-selected="true"], [aria-current="true"], .is-selected):is(:focus-visible, .is-focus)::before {
+    background: var(--tm-select-bg);
   }
 
   /* Generic card (Level 2 weight) */
@@ -1040,49 +1061,44 @@
     }
     .tm-select::picker(select) {
       margin-block: 4px;
-      padding: var(--tm-space-1);
+      padding: var(--tm-select-inset-y) var(--tm-select-inset);
       border: var(--tm-bw-control) solid var(--tm-ink);
       border-radius: var(--tm-radius-2);
       background: var(--tm-surface);
       color: var(--tm-text);
       box-shadow: var(--tm-shadow-overlay);
     }
+    /* Options use the shared item grammar. No tick: the selected option is
+       the framed block, so labels sit exactly where the closed control's
+       text sits and the list is as wide as its longest label. */
     .tm-select option {
       display: flex;
       align-items: center;
-      gap: var(--tm-space-2);
       min-height: var(--tm-control-sm);
-      padding: 0 var(--tm-space-2);
-      border-radius: var(--tm-radius-1);
+      padding: 0 calc(var(--tm-control-pad-x-md) - var(--tm-select-inset) - var(--tm-bw-control));
+      border: var(--tm-bw-control) solid transparent;
+      border-radius: var(--tm-radius-control);
       background: transparent;
       color: var(--tm-text);
       font-size: var(--tm-text-sm);
       cursor: pointer;
     }
+    .tm-select option + option {
+      margin-top: 2px;
+    }
     .tm-select option::checkmark {
-      /* drawn tick (same geometry as .tm-check), no font glyph needed */
-      content: "";
-      flex: none;
-      width: 0.3rem;
-      height: 0.55rem;
-      margin: -2px 0.25rem 0 0.15rem;
-      border: solid var(--tm-ink);
-      border-width: 0 2px 2px 0;
-      transform: rotate(45deg);
+      display: none;
     }
-    .tm-select option:not(:checked)::checkmark {
-      visibility: hidden; /* keep the column so labels stay aligned */
-    }
-    .tm-select option:hover,
-    .tm-select option:focus-visible {
+    .tm-select option:hover {
       background: var(--tm-hover);
-      outline: 0;
-    }
-    .tm-select option:focus-visible {
-      box-shadow: inset 0 0 0 2px var(--tm-focus);
     }
     .tm-select option:checked {
       background: var(--tm-select-bg);
+      border-color: var(--tm-select-frame);
+    }
+    .tm-select option:focus-visible {
+      outline: 0;
+      border-color: var(--tm-focus);
     }
     .tm-select option:disabled {
       color: var(--tm-text-disabled);
@@ -1096,24 +1112,128 @@
     max-height: min(20rem, 60vh);
     overflow-y: auto;
   }
-  .tm-listbox__option::before {
-    content: "";
-    flex: none;
-    width: 0.3rem;
-    height: 0.55rem;
-    margin: -2px 0.25rem 0 0.15rem;
-    border: solid transparent;
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
+  .tm-menu__item.tm-listbox__option {
+    padding-inline: calc(var(--tm-control-pad-x-md) - var(--tm-select-inset) - var(--tm-bw-control));
   }
   .tm-listbox__option[aria-selected="true"] {
     background: var(--tm-select-bg);
-  }
-  .tm-listbox__option[aria-selected="true"]::before {
-    border-color: var(--tm-ink);
+    border-color: var(--tm-select-frame);
   }
   .tm-input[type="search"]::-webkit-search-cancel-button {
     filter: grayscale(1);
+  }
+
+  /* Date / time picker. The field stays a native date/time input (typing,
+     validation, locale order); the browser's own popup is replaced by a
+     .tm-picker built from the shared item grammar. */
+  .tm-input::-webkit-calendar-picker-indicator {
+    display: none;
+  }
+  .tm-picker-field > .tm-picker-field__btn {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: var(--tm-control-md);
+    padding: 0;
+    border: 0;
+    border-left: var(--tm-bw-control) solid var(--tm-ink);
+    border-radius: 0 calc(var(--tm-radius-control) - 1px) calc(var(--tm-radius-control) - 1px) 0;
+    background: var(--tm-surface-alt);
+    color: var(--tm-text);
+    cursor: pointer;
+  }
+  .tm-picker-field__btn:hover {
+    background-image: linear-gradient(var(--tm-hover), var(--tm-hover));
+  }
+  .tm-picker-field__btn:focus-visible {
+    outline: var(--tm-bw-focus) solid var(--tm-focus);
+    outline-offset: -2px;
+  }
+  .tm-picker-field__btn[aria-expanded="true"] {
+    background: var(--tm-select-bg);
+  }
+  .tm-picker {
+    min-width: 0;
+    max-width: none;
+    padding: var(--tm-space-2) var(--tm-select-inset) var(--tm-select-inset);
+  }
+  .tm-picker__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--tm-space-2);
+    padding: 0 0 var(--tm-space-2);
+    font-weight: var(--tm-weight-bold);
+  }
+  .tm-picker__grid {
+    display: grid;
+    grid-template-columns: repeat(7, 2rem);
+    gap: 2px;
+  }
+  .tm-picker__dow {
+    display: grid;
+    place-items: center;
+    height: 1.5rem;
+    font-family: var(--tm-font-mono);
+    font-size: var(--tm-text-2xs);
+    font-weight: var(--tm-weight-medium);
+    letter-spacing: var(--tm-tracking-wide);
+    text-transform: uppercase;
+    color: var(--tm-text-2);
+  }
+  .tm-picker__cell {
+    display: grid;
+    place-items: center;
+    min-width: 2rem;
+    height: 2rem;
+    padding: 0 var(--tm-space-2);
+    border: var(--tm-bw-control) solid transparent;
+    border-radius: var(--tm-radius-control);
+    background: transparent;
+    color: var(--tm-text);
+    font-family: var(--tm-font-mono);
+    font-size: var(--tm-text-sm);
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+  }
+  .tm-picker__cell[data-outside] {
+    color: var(--tm-text-3);
+  }
+  .tm-picker__cell:hover {
+    background: var(--tm-hover);
+  }
+  .tm-picker__cell[aria-selected="true"] {
+    background: var(--tm-select-bg);
+    border-color: var(--tm-select-frame);
+    font-weight: var(--tm-weight-bold);
+  }
+  .tm-picker__cell:focus-visible {
+    outline: 0;
+    border-color: var(--tm-focus);
+  }
+  .tm-picker__cols {
+    display: flex;
+    gap: var(--tm-space-2);
+  }
+  .tm-picker__col {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-height: 13rem;
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+  .tm-picker__col-label {
+    padding: 0 0 var(--tm-space-1);
+    text-align: center;
+  }
+  .tm-picker__foot {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--tm-space-2);
+    margin-top: var(--tm-space-2);
+    padding-top: var(--tm-space-2);
+    border-top: var(--tm-bw-3) solid var(--tm-line-3);
   }
 
   /* Prefix / suffix group */
@@ -1596,7 +1716,8 @@
     gap: var(--tm-space-1) var(--tm-space-2);
     align-items: start;
     padding: var(--tm-space-2) var(--tm-space-3);
-    border: 1px solid var(--_l);
+    /* free-standing object → full-strength frame; tone = tint + icon */
+    border: var(--tm-bw-control) solid var(--tm-ink);
     background: var(--_s);
     color: var(--tm-text);
     font-size: var(--tm-text-sm);
@@ -1611,6 +1732,9 @@
   }
   .tm-alert__body {
     color: var(--tm-text-2);
+  }
+  .tm-alert > .tm-btn--icon {
+    margin: calc(var(--tm-space-1) * -1) calc(var(--tm-space-2) * -1) calc(var(--tm-space-1) * -1) 0;
   }
   .tm-alert--success { --_c: var(--tm-success); --_s: var(--tm-success-soft); --_l: var(--tm-success-line); }
   .tm-alert--warning { --_c: var(--tm-warning); --_s: var(--tm-warning-soft); --_l: var(--tm-warning-line); }
@@ -1940,8 +2064,9 @@
     min-width: 11rem;
     max-width: min(20rem, calc(100vw - 1rem));
     margin: 0;
-    padding: var(--tm-space-1);
-    border: var(--tm-bw-2) solid var(--tm-line-1);
+    padding: var(--tm-select-inset-y) var(--tm-select-inset);
+    /* free-standing object → full-strength frame */
+    border: var(--tm-bw-control) solid var(--tm-ink);
     border-radius: var(--tm-radius-2);
     background: var(--tm-surface);
     color: var(--tm-text);
@@ -1957,9 +2082,9 @@
     gap: var(--tm-space-2);
     width: 100%;
     min-height: var(--tm-control-sm);
-    padding: 0 var(--tm-space-2);
-    border: 0;
-    border-radius: var(--tm-radius-1);
+    padding: 0 var(--tm-select-pad);
+    border: var(--tm-bw-control) solid transparent;
+    border-radius: var(--tm-radius-control);
     background: transparent;
     color: var(--tm-text);
     font-size: var(--tm-text-sm);
@@ -1967,14 +2092,24 @@
     text-decoration: none;
     cursor: pointer;
   }
-  .tm-menu__item:hover,
-  .tm-menu__item:focus-visible,
-  .tm-menu__item.is-hover {
-    background: var(--tm-select-bg);
-    outline: 0;
+  .tm-menu__item + .tm-menu__item {
+    margin-top: 2px;
   }
-  .tm-menu__item:focus-visible {
-    box-shadow: inset 0 0 0 2px var(--tm-focus);
+  /* Same item grammar as nav/list rows: hover = grey block, focus = frame. */
+  .tm-menu__item:hover,
+  .tm-menu__item.is-hover {
+    background: var(--tm-hover);
+  }
+  .tm-menu__item[aria-checked="true"],
+  .tm-menu__item[aria-selected="true"],
+  .tm-menu__item[aria-current="true"] {
+    background: var(--tm-select-bg);
+    border-color: var(--tm-select-frame);
+  }
+  .tm-menu__item:focus-visible,
+  .tm-menu__item.is-focus {
+    outline: 0;
+    border-color: var(--tm-focus);
   }
   .tm-menu__item--danger {
     color: var(--tm-danger);
@@ -1991,7 +2126,7 @@
     border: 0;
   }
   .tm-menu__label {
-    padding: var(--tm-space-1) var(--tm-space-2) 2px;
+    padding: var(--tm-space-1) calc(var(--tm-bw-control) + var(--tm-select-pad)) 2px;
     font-family: var(--tm-font-mono);
     font-size: var(--tm-text-2xs);
     letter-spacing: var(--tm-tracking-label);
@@ -2058,6 +2193,250 @@
   .tm-accordion__body {
     padding: 0 var(--tm-space-3) var(--tm-space-3);
     color: var(--tm-text-2);
+  }
+
+  /* =================================================================
+     Workflow: stage pipeline, pass matrix, collapsible sections, danger zone
+     ================================================================= */
+  /* Stage pipeline: one framed strip, stages are cells split by dividers.
+     data-state = complete | active | pending | skipped | error */
+  .tm-pipeline {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
+    gap: 0;
+    outline: var(--tm-bw-1) solid var(--tm-line-1);
+    outline-offset: calc(var(--tm-bw-1) * -1);
+    background: var(--tm-surface);
+    overflow: clip;
+  }
+  .tm-stage {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 2px var(--tm-space-2);
+    align-items: center;
+    min-width: 0;
+    padding: var(--tm-space-3);
+    border: 0;
+    border-right: var(--tm-bw-1) solid var(--tm-line-1);
+    border-bottom: var(--tm-bw-1) solid var(--tm-line-1);
+    background: transparent;
+    color: var(--tm-text);
+    font: inherit;
+    text-align: left;
+    text-decoration: none;
+  }
+  button.tm-stage,
+  a.tm-stage {
+    cursor: pointer;
+  }
+  button.tm-stage:hover,
+  a.tm-stage:hover {
+    background-image: linear-gradient(var(--tm-hover), var(--tm-hover));
+  }
+  .tm-stage[aria-current="page"],
+  .tm-stage[aria-pressed="true"] {
+    background: var(--tm-select-bg);
+  }
+  .tm-stage:focus-visible {
+    outline-offset: -4px;
+  }
+  .tm-stage__title {
+    font-weight: var(--tm-weight-semibold);
+  }
+  .tm-stage__note {
+    grid-column: 2;
+    font-size: var(--tm-text-xs);
+    color: var(--tm-text-2);
+  }
+  .tm-stage[data-state="pending"] .tm-stage__title,
+  .tm-stage[data-state="skipped"] .tm-stage__title {
+    color: var(--tm-text-2);
+  }
+
+  /* Status marker (circle): pipeline stages and pass-matrix cells.
+     data-state = complete | review | warning | active | pending | skipped | error | none */
+  .tm-mark {
+    --_c: var(--tm-text-3);
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    width: 1.125rem;
+    height: 1.125rem;
+    flex: none;
+    border: var(--tm-bw-control) solid var(--_c);
+    border-radius: 50%;
+    color: var(--_c);
+    vertical-align: middle;
+  }
+  .tm-mark::after { content: ""; }
+  .tm-mark[data-state="complete"] { --_c: var(--tm-success); background: var(--_c); }
+  .tm-mark[data-state="complete"]::after {
+    width: 0.25rem; height: 0.45rem; margin-top: -2px;
+    border: solid var(--tm-surface); border-width: 0 2px 2px 0; transform: rotate(45deg);
+  }
+  .tm-mark[data-state="review"] { --_c: var(--tm-pending); }
+  .tm-mark[data-state="review"]::after { width: 0.4rem; height: 0.4rem; border-radius: 50%; background: linear-gradient(90deg, var(--_c) 50%, transparent 50%); }
+  .tm-mark[data-state="warning"] { --_c: var(--tm-warning); }
+  .tm-mark[data-state="warning"]::after { width: 0.5rem; height: 0.45rem; background: var(--_c); clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+  .tm-mark[data-state="error"] { --_c: var(--tm-danger); background: var(--_c); }
+  .tm-mark[data-state="error"]::after { width: 2px; height: 0.45rem; background: var(--tm-surface); box-shadow: 0 0 0 0; }
+  .tm-mark:is([data-state="active"], [data-state="info"]) { --_c: var(--tm-info); }
+  .tm-mark:is([data-state="active"], [data-state="info"])::after { width: 0.4rem; height: 0.4rem; border-radius: 50%; background: var(--_c); }
+  .tm-mark[data-state="pending"] { --_c: var(--tm-text-3); }
+  .tm-mark[data-state="skipped"] { --_c: var(--tm-line-2); border-style: dashed; }
+  .tm-mark[data-state="none"] { --_c: var(--tm-line-3); border-width: 1px; }
+
+  /* Status plate: the state of a whole page/object (page header, panel head).
+     Control-sized, ink frame, state carried by the .tm-mark, no tinted fill.
+     Small .tm-badge stays for statuses inside rows and lists. */
+  .tm-status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--tm-space-2);
+    min-height: var(--tm-control-md);
+    padding: 0 var(--tm-control-pad-x-md) 0 var(--tm-space-2);
+    border: var(--tm-bw-control) solid var(--tm-ink);
+    border-radius: var(--tm-radius-control);
+    background: var(--tm-surface);
+    color: var(--tm-text);
+    font-size: var(--tm-text-sm);
+    font-weight: var(--tm-weight-semibold);
+    white-space: nowrap;
+  }
+  /* Small plate for panel heads, KPI tiles and image overlays. */
+  .tm-status--sm {
+    gap: var(--tm-space-1-5);
+    min-height: var(--tm-control-sm);
+    padding: 0 var(--tm-control-pad-x-sm) 0 var(--tm-space-1-5);
+    font-size: var(--tm-text-xs);
+  }
+  .tm-status--sm .tm-mark {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+  .tm-status--sm .tm-mark[data-state="complete"]::after {
+    width: 0.2rem;
+    height: 0.36rem;
+    border-width: 0 1.5px 1.5px 0;
+  }
+  button.tm-status {
+    font-family: inherit;
+    cursor: pointer;
+  }
+  button.tm-status:hover {
+    background-image: linear-gradient(var(--tm-hover), var(--tm-hover));
+  }
+
+  /* Pass-matrix cell: [status] [open/run] as a pair of square icon buttons.
+     The status button is the selectable one (aria-pressed = this pass of this
+     unit is shown in the preview). */
+  .tm-passcell {
+    display: inline-flex;
+    gap: var(--tm-space-1);
+    vertical-align: middle;
+  }
+  .tm-passcell .tm-btn {
+    width: var(--tm-control-sm);
+    min-height: var(--tm-control-sm);
+    padding: 0;
+  }
+  .tm-passcell .tm-btn[data-state="complete"] { --_fg: var(--tm-success); }
+  .tm-passcell .tm-btn[data-state="review"] { --_fg: var(--tm-pending); }
+  .tm-passcell .tm-btn[data-state="warning"] { --_fg: var(--tm-warning); }
+  .tm-passcell .tm-btn[data-state="error"] { --_fg: var(--tm-danger); }
+  .tm-passcell .tm-btn[aria-pressed="true"] {
+    --_bg: var(--tm-select-bg);
+    --_bg-press: var(--tm-select-bg);
+    --_bd: var(--tm-select-line);
+    box-shadow: none;
+  }
+
+  /* Section heading with an inline filter (filter sits next to what it filters). */
+  .tm-section-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--tm-space-2) var(--tm-space-4);
+    margin-bottom: var(--tm-space-2);
+  }
+  .tm-section-head__title {
+    font-family: var(--tm-font-display);
+    font-size: var(--tm-text-lg);
+    font-weight: var(--tm-weight-bold);
+    letter-spacing: var(--tm-tracking-tight);
+  }
+  .tm-section-head__meta {
+    font-family: var(--tm-font-mono);
+    font-size: var(--tm-text-xs);
+    font-weight: var(--tm-weight-medium);
+    color: var(--tm-text-2);
+  }
+  .tm-section-head > .tm-segmented,
+  .tm-section-head__actions {
+    margin-left: auto;
+  }
+
+  /* Collapsible full-width section (native <details>): title, count, description. */
+  .tm-collapsible {
+    background: var(--tm-surface);
+    border: var(--tm-bw-1) solid var(--tm-line-1);
+  }
+  .tm-collapsible > summary {
+    display: flex;
+    align-items: center;
+    gap: var(--tm-space-2) var(--tm-space-3);
+    min-height: 2.75rem;
+    padding: var(--tm-space-2) var(--tm-space-4);
+    list-style: none;
+    cursor: pointer;
+  }
+  .tm-collapsible > summary::-webkit-details-marker { display: none; }
+  .tm-collapsible > summary::after {
+    content: "";
+    width: 0.45rem;
+    height: 0.45rem;
+    margin-left: auto;
+    flex: none;
+    border: solid var(--tm-text-2);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg) translateY(-2px);
+    transition: transform var(--tm-dur-fast) var(--tm-ease);
+  }
+  .tm-collapsible[open] > summary::after {
+    transform: rotate(-135deg) translate(-2px, 0);
+  }
+  .tm-collapsible > summary:hover {
+    background-image: linear-gradient(var(--tm-hover), var(--tm-hover));
+  }
+  .tm-collapsible > summary:focus-visible {
+    outline-offset: -4px;
+  }
+  .tm-collapsible__title {
+    font-weight: var(--tm-weight-bold);
+  }
+  .tm-collapsible__desc {
+    font-size: var(--tm-text-xs);
+    color: var(--tm-text-2);
+  }
+  .tm-collapsible__body {
+    padding: var(--tm-space-3) var(--tm-space-4) var(--tm-space-4);
+    border-top: var(--tm-bw-3) solid var(--tm-line-3);
+  }
+
+  /* Danger zone: description + destructive action, last on the page. */
+  .tm-danger-zone {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--tm-space-2) var(--tm-space-5);
+    align-items: center;
+  }
+  .tm-danger-zone__note {
+    grid-column: 1 / -1;
+    font-size: var(--tm-text-xs);
+    color: var(--tm-text-2);
+  }
+  @media (max-width: 639px) {
+    .tm-danger-zone { grid-template-columns: minmax(0, 1fr); }
   }
 
   /* =================================================================

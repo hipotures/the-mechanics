@@ -12,7 +12,7 @@ import { join, resolve } from "node:path";
 const args = process.argv.slice(2);
 const label = args.find((a) => !a.startsWith("--")) || "review";
 const opt = (k) => args.find((a) => a.startsWith(`--${k}=`))?.split("=")[1]?.split(",");
-const PAGES = opt("pages") || ["analytics", "workspace", "data", "catalog", "content", "components"];
+const PAGES = opt("pages") || ["analytics", "workspace", "workspace/analyse", "data", "catalog", "content", "components"];
 const THEMES = opt("themes") || ["light", "dark", "coffee"];
 const VIEWPORTS = (opt("viewports") || ["desktop", "mobile"]).map((v) => ({ desktop: { name: "desktop", width: 1440, height: 900 }, mobile: { name: "mobile", width: 390, height: 844 } })[v]);
 const outDir = resolve(process.env.SHOT_DIR || join("tmp/screenshots", label));
@@ -59,7 +59,7 @@ try {
             .slice(0, 5)
             .map((el) => `${el.tagName.toLowerCase()}.${[...el.classList].join(".")}`),
         }));
-        const file = `${p}-${theme}-${vp.name}.png`;
+        const file = `${p.replace("/", "-")}-${theme}-${vp.name}.png`;
         await page.screenshot({ path: join(outDir, file), fullPage: true });
         if (args.includes("--tiles")) {
           // Viewport-height tiles of tall pages for full-resolution review.

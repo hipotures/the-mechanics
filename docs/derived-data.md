@@ -15,10 +15,14 @@ All demo content comes from [`fixtures/demo-data.json`](../fixtures/demo-data.js
 | Scatter highlight | Points with error rate ≥ 1 % use the danger series and square markers (presentation rule, not a fixture threshold). |
 
 ## Workspace
+`#/workspace` (overview) and `#/workspace/analyse` (Analyse · P1) share one route.
+
 | Derived | Source / rule |
 |---|---|
-| Tabs | `preview.tabs`; annotations with type `place`/`facility` listed under *Terms*, `role` under *Observations*. |
-| Long-term stress row | `states.longTerm` added to the Terms table with a synthetic Polish note. |
+| Overview pipeline, sections, P0–P5 matrix, models, activity, P1 danger zone | `workspace.overview` (synthetic, added for the owner's pipeline layout). `overview.words` = sum of section words. Full sections 3–20 reuse `units[]` ids/titles; their P1 status is the unit's `status`. |
+| Section filter | `overview.sectionFilters` over `sections[].processing`. |
+| Analyse KPI strip / costs table | `metrics[]`. |
+| P1 terms table | all `preview.blocks[].annotations` + `states.longTerm` with a synthetic Polish note. |
 | Other units | Only `preview.unitId` has blocks; other units show an explicit empty state. |
 | Load next | `navigation.hasNext`/`pageSize` → loading skeleton then an “end of demo fixture” notice. |
 

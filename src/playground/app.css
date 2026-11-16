@@ -395,3 +395,48 @@ h1:focus { outline: 0; }
 
 /* Unit list column header aligned with the row text (selection-block geometry). */
 .pg-units .tm-colhead { padding-inline: var(--tm-select-text); }
+
+/* ---------- Workspace (overview + Analyse) ----------------------------- */
+.pg-back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tm-space-1);
+  margin-bottom: var(--tm-space-2);
+  color: var(--tm-text-2);
+  font-weight: var(--tm-weight-semibold);
+  text-decoration: none;
+}
+.pg-back:hover { color: var(--tm-text); text-decoration: underline; }
+.pg-an-grid {
+  grid-template-columns: minmax(16rem, 0.85fr) minmax(0, 1.6fr);
+  align-items: stretch;
+}
+@media (max-width: 899px) {
+  .pg-an-grid { grid-template-columns: minmax(0, 1fr); }
+  .pg-an-grid .pg-unit-list { max-height: 22rem; overflow-y: auto; }
+}
+.pg-units > .tm-panel__head { flex-wrap: wrap; }
+.pg-units-search { flex: 0 1 11rem; min-width: 8rem; }
+.pg-units-search .tm-input { min-height: calc(var(--tm-control-sm) - 2 * var(--tm-bw-control)); }
+.pg-pass-head { width: calc(2 * var(--tm-control-sm) + var(--tm-space-1)); text-align: center; }
+.pg-unit .tm-passcell { flex: none; }
+.pg-sections .pg-col-n { width: 3rem; color: var(--tm-text-3); }
+.pg-sections .pg-col-pass { width: 3.25rem; text-align: center; }
+.pg-sections tr.is-disabled .tm-table__primary { color: var(--tm-text-3); font-weight: var(--tm-weight-medium); }
+.pg-pass-models { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 12rem), 1fr)); gap: var(--tm-space-3); }
+.pg-log { margin: 0; padding: 0; list-style: none; display: grid; gap: 2px; font-family: var(--tm-font-mono); font-size: var(--tm-text-xs); }
+.pg-log li { display: flex; flex-wrap: wrap; align-items: center; gap: var(--tm-space-3); min-height: 1.75rem; border-bottom: var(--tm-bw-3) solid var(--tm-line-3); }
+.pg-log li:last-child { border-bottom: 0; }
+.pg-log time { color: var(--tm-text-2); font-weight: var(--tm-weight-medium); }
+.pg-page-end { display: flex; justify-content: flex-end; margin-top: var(--tm-gap-region); }
+.pg-proc-inline { display: none; }
+/* Narrow screens: processing moves under the name; the pass matrix compacts so P0–P5 always fit. */
+@media (max-width: 639px) {
+  .pg-sections { font-size: var(--tm-text-xs); }
+  .pg-sections .pg-col-proc { display: none; }
+  .pg-proc-inline { display: block; }
+  .pg-sections th, .pg-sections td { padding-inline: 4px; }
+  .pg-sections .pg-col-n { width: 1.75rem; }
+  .pg-sections .pg-col-pass { width: 1.5rem; padding-inline: 1px; }
+  .pg-sections .tm-mark { width: 0.95rem; height: 0.95rem; }
+}
