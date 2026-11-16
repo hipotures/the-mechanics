@@ -20,6 +20,7 @@ Source of truth for values: `src/the-mechanics/tokens.css` (geometry, type, spac
 8. **One hover language.** Every clickable control signals hover by a fill tint (`--tm-hover`), never by changing its border; selection never changes font weight (widths stay constant). Only form fields darken their border on hover. Containers that are not clickable (panels, product cards, regions) do not react to hover.
 9. **Emphasis budget (owner rule).** Strong controls are only strong if few things are strong. Decide first what a screen must say in two seconds, then spend emphasis there:
    - *Normal state is quiet, abnormal state is loud.* "Enabled · authenticated · pro" is muted text (`--tm-text-2`, or `.tm-badge--plain`); tinted badges, plates and color are for deviations (disabled, expired, stale, limit reached, failed).
+   - *Emphasis follows frequency.* A rare action (add an account, settings) is a quiet icon button with a tooltip, even when it is page-level; the filled primary button is for the action people come to the page to do, if there is one at all.
    - *One strong action per record* (framed or primary); other actions are ghost/text buttons; destructive ones turn red in their confirmation, not in every row.
    - *Frames organise, they do not decorate:* panels and controls have frames; data, dates, periods and metadata are plain (muted) text, never boxed.
    - *Color has at most three jobs on a screen:* identity (e.g. provider name), data (bars, charts) and attention (warning/error).
