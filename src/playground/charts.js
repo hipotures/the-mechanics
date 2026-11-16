@@ -184,13 +184,17 @@ function donutOption(c, t, width) {
 const hexRgb = (h) => (/^#[0-9a-f]{6}$/i.test(h) ? [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255) : null);
 const relLum = (c) => c.map((x) => (x <= 0.04045 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4)).reduce((s, x, i) => s + x * [0.2126, 0.7152, 0.0722][i], 0);
 const contrast = (a, b) => { const [x, y] = [relLum(a), relLum(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
+// Owner review switch (?heat=halo|plain|ink): halo = default; plain = better
+// color, no halo; ink = always the text color, no halo.
+const HEAT_MODE = new URLSearchParams(location.search).get("heat") || "halo";
 function heatLabel(t, v) {
+  if (HEAT_MODE === "ink") return { color: t.text };
   const lo = hexRgb(t.heatLo), hi = hexRgb(t.heatHi), tx = hexRgb(t.text), sf = hexRgb(t.surface);
   if (!lo || !hi || !tx || !sf) return { color: v >= 55 ? t.surface : t.text };
   const bg = lo.map((x, i) => x + (hi[i] - x) * (v / 100));
   const [rt, rs] = [contrast(tx, bg), contrast(sf, bg)];
   const useText = rt >= rs;
-  return Math.max(rt, rs) >= 4.5
+  return Math.max(rt, rs) >= 4.5 || HEAT_MODE === "plain"
     ? { color: useText ? t.text : t.surface }
     : { color: useText ? t.text : t.surface, textBorderColor: useText ? t.surface : t.text, textBorderWidth: 2 };
 }
