@@ -45,6 +45,8 @@ Test for anything new: *choice among siblings* → selection fill; *own on/off s
 - Reserve width for changing numbers (counter badge sized for two digits), append optional buttons at the end of a row, never insert them in the middle.
 - Do not add a whole toolbar row for one small display option. Put it on an existing element — e.g. the unit in a panel head becomes a `.tm-meta-toggle` (empty 2px ink frame; on = ink fill; 22px so the head keeps its height).
 
+- View toggle vs action vs setting: a *view toggle* (filter/display option) keeps a fixed label and uses the ink fill; an *action* on a record ("Disable", "Resume") may name the action; a persistent on/off *setting* of a record is a labelled `.tm-switch`. Do not rename product actions to satisfy the toggle rule — that changes the product.
+
 ## 5. Focus (§3)
 - `--tm-focus` is the ink color in every theme. Controls (buttons, fields, selects, segmented options, chips, pagination, checkbox/radio/switch, meta toggles) keep their frame and get `box-shadow: var(--tm-focus-lift)` (3px 3px 0, no blur) — "lifted off the page".
 - Composite controls (stepper, input group with affixes, date/time field, multi-select, drop zone) lift as one piece; the focused part inside is marked with the press tint `--tm-press`, never with a second frame.
@@ -56,6 +58,9 @@ Test for anything new: *choice among siblings* → selection fill; *own on/off s
 - Alerts: 2px ink frame, tone tint, icon. Warnings may be hidden; a status-plate button in the page head restores them. Blocking errors cannot be hidden.
 - Toasts: transient, same frame; errors persist until dismissed.
 - Empty / error / stale states: `.tm-state` with title, explanation and one recovery action.
+
+- Dialogs, never browser popups: `window.confirm/alert/prompt` are replaced by `<dialog class="tm-dialog">`. Destructive confirmation: title states the action and object, body says what is lost and what is kept, Cancel (outline, focused by default) + danger confirm; Escape and backdrop cancel; focus returns to the trigger. Reference: `confirmDialog` in `src/playground/lib.js`.
+- Action weight: one primary per record or panel; other actions outline, secondary/rare ones ghost; destructive last and `tm-btn--danger-outline`. Equal frames on every action flatten the hierarchy.
 
 ## 7. Fields (§5)
 - Label above, hint below, error message with a "!" glyph; invalid = `aria-invalid="true"` (red frame). Read-only = dashed frame.
@@ -72,6 +77,7 @@ Test for anything new: *choice among siblings* → selection fill; *own on/off s
 ## 9. Layout patterns (§5 Layout patterns)
 - Overview: page head (back link, eyebrow, title, meta, status plate) → stage pipeline → main table → collapsible secondary sections → page-level/destructive actions last.
 - List + preview: two columns split by a 2px divider; the list's search sits in the list head; preview pages with "Load next N", no tabs.
+- Panel grids never leave an empty cell: balance the column count to the item count or let the last panel span the gap (`balanceGrid`).
 - A filter sits next to what it filters (section head, list head), not in a distant toolbar.
 - Report state, not invented progress — no progress bars for work that does not report partial progress.
 - Prefer one view plus collapsible sections over tabs.

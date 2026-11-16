@@ -61,6 +61,11 @@ const RULES = [
     test: (l) => !/aria-label/.test(l) && /["'`](Show|Hide|Expand|Collapse|Enable|Disable)\b[^"'`]*["'`]\s*:\s*["'`](Show|Hide|Expand|Collapse|Enable|Disable)\b/.test(l),
   },
   {
+    id: "browser-dialog",
+    why: "use <dialog class=\"tm-dialog\"> (danger confirm for destructive actions), not browser popups",
+    test: (l, ext) => [".js", ".mjs", ".jsx", ".ts", ".tsx", ".svelte", ".vue", ".html", ".htm"].includes(ext) && /(^|[^.\w])(window\.)?(confirm|alert|prompt)\s*\(/.test(l) && !/function\s+(confirm|alert|prompt)\b/.test(l),
+  },
+  {
     id: "important",
     why: "app CSS outside layers already wins; !important usually hides a structure problem",
     test: (l, ext) => [".css", ".scss", ".less"].includes(ext) && /!important/.test(l),

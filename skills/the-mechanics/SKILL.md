@@ -17,6 +17,7 @@ If the checkout is available, read the relevant `DESIGN.md` section before inven
 
 ## 1. Before you start
 
+0. **Respect the project's own rules** (AGENTS.md / CLAUDE.md: temp directories, memory limits, branches). They win over anything here.
 1. **Confirm the project is allowed to use it.** Integration into another app is an owner decision. If the project does not already import The Mechanics and nobody asked for it, ask first.
 2. **Find how it is wired.** Look for `the-mechanics.css` / `fonts.css` imports, `class="tm-root"` on the body or app root, and `data-tm-theme` on `<html>`. If missing, follow `docs/distribution.md` (plain HTML, React, Svelte, Rust/Datastar, Tailwind+daisyUI bridge, ECharts adapter).
 3. **Do not add Tailwind/daisyUI (or any framework) just to get the styles.** The CSS is standalone.
@@ -30,8 +31,11 @@ Read `references/rules.md` for the reasoning and edge cases. In short:
 - **Three-level hierarchy:** region > panel > record. A nested header never competes with its parent.
 - **One item grammar** for everything pickable (nav, in-page nav, list rows, menu/select options, palette results, picker cells): hover = grey block; selected = **selection fill only** (no frame, no tick); keyboard focus = the block's frame in ink. Geometry never changes between states.
 - **Two "on" signals, never swapped:** *chosen among siblings* → **selection fill** (green/olive/copper: nav item, segmented option, category chip, selected row, the bulk bar). *A control's own on-state* → **ink fill** (checked checkbox, switch, count badge, `.tm-btn--toggle`, `.tm-meta-toggle`). Ink, because controls often sit inside a selected area and green on green would vanish.
-- **Toggles never relabel.** No "Show X / Hide X" swaps; keep label and icon fixed and change only the fill. Nothing in a toolbar may shift when state changes (fixed labels, reserved counter width, optional buttons appended last).
+- **Toggles never relabel.** A *view toggle* (filter or display option such as "Selected only", "Hide free") keeps its label and icon and changes only its fill. Nothing in a toolbar may shift when state changes (fixed labels, reserved counter width, optional buttons appended last). This is about view toggles only: an *action* that changes a record ("Enable" / "Disable", "Pause" / "Resume") may name the action it performs. A persistent on/off *setting* of a record is better shown as a `.tm-switch` with a label than as an ink-filled button, which would compete with the primary action.
 - **Focus = lift:** controls keep their frame and get a hard ink shadow `--tm-focus-lift` (3px 3px, no blur); composites (stepper, input group, date field) lift as one piece and mark the focused part with the press tint; items get an ink block frame. Never a blue ring, never two focus looks.
+- **No browser dialogs.** Replace `window.confirm`, `alert` and `prompt` with `<dialog class="tm-dialog">` — destructive confirmations get a danger confirm button (`tm-btn--danger`), Cancel focused by default, Escape/backdrop cancel (port `confirmDialog` from `src/playground/lib.js`). Errors that `alert()` showed become an alert or toast.
+- **Action weight:** one primary action per record; other actions are outline, rarely used or secondary ones ghost; destructive last, `tm-btn--danger-outline`. Do not frame every action equally.
+- **Grids have no empty cells:** a panel grid whose last row is short leaves a hole in the frame; balance the columns or let the last panel span the gap (see `balanceGrid` in `src/playground/lib.js`).
 - **Status:** a standalone status (page head, panel head, KPI, image overlay) is a **status plate** `.tm-status` with a `.tm-mark`; small tinted `.tm-badge` only inside rows, cells and text. Alerts: 2px ink frame + tint + icon; a warning may be hidden and restored from a page-head status button.
 - **Text fields have a clear ✕** while they hold text (space reserved, click clears and keeps focus, Escape clears search). Not on number/date/code/read-only fields, or where a cancel ✕ already exists.
 - **Layout:** a filter sits next to what it filters; secondary information goes in collapsible sections; destructive actions last, in a danger zone; report real state — no invented progress bars. A small display option goes **on the existing element** (e.g. the unit in the panel head as `.tm-meta-toggle`), not in a new toolbar row.
@@ -40,6 +44,8 @@ Read `references/rules.md` for the reasoning and edge cases. In short:
 - **Data in examples is synthetic.** Never real names, customers or copied text.
 
 ## 3. Workflow
+
+Restyling changes the look, not the product: keep the app's wording, features and behaviour. If a rule seems to require changing what a control does or what it is called, propose it in your report instead of doing it.
 
 1. Map each piece of the screen to an existing component (Gallery / `references/recipes.md`). Write markup with `tm-` classes and express state with attributes (`aria-pressed`, `aria-selected`, `aria-current`, `aria-invalid`, `aria-busy`, `disabled`, `[open]`).
 2. Put app-specific layout in the app's own CSS (unlayered, so it wins without `!important`). Use `--tm-*` tokens for every color, space, size and border, never hex values or ad-hoc pixel spacing.
