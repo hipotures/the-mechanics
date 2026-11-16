@@ -875,10 +875,32 @@
     cursor: not-allowed;
   }
   .tm-btn--ghost:disabled { --_bd: transparent; --_bg: transparent; }
+  /* Busy: the button keeps its size. After a short delay (so fast actions
+     never flash) the label and icons hide in place and a spinner takes the
+     centre — nothing around the button moves. */
   .tm-btn[aria-busy="true"] {
+    position: relative;
     cursor: progress;
+    animation: tm-busy-label 0s 250ms both;
   }
-  .tm-btn[aria-busy="true"]::before,
+  .tm-btn[aria-busy="true"] > * {
+    animation: tm-busy-hide 0s 250ms both;
+  }
+  .tm-btn[aria-busy="true"]::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 0.875rem;
+    height: 0.875rem;
+    border: 2px solid var(--_fg, currentColor);
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: tm-spin 0.7s linear infinite, tm-busy-show 0s 250ms both;
+  }
+  @keyframes tm-busy-label { from { color: var(--_fg); } to { color: transparent; } }
+  @keyframes tm-busy-hide { from { visibility: visible; } to { visibility: hidden; } }
+  @keyframes tm-busy-show { from { opacity: 0; } to { opacity: 1; } }
   .tm-spinner {
     content: "";
     display: inline-block;

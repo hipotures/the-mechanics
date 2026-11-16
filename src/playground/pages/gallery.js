@@ -73,7 +73,7 @@ export default {
 
       ${section("actions", "Actions", "buttons · groups · segmented · menus · toolbar", `
         ${spec("Variant × state matrix", `<div class="pg-matrix-wrap"><table class="pg-matrix"><thead><tr><th></th>${states.map(([s]) => `<th scope="col">${s}</th>`).join("")}</tr></thead><tbody>
-          ${variants.map(([n, v]) => `<tr><th scope="row">${n}</th>${states.map(([, s]) => `<td>${btn(v, s, s === "busy" ? "Saving" : n)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`, "pg-spec--wide")}
+          ${variants.map(([n, v]) => `<tr><th scope="row">${n}</th>${states.map(([, s]) => `<td>${btn(v, s, n)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`, "pg-spec--wide")}
         ${spec("Sizes & icons", `<div class="pg-row-wrap"><button class="tm-btn tm-btn--primary tm-btn--sm">${icon("plus", "tm-icon--sm")}Small</button><button class="tm-btn tm-btn--primary">${icon("download")}Leading</button><button class="tm-btn tm-btn--outline tm-btn--lg">Trailing${icon("chevronRight")}</button></div>
           <div class="pg-row-wrap pg-mt"><button class="tm-btn tm-btn--icon tm-btn--sm" aria-label="Edit">${icon("edit", "tm-icon--sm")}</button><button class="tm-btn tm-btn--icon" aria-label="Refresh">${icon("refresh")}</button><button class="tm-btn tm-btn--icon tm-btn--lg tm-btn--ghost" aria-label="More">${icon("dots")}</button><button class="tm-btn tm-btn--danger-outline">${icon("trash")}Danger outline</button></div>
           <button class="tm-btn tm-btn--outline tm-btn--block pg-mt">Full-width button</button>`)}

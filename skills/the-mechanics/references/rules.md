@@ -47,6 +47,9 @@ Test for anything new: *choice among siblings* → selection fill; *own on/off s
 
 - View toggle vs action vs setting: a *view toggle* (filter/display option) keeps a fixed label and uses the ink fill; an *action* on a record ("Disable", "Resume") may name the action; a persistent on/off *setting* of a record is a labelled `.tm-switch`. Do not rename product actions to satisfy the toggle rule — that changes the product.
 
+- Busy buttons keep their size: `aria-busy="true"` hides the label in place and centres a spinner after 250 ms; never change the label or put a spinner beside it.
+- Record problems: a text-sized marker beside the record name lives exactly as long as its toast; dismissing acknowledges this occurrence, a new failed attempt shows both again.
+
 ## 5. Focus (§3)
 - `--tm-focus` is the ink color in every theme. Controls (buttons, fields, selects, segmented options, chips, pagination, checkbox/radio/switch, meta toggles) keep their frame and get `box-shadow: var(--tm-focus-lift)` (3px 3px 0, no blur) — "lifted off the page".
 - Composite controls (stepper, input group with affixes, date/time field, multi-select, drop zone) lift as one piece; the focused part inside is marked with the press tint `--tm-press`, never with a second frame.
