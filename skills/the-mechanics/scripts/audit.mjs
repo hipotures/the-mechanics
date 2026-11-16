@@ -58,7 +58,8 @@ const RULES = [
     id: "relabel-toggle",
     why: "toggles keep a fixed label; show state with aria-pressed + fill",
     // aria-label-only changes (icon buttons) do not move anything on screen
-    test: (l) => !/aria-label/.test(l) && /["'`](Show|Hide|Expand|Collapse|Enable|Disable)\b[^"'`]*["'`]\s*:\s*["'`](Show|Hide|Expand|Collapse|Enable|Disable)\b/.test(l),
+    // view toggles only; record actions ("Enable"/"Disable") may name what they do
+    test: (l) => !/aria-label/.test(l) && /["'`](Show|Hide|Expand|Collapse)\b[^"'`]*["'`]\s*:\s*["'`](Show|Hide|Expand|Collapse)\b/.test(l),
   },
   {
     id: "browser-dialog",
@@ -92,6 +93,7 @@ for (const d of dirs) {
     const ext = extname(f);
     readFileSync(f, "utf8").split("\n").forEach((line, i) => {
       if (line.length > 400) return; // minified
+      if (/^\s*(\/\/|\/?\*|<!--)/.test(line)) return; // comments
       for (const r of RULES) {
         if (r.test(line, ext)) {
           counts[r.id] = (counts[r.id] || 0) + 1;
