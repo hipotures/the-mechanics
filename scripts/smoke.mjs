@@ -188,6 +188,22 @@ try {
     await page.click('[data-bulk="clear"]');
     assert(await page.locator("#bulk").isHidden(), "clear hides bar");
   });
+  await check("text fields: clear button appears with text, clears, keeps focus; Escape clears search", async () => {
+    await go("data");
+    const btn = page.locator("#q ~ .tm-input-clear .tm-input-clear__btn");
+    assert(!(await btn.isVisible()), "clear shown on empty field");
+    await page.click("#q");
+    await page.keyboard.type("zzz-no-match");
+    assert(await btn.isVisible(), "clear not shown with text");
+    await btn.click();
+    assert((await page.inputValue("#q")) === "" && (await page.evaluate(() => document.activeElement.id)) === "q", "not cleared / focus lost");
+    assert((await page.locator("#table-wrap tbody tr").count()) === 10, "table not restored after clear");
+    await page.keyboard.type("abc");
+    await page.keyboard.press("Escape");
+    assert((await page.inputValue("#q")) === "", "Escape did not clear search");
+    assert(await page.locator("#e-name ~ .tm-input-clear").count(), "editor text field has no clear button");
+    assert(!(await page.locator("#e-id ~ .tm-input-clear").count()), "read-only field got a clear button");
+  });
   await check("data: confirmation dialog — Escape closes and returns focus; confirm applies", async () => {
     await go("data");
     await page.click('[data-bulk="deactivate"]');

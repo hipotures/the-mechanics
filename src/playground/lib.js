@@ -590,3 +590,49 @@ export function enhanceDateTime(root = document) {
     input.addEventListener("click", (e) => { if (input.showPicker) e.preventDefault(); });
   });
 }
+
+/* ---------- Clear button for text fields ------------------------------
+   Every editable text/search/email/url/tel .tm-input gets a ✕ on the right
+   while it holds text (CSS shows it via :placeholder-shown, so programmatic
+   value changes are covered too). Click clears, fires input/change and keeps
+   focus in the field; Escape clears search fields. Opt out with
+   data-no-clear. New fields are picked up by a MutationObserver. */
+const CLEARABLE = 'input.tm-input:is([type="text"], [type="search"], [type="email"], [type="url"], [type="tel"], :not([type])):not([readonly], [disabled], [data-no-clear], .tm-otp__cell, [data-tm-clear])';
+export function enhanceClearable(root = document) {
+  if (!enhanceClearable.observer) {
+    let queued = false;
+    enhanceClearable.observer = new MutationObserver(() => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => { queued = false; enhanceClearable(document); });
+    });
+    enhanceClearable.observer.observe(document.body, { childList: true, subtree: true });
+  }
+  root.querySelectorAll(CLEARABLE).forEach((input) => {
+    if (input.closest(".tm-stepper, .tm-multiselect, .tm-palette, .tm-picker-field")) return;
+    input.dataset.tmClear = "1";
+    if (!input.placeholder) input.placeholder = " "; // :placeholder-shown = empty
+    const tip = document.createElement("span");
+    tip.className = "tm-tip tm-tip--below tm-input-clear";
+    tip.innerHTML = `<button type="button" class="tm-input-clear__btn" tabindex="-1" aria-label="Clear">${icon("x", "tm-icon--sm")}</button><span class="tm-tip__bubble" aria-hidden="true">Clear</span>`;
+    const group = input.parentElement.classList.contains("tm-input-group") ? input.parentElement : null;
+    if (group) {
+      input.after(tip);
+    } else {
+      const wrap = document.createElement("span");
+      wrap.className = "tm-clearable";
+      input.replaceWith(wrap);
+      wrap.append(input, tip);
+    }
+    const clear = () => {
+      input.value = "";
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+      input.focus();
+    };
+    tip.firstElementChild.addEventListener("mousedown", (e) => e.preventDefault()); // keep focus in the field
+    tip.firstElementChild.addEventListener("click", clear);
+    if (input.type === "search") input.addEventListener("keydown", (e) => { if (e.key === "Escape" && input.value) { e.preventDefault(); e.stopPropagation(); clear(); } });
+  });
+}
+

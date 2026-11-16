@@ -26,7 +26,7 @@ Verification (after `build`):
 ```sh
 corepack pnpm exec playwright install --only-shell chromium   # once; see “Disk-backed temp” below
 corepack pnpm check:contrast   # WCAG ratios: token pairs + derived colors → docs/verification/contrast*.md
-corepack pnpm smoke            # 24 interaction/keyboard checks + state screenshots (own port 4175)
+corepack pnpm smoke            # 25 interaction/keyboard checks + state screenshots (own port 4175)
 corepack pnpm shots [label]    # 7 views × 3 themes × desktop/mobile → tmp/screenshots/<label>/
 ```
 

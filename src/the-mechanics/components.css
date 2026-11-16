@@ -1189,8 +1189,53 @@
     background: var(--tm-select-bg);
     border-color: var(--tm-select-frame);
   }
+  /* The browser's own search ✕ is replaced by .tm-input-clear (same in every
+     browser). */
   .tm-input[type="search"]::-webkit-search-cancel-button {
-    filter: grayscale(1);
+    display: none;
+  }
+  /* Clear button: shown while the field holds text; space is reserved so
+     the text never moves when it appears. */
+  .tm-clearable {
+    position: relative;
+    display: block;
+    min-width: 0;
+  }
+  .tm-clearable > .tm-input {
+    padding-right: calc(var(--tm-space-2) + 1.5rem);
+  }
+  .tm-clearable > .tm-input-clear {
+    position: absolute;
+    top: 50%;
+    right: var(--tm-space-1);
+    transform: translateY(-50%);
+  }
+  .tm-input-group > .tm-input-clear {
+    align-self: center;
+    margin-right: var(--tm-space-1);
+  }
+  .tm-input-clear__btn {
+    display: grid;
+    place-items: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0;
+    border: 0;
+    border-radius: var(--tm-radius-control);
+    background: transparent;
+    color: var(--tm-text-2);
+    cursor: pointer;
+  }
+  .tm-input-clear__btn:hover {
+    background: var(--tm-hover);
+    color: var(--tm-text);
+  }
+  .tm-clearable:has(> .tm-input:placeholder-shown) > .tm-input-clear,
+  .tm-input-group:has(> .tm-input:placeholder-shown) > .tm-input-clear {
+    visibility: hidden;
+  }
+  .tm-input-clear > .tm-tip__bubble {
+    white-space: nowrap;
   }
 
   /* Date / time picker. The field stays a native date/time input (typing,
