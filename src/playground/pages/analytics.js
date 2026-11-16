@@ -13,12 +13,12 @@ function kpiTile(k, charts) {
   else value = `${k.value % 1 ? fmtNum(k.value, 2) : fmtInt(k.value)}${k.unit ? `<span class="tm-kpi__unit">${esc(k.unit)}</span>` : ""}`;
   let trend;
   if (k.deltaPercent == null) {
-    trend = `<span class="tm-trend" title="No comparison data">— n/a</span>`;
+    trend = `<span class="tm-trend" data-tm-tip="No comparison data">— n/a</span>`;
   } else {
     const dir = k.deltaPercent > 0 ? "up" : k.deltaPercent < 0 ? "down" : "flat";
     const tone = meta.good === "neutral" || dir === "flat" ? "" : dir === meta.good ? "tm-trend--good" : "tm-trend--bad";
     const verdict = tone === "tm-trend--good" ? "improving" : tone === "tm-trend--bad" ? "worsening" : "change";
-    trend = `<span class="tm-trend ${tone}" title="${verdict} vs previous period">${icon(dir === "down" ? "arrowDown" : "arrowUp", "tm-icon--sm")}${fmtSigned(k.deltaPercent)}<span class="tm-sr-only"> (${verdict})</span></span>`;
+    trend = `<span class="tm-trend ${tone}" data-tm-tip="${verdict} vs previous period">${icon(dir === "down" ? "arrowDown" : "arrowUp", "tm-icon--sm")}${fmtSigned(k.deltaPercent)}<span class="tm-sr-only"> (${verdict})</span></span>`;
   }
   const spark = meta.spark ? sparkline(meta.spark(charts), { tone: k.id === "errors" ? "tm-series-6" : "tm-series-1" }) : "";
   const extra = k.id === "workers" ? status("warning", `${k.denominator - k.value} offline`) : "";
@@ -39,7 +39,7 @@ function incidentTable(c) {
         <td data-label="Type">${badge(r.type, { warning: "Warning", error: "Error", success: "Resolved", info: "Info" }[r.type])}</td>
         <td class="tm-cell-primary" data-label="Event"><span class="tm-table__primary">${esc(r.name)}</span></td>
         <td data-label="Service">${esc(r.service)}</td>
-        <td class="tm-num" data-label="Duration">${r.duration === "—" ? '<span class="tm-muted" title="Not applicable">—</span>' : esc(r.duration)}</td>
+        <td class="tm-num" data-label="Duration">${r.duration === "—" ? '<span class="tm-muted" data-tm-tip="Not applicable">—</span>' : esc(r.duration)}</td>
       </tr>`,
       )
       .join("")}</tbody></table></div>`;
@@ -54,7 +54,7 @@ function panel(c, staleMin) {
   return `<article class="tm-panel ${WIDE.has(c.id) ? "pg-span-2" : ""} ${FULL.has(c.id) ? "pg-span-full" : ""}" data-panel="${esc(c.id)}" aria-labelledby="p-${esc(c.id)}">
     <header class="tm-panel__head">
       <h3 class="tm-panel__title" id="p-${esc(c.id)}">${esc(c.title)}</h3>
-      ${stale ? status("warning", `Delayed ${staleMin} min`) : c.kind === "heatmap" ? `<button type="button" class="tm-meta-toggle" data-heat-labels aria-pressed="${heatAuto()}" aria-label="Auto label color (values in ${esc(c.unit)})" title="Label color — off: every value in the text color · on: dark or light per cell">${esc(c.unit || "")}</button>` : `<span class="tm-panel__meta">${esc(c.unit)}</span>`}
+      ${stale ? status("warning", `Delayed ${staleMin} min`) : c.kind === "heatmap" ? `<button type="button" class="tm-meta-toggle" data-heat-labels aria-pressed="${heatAuto()}" aria-label="Auto label color (values in ${esc(c.unit)})" data-tm-tip="Label color — off: every value in the text color · on: dark or light per cell">${esc(c.unit || "")}</button>` : `<span class="tm-panel__meta">${esc(c.unit)}</span>`}
     </header>
     <div class="tm-panel__body ${c.kind === "table" ? "tm-panel__body--flush" : ""}" data-body>
       ${

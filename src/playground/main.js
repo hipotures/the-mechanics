@@ -1,6 +1,6 @@
 import "./app.css";
 import data from "../../fixtures/demo-data.json";
-import { icon, esc, enhanceSelects, enhanceDateTime, enhanceClearable } from "./lib.js";
+import { icon, esc, enhanceSelects, enhanceDateTime, enhanceClearable, enhanceTips } from "./lib.js";
 import analytics from "./pages/analytics.js";
 import workspace from "./pages/workspace.js";
 import dataManagement from "./pages/data.js";
@@ -41,7 +41,7 @@ function setTheme(id) {
 }
 
 function navItem(p) {
-  return `<li><a class="tm-nav__item" href="#/${p.id}" data-nav="${p.id}" title="${esc(p.label)}">${icon(p.icon)}<span class="tm-nav__label">${esc(p.label)}</span></a></li>`;
+  return `<li><a class="tm-nav__item" href="#/${p.id}" data-nav="${p.id}" data-tm-tip="${esc(p.label)}" data-tm-tip-collapsed>${icon(p.icon)}<span class="tm-nav__label">${esc(p.label)}</span></a></li>`;
 }
 
 // Collapsible nav group: the header toggles the list; a collapsed group still
@@ -59,12 +59,12 @@ app.innerHTML = `
   <header class="tm-topbar">
     <button class="tm-btn tm-btn--ghost tm-btn--icon pg-collapse" id="sidebar-toggle" aria-controls="sidebar" aria-expanded="true" aria-label="Collapse navigation">${icon("collapse")}</button>
     <a class="tm-brand" href="#/analytics"><span class="tm-brand__mark" aria-hidden="true">TM</span><span class="pg-brand-text">The Mechanics</span></a>
-    <span class="tm-badge tm-badge--plain pg-hide-md" title="Fixture as-of time">fixture ${esc(data.meta.version)} · ${esc(data.meta.asOf.replace("T", " ").replace(":00Z", " UTC"))}</span>
+    <span class="tm-badge tm-badge--plain pg-hide-md" data-tm-tip="Fixture as-of time">fixture ${esc(data.meta.version)} · ${esc(data.meta.asOf.replace("T", " ").replace(":00Z", " UTC"))}</span>
     <span class="tm-toolbar__spacer"></span>
     <fieldset class="tm-segmented tm-segmented--sm" id="theme-switcher" aria-label="Theme" data-testid="theme-switcher">
       <legend class="tm-sr-only">Theme</legend>
       ${THEMES.map(
-        (t) => `<label class="tm-segmented__option" title="${t.label} / ${t.desc}"><input type="radio" name="tm-theme" value="${t.id}" data-theme-option="${t.id}" ${
+        (t) => `<label class="tm-segmented__option" data-tm-tip="${t.label} / ${t.desc}"><input type="radio" name="tm-theme" value="${t.id}" data-theme-option="${t.id}" ${
           t.id === currentTheme() ? "checked" : ""
         }>${icon(t.icon, "tm-icon--sm")}<span>${t.label}</span></label>`,
       ).join("")}
@@ -155,3 +155,4 @@ setTheme(currentTheme());
 route();
 enhanceSelects(document);
 enhanceClearable(document);
+enhanceTips();

@@ -778,6 +778,13 @@
     background: var(--_bg-press);
     box-shadow: inset 0 2px 0 rgb(0 0 0 / 0.12);
   }
+  /* A frameless button has no edge to press against: the inset "pressed"
+     line would float above the label as a stray bar. Fill only. */
+  .tm-btn--ghost:active,
+  .tm-btn--ghost.is-active,
+  .tm-btn--ghost[aria-pressed="true"] {
+    box-shadow: none;
+  }
   /* A button group is a one-of-N choice: the chosen button takes the
      selection fill (like a segmented control), not the grey press tint. */
   .tm-btn-group > .tm-btn[aria-pressed="true"] {
@@ -1982,6 +1989,20 @@
     animation: tm-fade-in var(--tm-dur-fast) var(--tm-ease);
   }
   .tm-tip.is-dismissed > .tm-tip__bubble {
+    display: none;
+  }
+  /* Floating variant for [data-tm-tip] hosts (table cells, truncated text,
+     icons): the same bubble, placed by script in fixed position so a host
+     with overflow: hidden cannot clip it. Line breaks in the text are kept. */
+  .tm-tip__bubble.tm-tip--float {
+    position: fixed;
+    display: block;
+    transform: none;
+    bottom: auto;
+    white-space: pre-line;
+    animation: tm-fade-in var(--tm-dur-fast) var(--tm-ease);
+  }
+  .tm-tip__bubble.tm-tip--float[hidden] {
     display: none;
   }
   @keyframes tm-fade-in {

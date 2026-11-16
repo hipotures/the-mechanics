@@ -9,7 +9,7 @@ import { esc, icon, fmtInt, fmtMoney, fmtDateTime, toast, wait, confirmDialog, r
 const STATE_LABEL = { complete: "Complete", review: "In review", warning: "Needs check", active: "In progress", pending: "Pending", skipped: "Not required", error: "Failed", none: "Excluded" };
 const PROCESSING = { full: "Full", "translate-only": "Translate only", excluded: "Excluded" };
 const CONF = { high: "success", medium: "warning", low: "danger" };
-const mark = (state, label = STATE_LABEL[state]) => `<span class="tm-mark" data-state="${state}" role="img" aria-label="${esc(label)}" title="${esc(label)}"></span>`;
+const mark = (state, label = STATE_LABEL[state]) => `<span class="tm-mark" data-state="${state}" role="img" aria-label="${esc(label)}" data-tm-tip="${esc(label)}"></span>`;
 const statusIcon = { complete: "check", review: "clock", warning: "alert", error: "danger" };
 
 function viewFromHash() {
@@ -188,8 +188,8 @@ function renderAnalyse(main, data, preselect) {
             return `<li class="tm-row pg-unit" data-unit="${u.id}" ${on ? 'aria-current="true"' : ""}>
               <span class="pg-unit__text"><span class="pg-unit__name">${esc(u.title)}</span><span class="pg-unit__id">${esc(u.id)}</span></span>
               <span class="tm-passcell">
-                <button class="tm-btn" data-select="${u.id}" data-state="${u.status}" aria-pressed="${on}" aria-label="P1 ${esc(STATE_LABEL[u.status])}: show ${esc(u.title)}" title="P1 · ${esc(STATE_LABEL[u.status])}">${icon(statusIcon[u.status] || "check", "tm-icon--sm")}</button>
-                <button class="tm-btn" data-run="${u.id}" aria-label="Run P1 for ${esc(u.title)}" title="Run P1">${icon("play", "tm-icon--sm")}</button>
+                <button class="tm-btn" data-select="${u.id}" data-state="${u.status}" aria-pressed="${on}" aria-label="P1 ${esc(STATE_LABEL[u.status])}: show ${esc(u.title)}" data-tm-tip="P1 · ${esc(STATE_LABEL[u.status])}">${icon(statusIcon[u.status] || "check", "tm-icon--sm")}</button>
+                <button class="tm-btn" data-run="${u.id}" aria-label="Run P1 for ${esc(u.title)}" data-tm-tip="Run P1">${icon("play", "tm-icon--sm")}</button>
               </span></li>`;
           })
           .join("")
@@ -218,7 +218,7 @@ function renderAnalyse(main, data, preselect) {
                   ? b.annotations
                       .map(
                         (an) => `<div class="pg-annot"><div class="pg-annot__head"><span class="pg-term tm-wrap-anywhere">${esc(an.term)}</span><span class="tm-meta">${esc(an.type)}</span><span class="tm-badge tm-badge--${CONF[an.confidence] || "neutral"}">${esc(an.confidence)}</span></div>
-                <p class="pg-annot__desc"><span class="pg-lang" title="English">EN</span>${esc(an.description)}</p><p class="pg-annot__desc" lang="pl"><span class="pg-lang" title="Polski">PL</span>${esc(an.translationNote)}</p></div>`,
+                <p class="pg-annot__desc"><span class="pg-lang" data-tm-tip="English">EN</span>${esc(an.description)}</p><p class="pg-annot__desc" lang="pl"><span class="pg-lang" data-tm-tip="Polski">PL</span>${esc(an.translationNote)}</p></div>`,
                       )
                       .join("")
                   : '<p class="tm-muted pg-none">No new terms or observations for this block.</p>'

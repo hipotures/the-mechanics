@@ -104,11 +104,11 @@ export default {
         case "name":
           if (st.inline === r.id)
             return `<td class="tm-cell-primary" data-label=""><div class="pg-inline"><input class="tm-input tm-input--sm" id="inline-input" data-no-clear value="${esc(r.name)}" aria-label="Account name for ${esc(r.id)}"><button class="tm-btn tm-btn--sm tm-btn--primary tm-btn--icon" data-inline-save aria-label="Save name">${icon("check", "tm-icon--sm")}</button><button class="tm-btn tm-btn--sm tm-btn--ghost tm-btn--icon" data-inline-cancel aria-label="Cancel edit">${icon("x", "tm-icon--sm")}</button></div></td>`;
-          return `<td class="tm-cell-primary" data-label=""><div class="pg-acc"><span class="tm-table__primary" title="${esc(`${r.id} · ${r.email}`)}">${esc(r.name)}</span>
-            ${r.note ? `<span class="pg-note-flag" title="${esc(r.note)}" aria-label="Has internal note">${icon("info", "tm-icon--sm")}</span>` : ""}
+          return `<td class="tm-cell-primary" data-label=""><div class="pg-acc"><span class="tm-table__primary" data-tm-tip="${esc(`${r.id} · ${r.email}`)}">${esc(r.name)}</span>
+            ${r.note ? `<span class="pg-note-flag" data-tm-tip="${esc(r.note)}" aria-label="Has internal note">${icon("info", "tm-icon--sm")}</span>` : ""}
             <button class="tm-btn tm-btn--ghost tm-btn--icon tm-btn--sm pg-inline-edit" data-inline="${r.id}" aria-label="Rename ${esc(r.name)}">${icon("edit", "tm-icon--sm")}</button></div>
             <span class="tm-table__secondary"><span class="tm-mono">${esc(r.id)}</span> · ${esc(r.email)}</span>
-            ${r.note ? `<span class="tm-table__secondary pg-note tm-truncate" title="${esc(r.note)}">${icon("info", "tm-icon--sm")} ${esc(r.note)}</span>` : ""}</td>`;
+            ${r.note ? `<span class="tm-table__secondary pg-note tm-truncate" data-tm-tip-overflow data-tm-tip="${esc(r.note)}">${icon("info", "tm-icon--sm")} ${esc(r.note)}</span>` : ""}</td>`;
         case "status":
           return `<td data-label="Status">${badge(r.status)}</td>`;
         case "balance":

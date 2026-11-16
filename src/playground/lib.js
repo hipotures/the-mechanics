@@ -639,3 +639,59 @@ export function enhanceClearable(root = document) {
   });
 }
 
+/* ---------- Tooltips from data-tm-tip ----------------------------------
+   One tooltip look everywhere (never the browser's title popup). Any element
+   with data-tm-tip="text" shows a .tm-tip__bubble on hover and keyboard focus,
+   positioned below it (above if there is no room) and kept inside the
+   viewport; Escape, scrolling or leaving hides it.
+   data-tm-tip-overflow — only when the element's text is truncated;
+   data-tm-tip-collapsed — only inside a collapsed sidebar (icon rail). */
+export function enhanceTips() {
+  if (enhanceTips.ready) return;
+  enhanceTips.ready = true;
+  const bubble = document.createElement("div");
+  bubble.className = "tm-tip__bubble tm-tip--float";
+  bubble.id = "tm-float-tip";
+  bubble.setAttribute("role", "tooltip");
+  bubble.hidden = true;
+  document.body.append(bubble);
+  let host = null;
+  const eligible = (el) =>
+    !(el.hasAttribute("data-tm-tip-collapsed") && !el.closest('[data-sidebar="collapsed"]')) &&
+    !(el.hasAttribute("data-tm-tip-overflow") && el.scrollWidth <= el.clientWidth);
+  const hide = () => {
+    if (!host) return;
+    const ids = (host.getAttribute("aria-describedby") || "").split(" ").filter((i) => i && i !== bubble.id);
+    ids.length ? host.setAttribute("aria-describedby", ids.join(" ")) : host.removeAttribute("aria-describedby");
+    host = null;
+    bubble.hidden = true;
+  };
+  const show = (el) => {
+    if (el === host) return;
+    hide();
+    if (!el.dataset.tmTip || !eligible(el)) return;
+    host = el;
+    bubble.textContent = el.dataset.tmTip;
+    bubble.hidden = false;
+    const r = el.getBoundingClientRect();
+    const b = bubble.getBoundingClientRect();
+    let top = r.bottom + 6;
+    if (top + b.height > innerHeight - 8) top = Math.max(8, r.top - 6 - b.height);
+    bubble.style.top = `${top}px`;
+    bubble.style.left = `${Math.max(8, Math.min(r.left, innerWidth - b.width - 8))}px`;
+    el.setAttribute("aria-describedby", [el.getAttribute("aria-describedby"), bubble.id].filter(Boolean).join(" "));
+  };
+  document.addEventListener("pointerover", (e) => {
+    const el = e.target.closest?.("[data-tm-tip]");
+    el ? show(el) : hide();
+  });
+  document.addEventListener("focusin", (e) => {
+    const el = e.target.closest?.("[data-tm-tip]");
+    if (el && e.target.matches(":focus-visible")) show(el);
+  });
+  document.addEventListener("focusout", hide);
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") hide(); });
+  window.addEventListener("scroll", hide, { capture: true, passive: true });
+  window.addEventListener("hashchange", hide);
+}
+
