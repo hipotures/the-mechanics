@@ -28,7 +28,7 @@ Source files (`src/the-mechanics/*.css`) are also importable directly by any bun
 - **Tokens:** every `--tm-*` custom property listed in `DESIGN.md §4` is public. Others (`--_bg`, `--_series`, …) are private.
 - **Components:** classes prefixed `tm-` with BEM-style elements (`tm-panel__head`) and modifiers (`tm-btn--primary`). State is expressed through native attributes: `disabled`, `aria-invalid`, `aria-busy`, `aria-pressed`, `aria-selected`, `aria-current`, `aria-sort`, `:checked`, `:indeterminate`, `[open]`, `:popover-open`.
 - **Overrides:** consumer CSS that is not in a layer always wins over the library; no `!important` needed.
-- **Behavior:** provided by native elements (`<dialog>`, `<details>`, `popover`, form controls). Small optional behaviors used in the playground (menu arrow keys, roving lists, toasts, chart tooltips) live in `src/playground/lib.js` and `charts.js` as references, not as part of the CSS contract.
+- **Behavior:** provided by native elements (`<dialog>`, `<details>`, `popover`, form controls). Small optional behaviors used in the playground (menu arrow keys, roving lists, toasts, chart tooltips, select fallback `enhanceSelects`, date/time picker `enhanceDateTime`, restorable alerts `dismissibleAlert`) live in `src/playground/lib.js` and `charts.js` as references, not as part of the CSS contract.
 
 ## 3. Plain HTML / vanilla JS
 

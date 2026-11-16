@@ -13,9 +13,9 @@ Source of truth for values: `src/the-mechanics/tokens.css` (geometry, type, spac
 1. **Hierarchy by boundary strength.** Importance is shown by how strong a boundary is, not by how many boxes there are. One strong outer frame; medium panels inside; hairlines and tints inside those.
 2. **Density without noise.** Compact rows (32 px), 13 px UI text, tabular numerals — but separators get *weaker* as content gets more granular.
 3. **Color means something.** Accent = primary action / selection. Status hues = state. Chart hues = series identity. Decoration uses neutrals.
-4. **Never color alone.** Every status badge has a marker shape; series have dash patterns or marker styles; selection adds a 3–4 px bar; invalid fields add an inset bar and an error message.
+4. **Never color alone.** Every status badge has a marker shape; series have dash patterns or marker styles; selection is a fill whose hue differs from hover (grey) and focus (blue/teal frame); invalid fields get an error-colored border and a message with a “!” glyph.
 5. **Themes change paint, never geometry.** Verified by the smoke test: page dimensions are identical in all three themes on all six pages.
-6. **No side accent bars.** Elements never get a thick colored bar on their left edge (no `border-left` accents, no inset-shadow bars). State is shown by fill, a thin straight frame and typography: errors = 1px border in the error color + message; selected list rows and the active navigation item = one inset block with identical geometry (`--tm-select-inset` 4px gap from the container edge or row separator on all sides → 2px selection frame → `--tm-select-pad` 8px horizontally; vertically blocks sit `--tm-select-inset-y` 2px from the row edge with `--tm-select-pad-y` 4px to the content; selectable rows have no separator lines, like the side nav; unselected items reserve the same space, so nothing moves on selection), so it never stacks with the panel frame; hover uses the same block with fill only, and a selected item shows only its selection block on hover (tables: fill + checked checkbox); alerts, toasts, code blocks = uniform 1px border. Allowed exceptions: the blockquote rule and the table-of-contents position indicator; the horizontal underline of frameless tabs.
+6. **No side accent bars.** Elements never get a thick colored bar on their left edge (no `border-left` accents, no inset-shadow bars). State is shown by fill, frame and marker shapes: invalid fields = border in the error color + message; selected items = the inset selection block (see *Item grammar*); alerts and toasts = 2px ink frame + tone tint + icon; code blocks = 1px frame. Allowed exceptions: the blockquote rule, the table-of-contents position indicator and the underline of frameless tabs.
 7. **Strong controls, calm structure.** Everything you operate is drawn at full strength: inputs, selects, steppers, buttons, segmented controls, toggle chips, checkboxes, radios and switches use a 2px border in `--tm-ink` (dark ink in Light, bright text color in Dark/Coffee); checked checkboxes/radios/switches are filled with ink and carry a surface-colored mark. Structure (regions, panels, rows) keeps its own, calmer hierarchy. Control heights do not change with border width (border-box). Selected segments and chips are marked by the selection fill inside the ink frame (chips also switch to a selection-colored frame) — no underline.
 8. **One hover language.** Every clickable control signals hover by a fill tint (`--tm-hover`), never by changing its border; selection never changes font weight (widths stay constant). Only form fields darken their border on hover. Containers that are not clickable (panels, product cards, regions) do not react to hover.
 9. **Native first.** `<dialog>`, `<details>`, `popover`, real inputs and buttons. This keeps the CSS portable to any framework or server-rendered stack.
@@ -24,19 +24,19 @@ Source of truth for values: `src/the-mechanics/tokens.css` (geometry, type, spac
 
 | Level | Use | Border | Header band | Examples |
 |---|---|---|---|---|
-| **1 · Region** | App shell parts and major page sections | `2px` `--tm-line-1` (ink) | `--tm-head-1`, display font, 2px rule below | `.tm-topbar`, `.tm-sidebar`, `.tm-region`, `.tm-kpi-strip`, dialogs |
-| **2 · Panel** | Functional panels, tables, cards | `1px` `--tm-line-2` (pencil) | `--tm-head-2`, UI font semibold 13px, hairline below | `.tm-panel`, `.tm-table-wrap`, `.tm-card`, `.tm-product` |
+| **1 · Region** | App shell parts and major page sections | `2px` `--tm-line-1` (ink) | `--tm-head-1`, display font, rule below | `.tm-topbar`, `.tm-sidebar`, `.tm-region`, `.tm-kpi-strip`, dialogs |
+| **2 · Panel** | Functional panels, tables, cards | `2px` ink when free-standing; inside a region split by 2px ink dividers instead of own frames (see *Structure rule*) | `--tm-head-2`, UI font semibold 13px, 1px rule below | `.tm-panel`, `.tm-table-wrap`, `.tm-card`, `.tm-product` |
 | **3 · Record** | Nested groups, rows, block labels | `1px` `--tm-line-3` (hairline) or background tint only | `--tm-sunken`, mono 11px | `.tm-record`, `.tm-group`, `.tm-row`, table rows |
 
 Rules:
 
 - A nested header must never use a heavier border, larger type or darker band than its parent.
-- Panels inside a region with many siblings use **`.tm-panel-grid`**: panels lose their own frame and are separated by shared hairlines, so 16 charts read as one instrument cluster instead of 16 cards.
-- Badges are Level-3 weight regardless of where they appear.
+- Panels inside a region with many siblings use **`.tm-panel-grid`** / **`.tm-cells`**: panels lose their own frame and are separated by shared 2px ink dividers, so 16 charts read as one instrument cluster instead of 16 cards.
+- Statuses inside rows and text are small badges; standalone statuses are plates (see *Standalone vs. inline status*).
 - Charts sit directly in the panel body; they never get their own frame.
-- Shadows exist only on overlays (dialogs, menus, toasts) as a hard 4 px offset; regions and panels are flat.
+- Shadows exist only on overlays (dialogs, menus, pickers, toasts) as a hard 4 px offset; regions and panels are flat.
 
-### Structure rule (owner-approved, supersedes the 1px panel level)
+### Structure rule (owner-approved)
 
 1. **Free-standing objects** (nothing touching their frame: page sections, editors, filter panels, product grids, tables and field groups embedded with space around them) get a **2px ink frame**.
 2. **Dividers that split a container into parts** (Workspace columns, analytics panel cells, product grid cells, the line under a toolbar) are **2px ink** and meet the frame in T-junctions.
@@ -50,11 +50,11 @@ Every pickable item — side-nav link, selectable list row, menu item, select op
 | State | Look |
 |---|---|
 | hover | grey `--tm-hover` block, transparent frame |
-| selected / current | `--tm-select-bg` fill + 2px `--tm-select-line` frame |
+| selected / current | `--tm-select-bg` fill; frame `--tm-select-frame` — **transparent by default** (owner decision: fill-only selection); set it to `var(--tm-select-line)` for a framed variant |
 | keyboard focus | the same block's frame turns `--tm-focus` (never a second ring around it) |
 | selected + focus | selection fill + focus frame |
 
-Select options carry no tick: the framed block marks the choice, so option labels sit exactly where the closed field's text sits. Segmented controls follow the same rule — the selected cell is filled and its frame is the control's own outline and ink dividers. Lists and menus are free-standing, so their container has a 2px ink frame.
+The block geometry is the same for every item (`--tm-select-inset` 4px / `--tm-select-inset-y` 2px from the container, 2px reserved frame, `--tm-select-pad` 8px / `--tm-select-pad-y` 4px to the content), so nothing moves when an item is selected, hovered or focused. Selectable rows have no separator lines. In Dark and Coffee the selection fill is tuned to stay clearly distinct from hover without a frame. Select options carry no tick: the selected block marks the choice, so option labels sit exactly where the closed field's text sits. Segmented controls follow the same rule — the selected cell is filled and its frame is the control's own outline and ink dividers. Lists and menus are free-standing, so their container has a 2px ink frame.
 
 ### Standalone vs. inline status
 
@@ -73,15 +73,15 @@ Selected by `data-tm-theme` on `<html>` (or any subtree). Light is the default.
 Design choices:
 
 - The **focus ring is a different hue family from the accent/selection** in every theme (blue/blue/teal vs olive/olive/copper), so *selected* and *focused* are always distinguishable even on the same element.
-- Level-1 lines are dark ink in Light but a light gray / latte in the dark themes. Level-2 lines are lighter in tone and 1px instead of 2px, but still meet ≥3:1 against both the panel surface and the page canvas in every theme, so every panel and card edge is clearly visible. Level 3 hairlines are decorative separators inside a panel.
+- Ink lines (`--tm-line-1`, `--tm-ink`) are dark in Light and light gray / latte in the dark themes. `--tm-line-2` (1px header and table rules) meets ≥3:1 against surface and canvas in every theme. Level 3 hairlines are decorative separators inside a panel.
 - The built-in daisyUI `retro`, `coffee`, `caramellatte`, `wireframe` and `cyberpunk` themes were inspected as references (radius/border/depth and base colors). None is used; all three themes are original values.
 
-Contrast for 39 essential pairs per theme is computed by `pnpm check:contrast` → [docs/verification/contrast.md](docs/verification/contrast.md). All pass (4.5:1 text, 3:1 graphics/control boundaries).
+Contrast for 48 essential pairs per theme is computed by `pnpm check:contrast` → [docs/verification/contrast.md](docs/verification/contrast.md). All pass (4.5:1 text, 3:1 graphics/control boundaries).
 
 ## 4. Tokens (public API `--tm-*`)
 
 ### Color roles (per theme)
-`--tm-chrome`, `--tm-ink` (controls), `--tm-canvas`, `--tm-surface`, `--tm-surface-alt`, `--tm-head-1`, `--tm-head-2`, `--tm-sunken`, `--tm-inset`, `--tm-inverse` · `--tm-text`, `--tm-text-2`, `--tm-text-3`, `--tm-text-inverse`, `--tm-text-disabled` · `--tm-line-1/2/3`, `--tm-line-input`, `--tm-line-disabled` · `--tm-accent`, `-hover`, `-press`, `-text`, `-soft` · `--tm-link`, `--tm-link-hover` · `--tm-hover`, `--tm-press`, `--tm-select-bg`, `--tm-select-line`, `--tm-focus` · status `--tm-{success|warning|danger|info|pending|neutral|offline}` each with `-soft` and `-line` · charts `--tm-chart-1…8`, `--tm-chart-grid`, `--tm-chart-axis`, `--tm-chart-threshold`, `--tm-chart-target`, `--tm-chart-fill-opacity`, `--tm-heat-lo`, `--tm-heat-hi` · `--tm-shadow-overlay`, `--tm-shadow-raised`, `--tm-backdrop`.
+`--tm-chrome`, `--tm-ink` (controls), `--tm-canvas`, `--tm-surface`, `--tm-surface-alt`, `--tm-head-1`, `--tm-head-2`, `--tm-sunken`, `--tm-inset`, `--tm-inverse` · `--tm-text`, `--tm-text-2`, `--tm-text-3`, `--tm-text-inverse`, `--tm-text-disabled` · `--tm-line-1/2/3`, `--tm-line-input`, `--tm-line-disabled` · `--tm-accent`, `-hover`, `-press`, `-text`, `-soft` · `--tm-link`, `--tm-link-hover` · `--tm-hover`, `--tm-press`, `--tm-select-bg`, `--tm-select-line`, `--tm-focus` (plus `--tm-select-frame`, defined in `tokens.css`) · status `--tm-{success|warning|danger|info|pending|neutral|offline}` each with `-soft` and `-line` · charts `--tm-chart-1…8`, `--tm-chart-grid`, `--tm-chart-axis`, `--tm-chart-threshold`, `--tm-chart-target`, `--tm-chart-fill-opacity`, `--tm-heat-lo`, `--tm-heat-hi` · `--tm-shadow-overlay`, `--tm-shadow-raised`, `--tm-backdrop`.
 
 ### Typography
 | Token | Value | Use |
@@ -102,6 +102,7 @@ Why Plex: open license (OFL-1.1), a *soft* monospace with clear `0/O`, `1/l/I` d
 - Radius: regions/panels **0**, controls/badges **2 px**, overlays **3 px**. No pills.
 - Border widths: `--tm-bw-1` 2 px, `--tm-bw-2` 1 px, `--tm-bw-3` 1 px (strength comes from color), `--tm-bw-control` 2 px (all interactive controls, in `--tm-ink`), focus 2 px + 2 px offset.
 - Controls: 28 / 32 / 40 px; checkbox/radio 18 px; icons 14 / 16 / 20 px.
+- Selection block: `--tm-select-inset` 4px, `--tm-select-inset-y` 2px, `--tm-select-pad` 8px, `--tm-select-pad-y` 4px; `--tm-select-text` / `--tm-select-text-y` give the content offset for unselected rows.
 - Density: rows 32 px compact (default) / 40 px comfortable via `.tm-density-comfortable` on any subtree. Toolbar 44 px, topbar 48 px.
 - Media: product 4:3, thumbnail 1:1, hero 16:9.
 
@@ -118,21 +119,32 @@ Reading width 68ch; content max 1600 px; narrow 1120 px; sidebar 232 px (56 px c
 | Button | Variants primary / secondary / outline / ghost / danger / danger-outline; sizes sm / md / lg; icon-only must have `aria-label`. Loading = `aria-busy="true"` (spinner + label kept). Disabled = muted surface, gray border and text, `not-allowed` cursor. Pressed = `aria-pressed="true"`. |
 | Segmented control | Radio inputs inside `.tm-segmented__option` (or `aria-pressed` buttons) in a 2px ink frame with 2px ink dividers. Selected = selection fill + full-strength text color (no underline). Selection never changes font weight, so widths never shift. |
 | Fields | Label above, hint below, error replaces nothing (both can show). Invalid = `aria-invalid="true"` → red border + `.tm-field__error` with a “!” glyph. Native number spinners are always hidden; use `.tm-stepper` ([−] [unit value] [+], square buttons with full-height dividers, matching control height, buttons disabled at min/max). Read-only = dashed outline, transparent fill. Prefix/suffix via `.tm-input-group` + `.tm-affix`. |
-| Select | Closed control: field geometry with a drawn caret. Option list: where `appearance: base-select` is supported (Chromium 135+, incl. Android) it is styled like a menu — ink frame, hard shadow, drawn tick for the chosen option, selection fill, hover tint, focus ring; browsers without it (e.g. Firefox) get a small scripted fallback (`enhanceSelects` in the playground) that keeps the native `<select>` as the source of truth but opens the same styled `.tm-listbox` (keyboard: arrows, Home/End, type-ahead, Enter, Escape). |
+| Select | Closed control: field geometry with a drawn caret. Option list: where `appearance: base-select` is supported (Chromium 135+, incl. Android) it is styled like a menu — ink frame, hard shadow, options in the item grammar, **no tick**, option text aligned with the closed field's text, list as wide as the longest label; browsers without it (e.g. Firefox) get a small scripted fallback (`enhanceSelects` in the playground) that keeps the native `<select>` as the source of truth but opens the same styled `.tm-listbox` (keyboard: arrows, Home/End, type-ahead, Enter, Escape). |
 | Selection | Square checkbox (2 px radius), round radio, rectangular switch (not pill). Indeterminate shows a bar. Descriptions via `.tm-choice__desc`. |
-| Badge | Mono 11 px, 1 px tinted border, soft fill, **marker shape per tone** (✓ success, ▲ warning, ✕ danger, ● info, ○ pending, dashed □ offline, — disabled). Count badge is inverse. |
-| Alert vs toast | Alerts are persistent, in-flow, 4 px left bar. Toasts are transient (5 s default, pause on hover, progress line); errors are persistent until dismissed. |
+| Badge | Only inside table cells, list rows and lines of text. Mono 11 px, 1 px tinted border, soft fill, **marker shape per tone** (✓ success, ▲ warning, ✕ danger, ● info, ○ pending, dashed □ offline, — disabled). Count badge is inverse. |
+| Status plate | `.tm-status` (32px) / `.tm-status--sm` (28px) for standalone statuses: page head, panel head, KPI tile, image overlay. Ink frame, surface fill, state shown by `.tm-mark` (complete ✓ · active/info dot · review half · warning triangle · error · pending ring · skipped dashed · none faint). As a `<button>` it restores a hidden message. |
+| Alert vs toast | Alerts are in-flow, 2px ink frame, tone tint + icon. A warning may be hidden; `dismissibleAlert` leaves a status-plate button in the page head that restores it. Blocking errors cannot be hidden. Toasts use the same frame and are transient (5 s default, pause on hover, progress line); errors are persistent until dismissed. |
 | Tooltip | Supplementary only; appears on hover **and** focus; Escape dismisses without moving focus. |
-| Tabs | Underline 3 px in selection color + bold; arrow-key roving. |
+| Tabs | Underline 3 px in selection color, weight unchanged; arrow-key roving. Prefer no tabs when all content fits as one view plus collapsible sections. |
 | Table density | Compact = one line per record (secondary details in the title tooltip, a note marker instead of the note line), 32px minimum rows; Comfortable = full secondary lines, 40px minimum and extra vertical padding. The toggle must make a visible difference, not just a few pixels. |
-| Table | Sticky mono header within bounded scroll containers, tabular numerals, numbers right-aligned, negative values in danger color with a real minus sign, selected row = tint + 4 px left bar. On < 640 px `.tm-table--stack` turns rows into labelled records. |
-| Menu / popover | Native `popover`, Level-2 frame with Level-1 ink border and hard shadow; arrow keys, Home/End, Escape, focus return. |
-| Dialog / drawer | Native `<dialog>`; 2 px ink frame; head band `--tm-head-1`; destructive dialogs add a danger bar to the head. Escape and backdrop close; focus returns to the trigger. |
+| Table | Sticky mono header within bounded scroll containers, tabular numerals, numbers right-aligned, negative values in danger color with a real minus sign, selected row = selection fill (+ checked checkbox). On < 640 px `.tm-table--stack` turns rows into labelled records. |
+| Menu / popover | Native `popover`, 2px ink frame (free-standing) and hard shadow; items in the item grammar (hover grey, focus frame); arrow keys, Home/End, Escape, focus return. |
+| Date / time picker | Native `<input type="date|time">` stays the field (typing, validation); its browser popup is replaced by `.tm-picker` (playground helper `enhanceDateTime`): Monday-first month grid without weekend colouring, 24h hour/minute columns; cells use the item grammar. Keyboard: Alt+↓/F4 or the field button opens; arrows, PageUp/PageDown, Enter, Escape. |
+| Workflow | `.tm-pipeline` of `.tm-stage` cells (one framed strip split by dividers; a stage that opens a view is a link), `.tm-mark` status markers in pass matrices, `.tm-passcell` = [status][run] square buttons (status button pressed = shown in the preview), `.tm-section-head` = title + meta + the filter for that section, `.tm-collapsible` (`<details>`: title, count, description, chevron) for secondary information, `.tm-danger-zone` (explanation + destructive action, disabled with a reason when blocked) last on the page. |
+| Dialog / drawer | Native `<dialog>`; 2 px ink frame; head band `--tm-head-1`; destructive dialogs use a danger confirm button. Escape and backdrop close; focus returns to the trigger. |
 | Empty / error / stale | `.tm-state` (+ `--error`, `--warning`). Always title + explanation + (where possible) one recovery action. |
 | KPI | Mono value, unit in smaller muted type, trend with arrow + sign + text (“improving/worsening” for screen readers); good/bad depends on metric direction, not on sign. |
 | Charts | See §6. |
 | Product card | Image first (4:3); body is a stack of plain lines — meta, title (wraps fully, never truncated), description, rating, stock status as a bare badge (marker + text, no frame). Footer is one fixed-height strip of two cells: price left, action button flush with the card frame on the right, so the two share one height and center line and footers align across a row. Never mix a boxed badge, a stacked price and a floating button in the footer. Missing image shows a hatched fallback with text. |
-| Prose | 16 px / 1.65, 68ch, display-font headings, square accent bullets, ink blockquote bar, code with 4 px left bar. |
+| Prose | 16 px / 1.65, 68ch, display-font headings, square accent bullets, ink blockquote bar, code blocks in a 1px frame on the inset surface. |
+
+### Layout patterns
+
+- **Overview with pipeline:** page head (back link, eyebrow, title, meta, status plate) → stage pipeline → main table → collapsible secondary sections → page-level action last.
+- **List + preview:** two columns split by a 2px divider; the list's search sits in the list head; the preview has no tabs and pages with “Load next N”.
+- **Pass matrix:** rows = units/sections, columns = passes; each cell a `.tm-mark` (overview) or a `.tm-passcell` (working view). On phones secondary columns move under the name so all pass columns fit without horizontal scroll.
+- **A filter sits next to what it filters** (section head, list head), never in a distant toolbar.
+- Report state, not invented progress: no progress bars for work that does not report partial progress.
 
 ### Documentation-only state classes
 `.is-hover`, `.is-active`, `.is-focus`, `.is-selected`, `.is-open` mirror interactive states for galleries and visual tests. Applications should rely on real pseudo-classes and ARIA states.
@@ -150,7 +162,7 @@ Reading width 68ch; content max 1600 px; narrow 1120 px; sidebar 232 px (56 px c
 - Tooltips sit below sticky app chrome (`--tm-z-sticky`) and close on scroll or a tap outside the chart, so they never drift away from their data.
 - Tooltips: hover **or** keyboard (focus chart, ←/→/Home/End, Escape); values are mirrored into a polite live region.
 - **Building blocks for composite time charts** (e.g. “cost over time, stacked by model, 30-minute buckets”): rich panel head `.tm-panel__head--rich` (`.tm-panel__heading` = title + `.tm-panel__subtitle`, `.tm-panel__actions` = legend + metric `.tm-segmented--sm`); ECharts adapter helpers `peakMarker()` (boxed “peak 12:00 285 k tokens” callout), `rangeArea()` (labelled band for quota windows / incidents, tone neutral|warning|danger|success), `rangeBrush()` (drag along x to select a span) and `dayBoundaryLabels()` (midnight shown as the bold date); `.tm-chart-readout` for the live sum of a selection and `.tm-chart-options` for overlay toggles under the chart. Leave ~25 % headroom above the tallest value for the peak callout. A working composition is in the Component Gallery › Data graphics (fixture data only); concrete product charts are assembled from these pieces when needed.
-- States: data, no data (`.tm-state`), stale (warning badge + hatched body + reduced opacity), error (`.tm-state--error` + retry).
+- States: data, no data (`.tm-state`), stale (“Delayed N min” status plate + hatched body + reduced opacity), error (`.tm-state--error` + retry).
 
 ## 7. Permitted variations
 
@@ -172,8 +184,11 @@ Reading width 68ch; content max 1600 px; narrow 1120 px; sidebar 232 px (56 px c
 
 ## 9. Decisions for owner review
 
+Settled with the owner: structure rule (2px ink frames and dividers); fill-only selection with one item grammar; status plates vs. badges; compact tables = one line per record; `.tm-panel-grid` with 2px dividers; own date/time picker; menus, side nav and the green primary button kept as they are.
+
+Still open:
+
 1. **Monospace display headings** (Plex Mono bold) give the retro-tech character; an alternative is Plex Sans headings with mono only for labels.
-2. **Level-2 line contrast** was raised after review (previously 2.2:1 in Dark/Coffee) to ≥3:1 on surface and canvas. If panels now feel too heavy, the alternative is to keep 3:1 only against the canvas.
-3. **Accent hues**: olive (Light/Dark) and copper (Coffee). Dark could alternatively use a cool steel accent.
-4. **Data table compact rows** show name + id/email on two lines (~54 px). A single-line variant could be added for 32 px rows.
-5. **Analytics `.tm-panel-grid`** (hairline-separated panels) vs individually framed panels — chosen to avoid “grid of equally heavy boxes”.
+2. **Accent hues**: olive (Light/Dark) and copper (Coffee). Coffee's warning hue is close to the copper accent.
+3. **Dialogs**: a lighter modal variant from an owner reference is still to be evaluated.
+4. **Gallery section indicator** in the gallery's in-page navigation.

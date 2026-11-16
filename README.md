@@ -26,8 +26,8 @@ Verification (after `build`):
 ```sh
 corepack pnpm exec playwright install --only-shell chromium   # once; see “Disk-backed temp” below
 corepack pnpm check:contrast   # WCAG ratios of token pairs → docs/verification/contrast.md
-corepack pnpm smoke            # 15 interaction/keyboard checks + state screenshots
-corepack pnpm shots [label]    # 6 pages × 3 themes × desktop/mobile → tmp/screenshots/<label>/
+corepack pnpm smoke            # 22 interaction/keyboard checks + state screenshots
+corepack pnpm shots [label]    # 7 views × 3 themes × desktop/mobile → tmp/screenshots/<label>/
 ```
 
 **Disk-backed temp (this VM):** `/tmp` is RAM-backed. Before installing browsers or running Playwright, export project-local paths, e.g. `TMPDIR=$PWD/tmp/work XDG_CACHE_HOME=$PWD/.cache PLAYWRIGHT_BROWSERS_PATH=$PWD/.cache/ms-playwright COREPACK_HOME=$PWD/.cache/corepack`. See `AGENTS.md`.
@@ -85,7 +85,7 @@ references/               visual concept reference (not production code)
 - [docs/component-status.md](docs/component-status.md) — P0/P1 status against [docs/component-coverage.md](docs/component-coverage.md).
 - [docs/derived-data.md](docs/derived-data.md) — how fixtures are used and every derived value.
 - [docs/verification/testing-report.md](docs/verification/testing-report.md) — what was tested, improvement passes, what was not tested.
-- Screenshots: [docs/screenshots/apps/](docs/screenshots/apps/) (all 36 app × theme × viewport captures) and [docs/screenshots/states/](docs/screenshots/states/).
+- Screenshots: [docs/screenshots/apps/](docs/screenshots/apps/) (all 42 view × theme × viewport captures) and [docs/screenshots/states/](docs/screenshots/states/).
 
 ## Provenance and licensing
 
