@@ -191,9 +191,8 @@ Reading width 68ch; content max 1600 px; narrow 1120 px; sidebar 232 px (56 px c
 
 ## 9. Decisions for owner review
 
-Settled with the owner: structure rule (2px ink frames and dividers); fill-only selection with one item grammar; status plates vs. badges; compact tables = one line per record; `.tm-panel-grid` with 2px dividers; own date/time picker; menus, side nav and the green primary button kept as they are; Coffee alert/warning hues (reviewed in the gallery, kept); the current dialog weight (reviewed in Coffee, kept — no lighter variant); in-page navigation (`.tm-toc`) uses the item grammar instead of a rail with a side bar; collapsible side-nav groups (added for review).
+Settled with the owner: structure rule (2px ink frames and dividers); fill-only selection with one item grammar; status plates vs. badges; compact tables = one line per record; `.tm-panel-grid` with 2px dividers; own date/time picker; menus, side nav and the green primary button kept as they are; Coffee alert/warning hues (reviewed in the gallery, kept); the current dialog weight (reviewed in Coffee, kept — no lighter variant); in-page navigation (`.tm-toc`) uses the item grammar instead of a rail with a side bar; collapsible side-nav groups (added for review). Display headings stay **Plex Mono bold**: titles are one or two lines with room to spare, so there is no space to win by switching to the narrower Plex Sans (Sans was compared side by side and declined).
 
 Still open:
 
-1. **Monospace display headings** (Plex Mono bold) give the retro-tech character; the alternative is Plex Sans headings with mono only for labels (`--tm-font-display: var(--tm-font-ui)`, already a permitted variation). Both were offered side by side for review.
-2. **Heatmap label halo**: mid-ramp cells use a 2px halo to reach 4.5:1. Alternatives if it reads as too busy: stepped (bucketed) heat colors that skip the mid-luminance band, or values only in the tooltip plus a legend.
+1. **Heatmap label halo**: mid-ramp cells use a 2px halo to reach 4.5:1. Alternatives if it reads as too busy: stepped (bucketed) heat colors that skip the mid-luminance band, or values only in the tooltip plus a legend.

@@ -391,7 +391,9 @@ export default {
       const bulk = t.closest("[data-bulk]");
       if (bulk) {
         const k = bulk.dataset.bulk;
-        if (k === "clear") { st.selected.clear(); st.onlySelected = false; render(); $("#q").focus(); }
+        // The bar disappears; a keyboard user lands on the header checkbox (next
+        // selection control), a mouse click leaves focus alone — no jump to search.
+        if (k === "clear") { st.selected.clear(); st.onlySelected = false; render(); if (e.detail === 0) $("#check-all")?.focus(); }
         if (k === "only") { st.onlySelected = !st.onlySelected; st.page = 1; render(); $('[data-bulk="only"]').focus(); }
         if (k === "all") { filtered().forEach((r) => st.selected.add(r.id)); render(); $('[data-bulk="only"]').focus(); }
         if (k === "export") toast({ tone: "success", title: `${st.selected.size} accounts exported`, body: [...st.selected].join(", ") });
