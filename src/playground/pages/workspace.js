@@ -66,7 +66,7 @@ export default {
           <button class="tm-menu__item tm-menu__item--danger" role="menuitem" data-run="clear">Clear saved P1 results…</button>
         </div>
       </div>
-      <div class="pg-ws-grid">
+      <div class="pg-ws-grid tm-cells">
         <section class="tm-panel pg-units" aria-labelledby="units-title">
           <header class="tm-panel__head"><h2 class="tm-panel__title" id="units-title">${icon("stack", "tm-icon--sm")}Analysis units</h2><span class="tm-panel__meta" id="unit-count"></span></header>
           <div class="tm-colhead"><span>Section / unit</span><span>P1</span></div>

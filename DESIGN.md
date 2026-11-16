@@ -36,6 +36,13 @@ Rules:
 - Charts sit directly in the panel body; they never get their own frame.
 - Shadows exist only on overlays (dialogs, menus, toasts) as a hard 4 px offset; regions and panels are flat.
 
+### Structure rule (owner-approved, supersedes the 1px panel level)
+
+1. **Free-standing objects** (nothing touching their frame: page sections, editors, filter panels, product grids, tables and field groups embedded with space around them) get a **2px ink frame**.
+2. **Dividers that split a container into parts** (Workspace columns, analytics panel cells, product grid cells, the line under a toolbar) are **2px ink** and meet the frame in T-junctions.
+3. **Lines that touch or sit next to other lines** (panel header rule, column header rule, table header rule, data rows, record rows) are **thin** (1px), so lines never stack into heavy bands.
+4. **Controls** are always 2px ink. Never nest a framed box flush inside another frame; split with dividers instead (`.tm-cells`, `.tm-panel-grid`).
+
 ## 3. Themes
 
 Selected by `data-tm-theme` on `<html>` (or any subtree). Light is the default.

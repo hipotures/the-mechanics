@@ -329,7 +329,7 @@
     flex-direction: column;
     min-width: 0;
     background: var(--tm-surface);
-    border: var(--tm-bw-2) solid var(--tm-line-2);
+    border: var(--tm-bw-1) solid var(--tm-line-1);
     border-radius: var(--tm-radius-panel);
   }
   .tm-panel__head {
@@ -427,20 +427,24 @@
      than the region so the last column/row borders fall under the region's
      own frame and are clipped. Dividers use the Level 2 line color so they
      never read as chart gridlines. */
-  .tm-panel-grid {
+  .tm-panel-grid,
+  .tm-cells {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
     gap: 0;
-    width: calc(100% + var(--tm-bw-2));
-    margin-bottom: calc(var(--tm-bw-2) * -1);
+    width: calc(100% + var(--tm-bw-1));
+    margin-bottom: calc(var(--tm-bw-1) * -1);
   }
-  .tm-region:has(> .tm-panel-grid) {
+  .tm-region:has(> .tm-panel-grid),
+  .tm-region:has(> .tm-cells) {
     overflow: clip;
   }
-  .tm-panel-grid > .tm-panel {
+  /* Cells of a framed container: no own frame, structural dividers only. */
+  .tm-panel-grid > .tm-panel,
+  .tm-cells > * {
     border: 0;
-    border-right: var(--tm-bw-2) solid var(--tm-line-2);
-    border-bottom: var(--tm-bw-2) solid var(--tm-line-2);
+    border-right: var(--tm-bw-1) solid var(--tm-line-1);
+    border-bottom: var(--tm-bw-1) solid var(--tm-line-1);
   }
   .tm-panel-grid > .tm-panel[hidden] {
     display: none;
@@ -454,7 +458,7 @@
   /* Level 3 — nested group / record */
   .tm-group {
     background: var(--tm-surface);
-    border: var(--tm-bw-3) solid var(--tm-line-3);
+    border: var(--tm-bw-1) solid var(--tm-line-1);
   }
   .tm-group__head,
   .tm-record__head {
@@ -464,7 +468,7 @@
     gap: var(--tm-space-2);
     padding: 2px var(--tm-space-2);
     background: var(--tm-sunken);
-    border-bottom: var(--tm-bw-3) solid var(--tm-line-3);
+    border-bottom: var(--tm-bw-3) solid var(--tm-line-2);
     font-family: var(--tm-font-mono);
     font-size: var(--tm-text-2xs);
     font-weight: var(--tm-weight-semibold);
@@ -472,7 +476,7 @@
     color: var(--tm-text-2);
   }
   .tm-record {
-    border-bottom: var(--tm-bw-3) solid var(--tm-line-3);
+    border-bottom: var(--tm-bw-3) solid var(--tm-line-2);
   }
   .tm-record:last-child {
     border-bottom: 0;
@@ -594,7 +598,7 @@
     flex-direction: column;
     min-width: 0;
     background: var(--tm-surface);
-    border: var(--tm-bw-2) solid var(--tm-line-2);
+    border: var(--tm-bw-1) solid var(--tm-line-1);
   }
   /* Hover rule (all clickable controls): add a fill tint, never change the
      border. Borders change on hover only for form fields. Non-clickable
@@ -863,7 +867,7 @@
     min-height: var(--tm-toolbar-h);
     padding: var(--tm-space-1-5) var(--tm-panel-pad);
     background: var(--tm-surface);
-    border-bottom: var(--tm-bw-3) solid var(--tm-line-3);
+    border-bottom: var(--tm-bw-1) solid var(--tm-line-1);
   }
   .tm-toolbar__spacer {
     flex: 1 1 auto;
@@ -1274,7 +1278,7 @@
     min-width: 0;
     margin: 0;
     padding: var(--tm-space-3);
-    border: var(--tm-bw-3) solid var(--tm-line-3);
+    border: var(--tm-bw-1) solid var(--tm-line-1); /* free-standing group: thick frame, legend sits on it */
     background: var(--tm-sunken);
   }
   .tm-fieldset > legend {
@@ -2013,11 +2017,11 @@
 
   /* Accordion (native <details>) */
   .tm-accordion {
-    border: var(--tm-bw-2) solid var(--tm-line-2);
+    border: var(--tm-bw-1) solid var(--tm-line-1);
     background: var(--tm-surface);
   }
   .tm-accordion > details + details {
-    border-top: var(--tm-bw-3) solid var(--tm-line-3);
+    border-top: var(--tm-bw-1) solid var(--tm-line-1);
   }
   .tm-accordion summary {
     display: flex;
@@ -2064,7 +2068,7 @@
     min-width: 0;
     overflow: auto;
     background: var(--tm-surface);
-    border: var(--tm-bw-2) solid var(--tm-line-2);
+    border: var(--tm-bw-1) solid var(--tm-line-1); /* free-standing object: thick frame; its inner lines stay thin */
   }
   .tm-table-wrap--flush {
     border: 0;
@@ -2086,7 +2090,7 @@
   .tm-table td {
     height: var(--tm-row);
     padding: var(--tm-space-1) var(--tm-cell-pad-x);
-    border-bottom: var(--tm-bw-3) solid var(--tm-line-3);
+    border-bottom: var(--tm-bw-3) solid var(--tm-line-2);
     text-align: left;
     vertical-align: middle;
   }
@@ -2342,9 +2346,11 @@
   .tm-kpi-strip {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 9.5rem), 1fr));
-    gap: 1px;
-    background: var(--tm-line-3);
-    border: var(--tm-bw-1) solid var(--tm-line-1);
+    gap: 0;
+    /* frame drawn as an inset outline so tile dividers on the outer edge coincide with it */
+    outline: var(--tm-bw-1) solid var(--tm-line-1);
+    outline-offset: calc(var(--tm-bw-1) * -1);
+    overflow: clip;
   }
   .tm-kpi {
     display: grid;
@@ -2353,6 +2359,8 @@
     min-width: 0;
     padding: var(--tm-space-2) var(--tm-space-3);
     background: var(--tm-surface);
+    border-right: var(--tm-bw-1) solid var(--tm-line-1);
+    border-bottom: var(--tm-bw-1) solid var(--tm-line-1);
   }
   .tm-kpi__label {
     font-family: var(--tm-font-mono);
@@ -2567,10 +2575,10 @@
     aspect-ratio: var(--tm-aspect-product);
     overflow: hidden;
     background: var(--tm-sunken);
-    border-bottom: var(--tm-bw-3) solid var(--tm-line-3);
+    border-bottom: var(--tm-bw-1) solid var(--tm-line-1);
   }
   .tm-media--square { aspect-ratio: var(--tm-aspect-thumb); }
-  .tm-media--framed { border: var(--tm-bw-3) solid var(--tm-line-3); }
+  .tm-media--framed { border: var(--tm-bw-1) solid var(--tm-line-1); }
   .tm-media > img {
     display: block;
     width: 100%;
@@ -2624,7 +2632,7 @@
     flex-direction: column;
     min-width: 0;
     background: var(--tm-surface);
-    border: var(--tm-bw-2) solid var(--tm-line-2);
+    border: var(--tm-bw-1) solid var(--tm-line-1);
   }
   .tm-product__body {
     display: grid;
@@ -2668,7 +2676,7 @@
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: stretch;
     min-height: var(--tm-control-lg);
-    border-top: var(--tm-bw-3) solid var(--tm-line-3);
+    border-top: var(--tm-bw-1) solid var(--tm-line-1);
   }
   .tm-product__foot > .tm-price {
     align-self: center;
@@ -2677,8 +2685,8 @@
   .tm-product__foot > .tm-btn {
     min-height: var(--tm-control-lg);
     padding: 0 var(--tm-space-4);
-    border-width: 0 0 0 var(--tm-bw-3);
-    border-color: var(--tm-line-3);
+    border-width: 0 0 0 var(--tm-bw-1);
+    border-color: var(--tm-line-1);
     border-radius: 0;
     box-shadow: none;
   }

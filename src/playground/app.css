@@ -142,12 +142,10 @@ html {
 @media (min-width: 900px) {
   .pg-kpi-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 }
+/* Workspace columns are cells of the region (structural dividers, no nested frames). */
 .pg-ws-grid {
-  display: grid;
   grid-template-columns: minmax(15rem, 0.8fr) minmax(0, 2fr) minmax(15rem, 0.8fr);
-  gap: var(--tm-gap-panel);
-  padding: var(--tm-gap-panel);
-  align-items: start;
+  align-items: stretch;
 }
 @media (max-width: 1279px) {
   .pg-ws-grid { grid-template-columns: minmax(14rem, 0.9fr) minmax(0, 2fr); }
@@ -155,7 +153,7 @@ html {
   .pg-inspector > .tm-panel__body { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: var(--tm-space-4); }
 }
 @media (max-width: 899px) {
-  .pg-ws-grid { grid-template-columns: minmax(0, 1fr); padding: var(--tm-space-2); }
+  .pg-ws-grid { grid-template-columns: minmax(0, 1fr); }
   .pg-unit-list { max-height: 18rem; overflow-y: auto; }
 }
 .pg-unit { gap: var(--tm-space-2); }
@@ -186,7 +184,6 @@ html {
 }
 .pg-preview-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--tm-space-2); padding-top: var(--tm-space-3); }
 .pg-skel-rows .tm-skeleton { height: 0.75rem; }
-.pg-ws-toolbar { border-bottom-color: var(--tm-line-2); }
 
 /* ---------- Data management ------------------------------------------ */
 .pg-dm-grid {
@@ -209,7 +206,7 @@ html {
 }
 .pg-bulk__label { font-weight: var(--tm-weight-semibold); margin-right: var(--tm-space-2); }
 .pg-chips { display: flex; flex-wrap: wrap; align-items: center; gap: var(--tm-space-1-5); padding: var(--tm-space-1-5) var(--tm-panel-pad); border-bottom: 1px solid var(--tm-line-3); }
-.pg-dm-wrap { max-height: none; border-bottom: 1px solid var(--tm-line-3); }
+.pg-dm-wrap { max-height: none; border-bottom: var(--tm-bw-3) solid var(--tm-line-2); }
 .pg-dm-foot { border-top: 0; }
 .pg-acc { display: flex; align-items: center; gap: var(--tm-space-1); }
 .pg-inline-edit { opacity: 0; }
@@ -245,8 +242,21 @@ tr:hover .pg-inline-edit,
 .pg-range-scale { display: flex; justify-content: space-between; }
 .pg-results-bar { display: flex; flex-wrap: wrap; align-items: center; gap: var(--tm-space-2); margin-bottom: var(--tm-space-3); }
 .pg-inline-label { margin: 0; }
-.pg-product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr)); gap: var(--tm-gap-panel); }
-.pg-span-all { grid-column: 1 / -1; border: 1px dashed var(--tm-line-2); }
+/* One framed product grid with structural dividers (frame = inset outline over the cell edges). */
+.pg-product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr));
+  gap: 0;
+  outline: var(--tm-bw-1) solid var(--tm-line-1);
+  outline-offset: calc(var(--tm-bw-1) * -1);
+  background: var(--tm-surface);
+}
+.pg-product-grid > .tm-product {
+  border: 0;
+  border-right: var(--tm-bw-1) solid var(--tm-line-1);
+  border-bottom: var(--tm-bw-1) solid var(--tm-line-1);
+}
+.pg-span-all { grid-column: 1 / -1; }
 .pg-thumbs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--tm-space-2); }
 .pg-thumbs figure { margin: 0; display: grid; gap: 2px; }
 .pg-detail-title { font-weight: var(--tm-weight-bold); font-family: var(--tm-font-display); font-size: var(--tm-text-xl); line-height: var(--tm-leading-snug); overflow-wrap: anywhere; }
