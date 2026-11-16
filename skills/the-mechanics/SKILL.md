@@ -32,8 +32,10 @@ The most common failure is translating the old page element by element into stro
 3. **One strong action per record.** The everyday action is framed/primary; the rest (Details, Reauthenticate, Disable, Delete) are ghost buttons that read like quiet text until hovered. Destructive actions get their red in the confirmation dialog.
 4. **Frames organise, they do not decorate.** Regions, panels, cards and real controls have frames. Data and metadata never do.
 5. **Inactive records go quiet as a whole.** Disabled, paused, expired or stale data is the past, not the present: neutral bars, muted values and dates, one note saying why and since when (the note carries the message, so the status line stays plain text in both states — "Enabled · …" / "Disabled · …"); hide or disable actions that need an active record, keep the others normal. No opacity on the whole card.
-6. **Color has at most three jobs:** identity (a provider/series name), data (bars, charts) and attention (warning, error). If something is colored for another reason, mute it.
-7. Then compare your screenshot with the original side by side: if yours looks busier, remove emphasis until it is at least as calm. `DESIGN.md` §1 "Emphasis budget".
+6. **Panels: join only a topic.** Shared-divider grids (`.tm-panel-grid`) are for parts of one topic; independent records with their own actions are separate panels with a gap.
+7. **Markers never outgrow their text; transient problems are toasts.** A per-item problem goes on that item's line in smaller text ("5-hour · limit reached"), no big icon. Failed checks, timeouts and stale data become a toast naming the record — shown while the problem lasts, removed when it clears, ✕ hides it until a new one — and the record keeps a quiet hint ("· stale").
+8. **Color has at most three jobs:** identity (a provider/series name), data (bars, charts) and attention (warning, error). If something is colored for another reason, mute it.
+9. Then compare your screenshot with the original side by side: if yours looks busier, remove emphasis until it is at least as calm. `DESIGN.md` §1 "Emphasis budget".
 
 ## 3. The rules that matter most
 
