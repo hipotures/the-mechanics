@@ -396,7 +396,8 @@
   .tm-panel__meta {
     font-family: var(--tm-font-mono);
     font-size: var(--tm-text-2xs);
-    color: var(--tm-text-3);
+    color: var(--tm-text-2);
+    font-weight: var(--tm-weight-medium);
     white-space: nowrap;
   }
   .tm-panel__body {
@@ -2464,7 +2465,8 @@
     padding: 0;
     list-style: none;
     font-size: var(--tm-text-xs);
-    color: var(--tm-text-2);
+    color: var(--tm-text);
+    font-weight: var(--tm-weight-medium);
   }
   .tm-legend__item {
     display: inline-flex;

@@ -116,6 +116,7 @@ Reading width 68ch; content max 1600 px; narrow 1120 px; sidebar 232 px (56 px c
 ## 6. Chart grammar
 
 - **Renderer: Apache ECharts** (SVG renderer). Charts are never hand-drawn; ECharts owns layout, axis label thinning and label-collision handling (`labelLayout: moveOverlap / hideOverlap`). All visual values come from `--tm-*` tokens through `adapters/echarts.js` (`readChartTokens` → `createEChartsTheme`), so charts follow the active theme and are rebuilt on theme switch. KPI sparklines stay as tiny inline SVG (no labels).
+- Chart text: IBM Plex Mono **medium (500)**, 11px; category names and data values in full text color, axis numbers and axis units in `--tm-text-2`; legends and panel unit labels also medium. Bold is reserved for tooltip values and the day-boundary date.
 - One grammar: hairline horizontal grid (`--tm-chart-grid`), ink baseline, mono 10.5 px ticks, unit label above the y-axis, no chart frame.
 - Series order is fixed: chart-1 blue/copper, chart-2 orange/blue, chart-3 green… Series 2–4 are dashed/dotted lines, alternate series use solid vs hollow point markers.
 - Thresholds are dashed `--tm-chart-threshold` lines, targets dotted `--tm-chart-target`. The line is named in the legend; the on-chart label is the short value (“750 ms”, “75% target”) at the left end, on a surface-colored background, away from the latest values.

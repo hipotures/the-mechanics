@@ -55,8 +55,10 @@ export const seriesLineType = (i) => ["solid", [6, 3], [2, 3], [8, 3, 2, 3]][i %
 
 /** ECharts theme object built from resolved tokens. */
 export function createEChartsTheme(t) {
-  const axisLabel = { color: t.text3, fontFamily: t.fontMono, fontSize: 10.5, hideOverlap: true };
-  const axisName = { color: t.text3, fontFamily: t.fontMono, fontSize: 10.5 };
+  // Chart text uses the medium weight (500): legible next to 2px controls,
+  // still clearly lighter than the bold used inside tooltips.
+  const axisLabel = { color: t.text2, fontFamily: t.fontMono, fontSize: 11, fontWeight: 500, hideOverlap: true };
+  const axisName = { color: t.text2, fontFamily: t.fontMono, fontSize: 11, fontWeight: 500 };
   return {
     color: t.chart,
     backgroundColor: "transparent",
@@ -80,7 +82,7 @@ export function createEChartsTheme(t) {
     scatter: { symbolSize: 9, emphasis: { disabled: true } },
     pie: { itemStyle: { borderColor: t.surface, borderWidth: 2 }, emphasis: { disabled: true } },
     heatmap: { itemStyle: { borderColor: t.surface, borderWidth: 2 } },
-    legend: { textStyle: { color: t.text2, fontFamily: t.fontMono, fontSize: 11 }, itemWidth: 10, itemHeight: 10, icon: "rect" },
+    legend: { textStyle: { color: t.text, fontFamily: t.fontMono, fontSize: 11, fontWeight: 500 }, itemWidth: 10, itemHeight: 10, icon: "rect" },
     tooltip: {
       backgroundColor: t.surface,
       borderColor: t.line1,
@@ -106,7 +108,7 @@ export function referenceLine(t, value, label, kind = "threshold") {
       position: "insideStartTop", // left end: away from the latest (most-watched) values
       color,
       fontFamily: t.fontMono,
-      fontSize: 10.5,
+      fontSize: 11,
       fontWeight: 600,
       backgroundColor: t.surface,
       padding: [1, 3],
@@ -154,7 +156,7 @@ export function rangeArea(t, ranges, kind = "neutral") {
     silent: true,
     itemStyle: { color: tone, opacity: 0.1, borderColor: tone, borderWidth: 1, borderType: [3, 3] },
     // Label at the band's top-left corner, away from a centered peak callout.
-    label: { position: "insideTopLeft", color: tone, fontFamily: t.fontMono, fontSize: 10.5, fontWeight: 600, distance: 4 },
+    label: { position: "insideTopLeft", color: tone, fontFamily: t.fontMono, fontSize: 11, fontWeight: 600, distance: 4 },
     data: ranges.map(([from, to, name]) => [{ xAxis: from, name }, { xAxis: to }]),
   };
 }
@@ -181,6 +183,6 @@ export function rangeBrush(t) {
 export function dayBoundaryLabels(t, dateFor) {
   return {
     formatter: (value, index) => (value === "00:00" ? `{day|${dateFor(index)}}` : value),
-    rich: { day: { color: t.text, fontFamily: t.fontMono, fontSize: 10.5, fontWeight: 700 } },
+    rich: { day: { color: t.text, fontFamily: t.fontMono, fontSize: 11, fontWeight: 700 } },
   };
 }

@@ -13,7 +13,7 @@ import { esc, fmtNum } from "./lib.js";
 
 echarts.use([LineChart, BarChart, PieChart, HeatmapChart, ScatterChart, GridComponent, TooltipComponent, MarkLineComponent, VisualMapComponent, LegendComponent, TitleComponent, MarkPointComponent, MarkAreaComponent, BrushComponent, LabelLayout, SVGRenderer]);
 
-const CHAR_W = 6.4; // approx. advance of 10.5px IBM Plex Mono, used for layout decisions
+const CHAR_W = 6.7; // approx. advance of 11px IBM Plex Mono (medium), used for layout decisions
 const textW = (s) => String(s).length * CHAR_W;
 const seriesCls = (i) => `tm-series-${(i % 8) + 1}`;
 const dashCls = (i) => (i > 0 && i < 4 ? `tm-dash-${i + 1}` : "");
@@ -93,7 +93,7 @@ function lineOption(c, t, hidden, area, width) {
 function barOption(c, t, hidden, mode, horizontal, width) {
   // Time buckets may be thinned (order is implicit); named categories never are.
   const xLabel = isTimeSeries(c) ? { interval: labelInterval(c.xLabels, width - 60) } : ALL_LABELS;
-  const cat = { type: "category", data: c.xLabels, ...(horizontal ? { inverse: true, axisLabel: { color: t.text2, ...ALL_LABELS } } : { axisLabel: xLabel }) };
+  const cat = { type: "category", data: c.xLabels, ...(horizontal ? { inverse: true, axisLabel: { color: t.text, fontWeight: 500, ...ALL_LABELS } } : { axisLabel: xLabel }) };
   // Horizontal value axis: one tick per ~64px so numbers never crowd.
   const val = valueAxis(horizontal ? "" : c.unit, { min: 0, ...(horizontal ? { splitNumber: Math.max(2, Math.floor((width - Math.max(...c.xLabels.map(textW)) - 60) / 64)) } : {}) });
   return {
@@ -110,7 +110,7 @@ function barOption(c, t, hidden, mode, horizontal, width) {
       ...(mode === "stacked" ? { stack: "total", barWidth: "58%" } : { barGap: "25%", barCategoryGap: horizontal ? "26%" : "30%" }),
       ...(mode === "stacked"
         ? {}
-        : { label: { show: true, position: horizontal ? "right" : "top", distance: 4, fontFamily: t.fontMono, fontSize: 10.5, color: t.text2 } }),
+        : { label: { show: true, position: horizontal ? "right" : "top", distance: 4, fontFamily: t.fontMono, fontSize: 11, fontWeight: 500, color: t.text } }),
       barMinHeight: 1, // zero values keep a visible 1px stub
       itemStyle: { color: t.chart[i % 8] },
     })),
@@ -121,9 +121,9 @@ function hBarOption(c, t) {
   return {
     grid: catYGrid(c.series.map((d) => d.label), { right: 48 }),
     xAxis: { type: "value", min: 0, show: false },
-    yAxis: { type: "category", data: c.series.map((d) => d.label), inverse: true, axisLabel: { color: t.text2, ...ALL_LABELS } },
+    yAxis: { type: "category", data: c.series.map((d) => d.label), inverse: true, axisLabel: { color: t.text, fontWeight: 500, ...ALL_LABELS } },
     tooltip: { trigger: "axis", axisPointer: { type: "shadow" } },
-    series: [{ type: "bar", data: c.series.map((d) => d.value), barWidth: 14, label: { show: true, position: "right", fontFamily: t.fontMono, fontSize: 10.5, color: t.text2, formatter: (p) => fmtNum(p.value) } }],
+    series: [{ type: "bar", data: c.series.map((d) => d.value), barWidth: 14, label: { show: true, position: "right", fontFamily: t.fontMono, fontSize: 11, fontWeight: 500, color: t.text, formatter: (p) => fmtNum(p.value) } }],
   };
 }
 
@@ -133,7 +133,7 @@ function histogramOption(c, t) {
     xAxis: { type: "category", data: c.series.map((d) => d.range), axisLabel: ALL_LABELS },
     yAxis: valueAxis(c.unit, { min: 0 }),
     tooltip: { trigger: "axis", axisPointer: { type: "shadow" } },
-    series: [{ type: "bar", data: c.series.map((d) => d.count), barCategoryGap: "3%", label: { show: true, position: "top", fontFamily: t.fontMono, fontSize: 10.5, color: t.text2 } }],
+    series: [{ type: "bar", data: c.series.map((d) => d.count), barCategoryGap: "3%", label: { show: true, position: "top", fontFamily: t.fontMono, fontSize: 11, fontWeight: 500, color: t.text } }],
   };
 }
 
@@ -159,7 +159,7 @@ function donutOption(c, t, width) {
       itemGap: DONUT_ROW - 12,
       ...(side ? { left: 170, right: 4, top: "middle" } : { left: 12, right: 12, top: DONUT_LEGEND_TOP }),
       formatter: (name) => `{n|${name}}{p|${pct(name)}%}`,
-      textStyle: { rich: { n: { width: Math.max(64, (side ? width - 170 : width - 24) - 64), color: t.text2 }, p: { align: "right", width: 44, color: t.text, fontWeight: 600 } } },
+      textStyle: { rich: { n: { width: Math.max(64, (side ? width - 170 : width - 24) - 64), color: t.text, fontWeight: 500 }, p: { align: "right", width: 44, color: t.text, fontWeight: 600 } } },
     },
     title: {
       text: `{a|TOTAL}\n{b|${totalLabel}}`,
@@ -181,14 +181,14 @@ function heatmapOption(c, t, width) {
   return {
     grid: catYGrid(c.series.map((r) => r.row), { right: 4, bottom: 22 }),
     xAxis: { type: "category", data: c.xLabels, axisLine: { show: false }, axisLabel: { interval: labelInterval(c.xLabels, width - 80) } },
-    yAxis: { type: "category", data: c.series.map((r) => r.row), inverse: true, axisLine: { show: false }, axisLabel: { color: t.text2, ...ALL_LABELS } },
+    yAxis: { type: "category", data: c.series.map((r) => r.row), inverse: true, axisLine: { show: false }, axisLabel: { color: t.text, fontWeight: 500, ...ALL_LABELS } },
     visualMap: { show: false, min: 0, max: 100, inRange: { color: [t.heatLo, t.heatHi] } },
     tooltip: { trigger: "item" },
     series: [
       {
         type: "heatmap",
         data: c.series.flatMap((r, ri) => r.values.map((v, i) => ({ value: [i, ri, v], label: { color: v >= 55 ? t.surface : t.text } }))),
-        label: { show: true, fontFamily: t.fontMono, fontSize: 10 },
+        label: { show: true, fontFamily: t.fontMono, fontSize: 10.5, fontWeight: 500 },
       },
     ],
   };
@@ -209,7 +209,7 @@ function scatterOption(c, t) {
           const hot = p.y >= 1;
           return { name: p.label, value: [p.x, p.y], symbol: hot ? "rect" : "circle", symbolSize: hot ? 9 : 10, itemStyle: { color: hot ? t.chart[5] : t.chart[0] } };
         }),
-        label: { show: true, position: "right", distance: 6, formatter: "{b}", fontFamily: t.fontMono, fontSize: 10.5, color: t.text2, backgroundColor: t.surface, padding: [0, 2] },
+        label: { show: true, position: "right", distance: 6, formatter: "{b}", fontFamily: t.fontMono, fontSize: 11, fontWeight: 500, color: t.text, backgroundColor: t.surface, padding: [0, 2] },
         labelLine: { show: true, length2: 4, lineStyle: { color: t.line2 } },
       },
     ],
