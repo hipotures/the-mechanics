@@ -23,7 +23,18 @@ If the checkout is available, read the relevant `DESIGN.md` section before inven
 3. **Do not add Tailwind/daisyUI (or any framework) just to get the styles.** The CSS is standalone.
 4. **Look up the component in the Gallery or `references/recipes.md` before writing markup.** Most needs are already covered; a new component is a last resort and must follow section 2.
 
-## 2. The rules that matter most
+## 2. First: decide the emphasis (redesign, not translation)
+
+The most common failure is translating the old page element by element into strong The Mechanics pieces. Every badge, date and button then gets a frame or a color, and the screen shouts everywhere at once — worse than the calm original. Before writing markup:
+
+1. Write down what the user must see in two seconds (e.g. "how much is left, when it resets, what needs attention") — usually two or three things. Those get size, color or a strong control.
+2. **Normal state is quiet, abnormal state is loud.** Routine facts ("Enabled · authenticated · pro", "Resets …", "Last check …", "Ends in …") are muted text (`--tm-text-2`, `.tm-meta`, or `.tm-badge--plain`), not tinted badges or framed boxes. Tinted badges, plates and red/amber are for deviations only.
+3. **One strong action per record.** The everyday action is framed/primary; the rest (Details, Reauthenticate, Disable, Delete) are ghost buttons that read like quiet text until hovered. Destructive actions get their red in the confirmation dialog.
+4. **Frames organise, they do not decorate.** Regions, panels, cards and real controls have frames. Data and metadata never do.
+5. **Color has at most three jobs:** identity (a provider/series name), data (bars, charts) and attention (warning, error). If something is colored for another reason, mute it.
+6. Then compare your screenshot with the original side by side: if yours looks busier, remove emphasis until it is at least as calm. `DESIGN.md` §1 "Emphasis budget".
+
+## 3. The rules that matter most
 
 Read `references/rules.md` for the reasoning and edge cases. In short:
 
@@ -34,7 +45,7 @@ Read `references/rules.md` for the reasoning and edge cases. In short:
 - **Toggles never relabel.** A *view toggle* (filter or display option such as "Selected only", "Hide free") keeps its label and icon and changes only its fill. Nothing in a toolbar may shift when state changes (fixed labels, reserved counter width, optional buttons appended last). This is about view toggles only: an *action* that changes a record ("Enable" / "Disable", "Pause" / "Resume") may name the action it performs. A persistent on/off *setting* of a record is better shown as a `.tm-switch` with a label than as an ink-filled button, which would compete with the primary action.
 - **Focus = lift:** controls keep their frame and get a hard ink shadow `--tm-focus-lift` (3px 3px, no blur); composites (stepper, input group, date field) lift as one piece and mark the focused part with the press tint; items get an ink block frame. Never a blue ring, never two focus looks.
 - **No browser dialogs.** Replace `window.confirm`, `alert` and `prompt` with `<dialog class="tm-dialog">` — destructive confirmations get a danger confirm button (`tm-btn--danger`), Cancel focused by default, Escape/backdrop cancel (port `confirmDialog` from `src/playground/lib.js`). Errors that `alert()` showed become an alert or toast.
-- **Action weight:** one primary action per record; other actions are outline, rarely used or secondary ones ghost; destructive last, `tm-btn--danger-outline`. Do not frame every action equally.
+- **Action weight:** one strong action per record; other actions ghost; destructive last and quiet in the row (ghost), red only in its confirmation dialog. A page-level destructive action in a danger zone may be `tm-btn--danger-outline`. Do not frame every action equally.
 - **Grids have no empty cells:** a panel grid whose last row is short leaves a hole in the frame; balance the columns or let the last panel span the gap (see `balanceGrid` in `src/playground/lib.js`).
 - **Status:** a standalone status (page head, panel head, KPI, image overlay) is a **status plate** `.tm-status` with a `.tm-mark`; small tinted `.tm-badge` only inside rows, cells and text. Alerts: 2px ink frame + tint + icon; a warning may be hidden and restored from a page-head status button.
 - **Text fields have a clear ✕** while they hold text (space reserved, click clears and keeps focus, Escape clears search). Not on number/date/code/read-only fields, or where a cancel ✕ already exists.
@@ -43,7 +54,7 @@ Read `references/rules.md` for the reasoning and edge cases. In short:
 - **Themes change color only**, never geometry. Check every screen in Light, Dark and Coffee.
 - **Data in examples is synthetic.** Never real names, customers or copied text.
 
-## 3. Workflow
+## 4. Workflow
 
 Restyling changes the look, not the product: keep the app's wording, features and behaviour. If a rule seems to require changing what a control does or what it is called, propose it in your report instead of doing it.
 
@@ -51,9 +62,9 @@ Restyling changes the look, not the product: keep the app's wording, features an
 2. Put app-specific layout in the app's own CSS (unlayered, so it wins without `!important`). Use `--tm-*` tokens for every color, space, size and border, never hex values or ad-hoc pixel spacing.
 3. Behavior comes from native elements (`<dialog>`, `<details>`, `popover`, form controls). For richer behavior (select fallback, date/time picker, clear button, restorable alert, multi-select, command palette, chart tooltips), port the reference helpers from the playground (`src/playground/lib.js`, `p1.js`, `charts.js`) instead of writing new ones with a different feel.
 4. Run the audit: `node <skill-dir>/scripts/audit.mjs <app-src-dir>`. It flags the rejected patterns (large radii, pills, blurred panel shadows, colored side bars, blue focus rings, hard-coded colors, relabelling toggles). Treat its output as leads to inspect, not verdicts.
-5. **Look at it.** Take screenshots (Playwright or the project's own tooling) in Light, Dark and Coffee, at desktop and ~390px phone width, and inspect them yourself. Check: frames and hierarchy, nothing shifts when you toggle or select, focus by Tab looks like the lift everywhere, no horizontal page scroll, long text wraps or truncates with a tooltip, contrast of anything you colored. A successful build or passing DOM checks is not visual verification.
+5. **Look at it** — and judge emphasis first: where does the eye land, and is that the thing that matters? Then take screenshots (Playwright or the project's own tooling) in Light, Dark and Coffee, at desktop and ~390px phone width, and inspect them yourself. Check: frames and hierarchy, nothing shifts when you toggle or select, focus by Tab looks like the lift everywhere, no horizontal page scroll, long text wraps or truncates with a tooltip, contrast of anything you colored. A successful build or passing DOM checks is not visual verification.
 6. Report what you inspected (themes, widths, interactions) and what you could not check. Do not claim accessibility compliance you did not measure.
 
-## 4. When the system does not cover it
+## 5. When the system does not cover it
 
 Prefer composition of existing pieces. If something new is unavoidable: build it from the same tokens and grammar (2px ink frame if free-standing, item grammar for pickable parts, the right "on" signal, lift focus), add it to the app, and tell the user it is a candidate for The Mechanics itself rather than silently diverging. Do not edit The Mechanics repository from another project.

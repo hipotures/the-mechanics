@@ -60,7 +60,8 @@ Test for anything new: *choice among siblings* → selection fill; *own on/off s
 - Empty / error / stale states: `.tm-state` with title, explanation and one recovery action.
 
 - Dialogs, never browser popups: `window.confirm/alert/prompt` are replaced by `<dialog class="tm-dialog">`. Destructive confirmation: title states the action and object, body says what is lost and what is kept, Cancel (outline, focused by default) + danger confirm; Escape and backdrop cancel; focus returns to the trigger. Reference: `confirmDialog` in `src/playground/lib.js`.
-- Action weight: one primary per record or panel; other actions outline, secondary/rare ones ghost; destructive last and `tm-btn--danger-outline`. Equal frames on every action flatten the hierarchy.
+- Action weight: one strong action per record or panel; other actions ghost; destructive last and quiet (ghost) in rows, red in the confirmation dialog; `tm-btn--danger-outline` only for a page-level action in a danger zone. Equal frames on every action flatten the hierarchy.
+- Emphasis budget (DESIGN.md §1): decide the two or three things the screen must say; normal state is quiet (muted text, `.tm-badge--plain`), deviations are loud; frames for structure and controls only, never around data; color for identity, data and attention only. Restyling is a redesign of emphasis, not a translation of the old DOM.
 
 ## 7. Fields (§5)
 - Label above, hint below, error message with a "!" glyph; invalid = `aria-invalid="true"` (red frame). Read-only = dashed frame.
