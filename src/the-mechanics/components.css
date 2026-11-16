@@ -3689,4 +3689,22 @@
       border-radius: 0;
     }
   }
+
+  /* =================================================================
+     Focus = lift (owner decision). Controls keep their own frame and get a
+     hard ink shadow, 3px right/down, as if raised off the page; nothing
+     changes size or moves. Pickable items (nav, rows, options, cells) keep
+     the item grammar: their block frame turns ink. Placed last so it
+     overrides the per-component focus outlines above.
+     ================================================================= */
+  :is(.tm-btn, .tm-input, .tm-select, .tm-textarea, .tm-chip--toggle, .tm-pagination__page, .tm-legend__item, .tm-picker-field__btn):is(:focus-visible, .is-focus),
+  .tm-multiselect:is(:focus-within, .is-focus),
+  .tm-input-group:focus-within,
+  .tm-segmented__option:has(input:focus-visible) {
+    outline: 0;
+    box-shadow: var(--tm-focus-lift);
+  }
+  .tm-input-group > .tm-input:focus-visible {
+    box-shadow: none;
+  }
 }

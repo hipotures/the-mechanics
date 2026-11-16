@@ -13,7 +13,7 @@ Source of truth for values: `src/the-mechanics/tokens.css` (geometry, type, spac
 1. **Hierarchy by boundary strength.** Importance is shown by how strong a boundary is, not by how many boxes there are. One strong outer frame; medium panels inside; hairlines and tints inside those.
 2. **Density without noise.** Compact rows (32 px), 13 px UI text, tabular numerals — but separators get *weaker* as content gets more granular.
 3. **Color means something.** Accent = primary action / selection. Status hues = state. Chart hues = series identity. Decoration uses neutrals.
-4. **Never color alone.** Every status badge has a marker shape; series have dash patterns or marker styles; selection is a fill whose hue differs from hover (grey) and focus (blue/teal frame); invalid fields get an error-colored border and a message with a “!” glyph.
+4. **Never color alone.** Every status badge has a marker shape; series have dash patterns or marker styles; selection is a fill whose hue differs from hover (grey), and focus is a shape (ink lift shadow or ink item frame), not a hue; invalid fields get an error-colored border and a message with a “!” glyph.
 5. **Themes change paint, never geometry.** Verified by the smoke test: page dimensions are identical in all three themes on all six pages.
 6. **No side accent bars.** Elements never get a thick colored bar on their left edge (no `border-left` accents, no inset-shadow bars). State is shown by fill, frame and marker shapes: invalid fields = border in the error color + message; selected items = the inset selection block (see *Item grammar*); alerts and toasts = 2px ink frame + tone tint + icon; code blocks = 1px frame. Allowed exceptions: the blockquote rule, the table-of-contents position indicator and the underline of frameless tabs.
 7. **Strong controls, calm structure.** Everything you operate is drawn at full strength: inputs, selects, steppers, buttons, segmented controls, toggle chips, checkboxes, radios and switches use a 2px border in `--tm-ink` (dark ink in Light, bright text color in Dark/Coffee); checked checkboxes/radios/switches are filled with ink and carry a surface-colored mark. Structure (regions, panels, rows) keeps its own, calmer hierarchy. Control heights do not change with border width (border-box). Selected segments and chips are marked by the selection fill inside the ink frame (chips also switch to a selection-colored frame) — no underline.
@@ -51,7 +51,7 @@ Every pickable item — side-nav link, in-page navigation link (`.tm-toc`), sele
 |---|---|
 | hover | grey `--tm-hover` block, transparent frame |
 | selected / current | `--tm-select-bg` fill; frame `--tm-select-frame` — **transparent by default** (owner decision: fill-only selection); set it to `var(--tm-select-line)` for a framed variant |
-| keyboard focus | the same block's frame turns `--tm-focus` (never a second ring around it) |
+| keyboard focus | the same block's frame turns `--tm-focus` (ink; never a second ring around it) |
 | selected + focus | selection fill + focus frame |
 
 The block geometry is the same for every item (`--tm-select-inset` 4px / `--tm-select-inset-y` 2px from the container, 2px reserved frame, `--tm-select-pad` 8px / `--tm-select-pad-y` 4px to the content), so nothing moves when an item is selected, hovered or focused. Selectable rows have no separator lines. In Dark and Coffee the selection fill is tuned to stay clearly distinct from hover without a frame. Select options carry no tick: the selected block marks the choice, so option labels sit exactly where the closed field's text sits. Segmented controls follow the same rule — the selected cell is filled and its frame is the control's own outline and ink dividers. Lists and menus are free-standing, so their container has a 2px ink frame. Multi-select options add a small check box in front of the label so "several can be chosen" is visible before anything is chosen; the fill still marks the chosen ones, and the keyboard-active option gets the focus frame. In the command palette focus stays in the search field, so the result that Enter will run (`aria-activedescendant`) carries the selection fill. On touch screens (`hover: none`) nav and in-page links drop the hover tint, so a tapped link never looks selected after the tap.
@@ -77,13 +77,13 @@ Selected by `data-tm-theme` on `<html>` (or any subtree). Light is the default.
 
 | Theme | Intent | Canvas → surface | Text | Accent | Focus |
 |---|---|---|---|---|---|
-| **Light / Paper-Stone** | Stone-gray canvas, cream paper, green-black ink. Surfaces are visibly distinct from canvas (not white-on-white). | `#dcd9cf` → `#efebe1` (shell `#e6e0cc`) | `#22271f` | olive `#44622a` | blue `#1d5fb0` |
-| **Dark / Graphite** | Lifted graphite (canvas `#26292c`, never near-black); muted olive accent, no neon. | `#26292c` → `#33373b` | `#e9ebe6` | `#aac67b` | `#7db3ff` |
-| **Coffee / Espresso-Mocha** | Warm mid-dark espresso, mocha surfaces, cream text, muted copper. Distinct from Graphite by hue, not just lightness. | `#33261e` → `#433228` | `#f3e8d8` | copper `#d79560` | teal `#83cfc6` |
+| **Light / Paper-Stone** | Stone-gray canvas, cream paper, green-black ink. Surfaces are visibly distinct from canvas (not white-on-white). | `#dcd9cf` → `#efebe1` (shell `#e6e0cc`) | `#22271f` | olive `#44622a` | ink `#2b312a` |
+| **Dark / Graphite** | Lifted graphite (canvas `#26292c`, never near-black); muted olive accent, no neon. | `#26292c` → `#33373b` | `#e9ebe6` | `#aac67b` | ink `#dfe2dc` |
+| **Coffee / Espresso-Mocha** | Warm mid-dark espresso, mocha surfaces, cream text, muted copper. Distinct from Graphite by hue, not just lightness. | `#33261e` → `#433228` | `#f3e8d8` | copper `#d79560` | ink `#ead9c2` |
 
 Design choices:
 
-- The **focus ring is a different hue family from the accent/selection** in every theme (blue/blue/teal vs olive/olive/copper), so *selected* and *focused* are always distinguishable even on the same element.
+- **Focus = lift (owner decision).** A focused control (button, field, select, segmented option, chip, pagination, input group, multi-select) keeps its own frame and gets a hard ink shadow `--tm-focus-lift` (3px right/down, no blur) — it looks raised off the flat page; nothing changes size or moves. Pickable items (nav, rows, options, picker cells) show focus as an ink frame on their block (item grammar). Other focusable elements (links, checkboxes) get a 2px ink outline. Focus is told apart from selection by *shape* (shadow/frame vs fill), so the two stay distinguishable on the same element in every theme. The blue browser-style ring was rejected as foreign to the ink-framed design; a thicker ink frame was the runner-up. The hard shadow is reserved for focus and for floating objects (menus, dialogs, toasts); regions, panels and cards stay flat.
 - Ink lines (`--tm-line-1`, `--tm-ink`) are dark in Light and light gray / latte in the dark themes. `--tm-line-2` (1px header and table rules) meets ≥3:1 against surface and canvas in every theme. Level 3 hairlines are decorative separators inside a panel.
 - The built-in daisyUI `retro`, `coffee`, `caramellatte`, `wireframe` and `cyberpunk` themes were inspected as references (radius/border/depth and base colors). None is used; all three themes are original values.
 
@@ -111,7 +111,7 @@ Why Plex: open license (OFL-1.1), a *soft* monospace with clear `0/O`, `1/l/I` d
 ### Spacing, geometry, density
 - Spacing: 4 px rhythm `--tm-space-1…16` (4, 8, 12, 16, 20, 24, 32, 40, 48, 64).
 - Radius: regions/panels **0**, controls/badges **2 px**, overlays **3 px**. No pills.
-- Border widths: `--tm-bw-1` 2 px, `--tm-bw-2` 1 px, `--tm-bw-3` 1 px (strength comes from color), `--tm-bw-control` 2 px (all interactive controls, in `--tm-ink`), focus 2 px + 2 px offset.
+- Border widths: `--tm-bw-1` 2 px, `--tm-bw-2` 1 px, `--tm-bw-3` 1 px (strength comes from color), `--tm-bw-control` 2 px (all interactive controls, in `--tm-ink`), focus = `--tm-focus-lift` shadow on controls, 2 px ink frame on items, 2 px ink outline + 2 px offset elsewhere.
 - Controls: 28 / 32 / 40 px; checkbox/radio 18 px; icons 14 / 16 / 20 px.
 - Selection block: `--tm-select-inset` 4px, `--tm-select-inset-y` 2px, `--tm-select-pad` 8px, `--tm-select-pad-y` 4px; `--tm-select-text` / `--tm-select-text-y` give the content offset for unselected rows.
 - Density: rows 32 px compact (default) / 40 px comfortable via `.tm-density-comfortable` on any subtree. Toolbar 44 px, topbar 48 px.
@@ -202,7 +202,7 @@ Reading width 68ch; content max 1600 px; narrow 1120 px; sidebar 232 px (56 px c
 
 ## 9. Decisions for owner review
 
-Settled with the owner: structure rule (2px ink frames and dividers); fill-only selection with one item grammar; status plates vs. badges; compact tables = one line per record; `.tm-panel-grid` with 2px dividers; own date/time picker; menus, side nav and the green primary button kept as they are; Coffee alert/warning hues (reviewed in the gallery, kept); the current dialog weight (reviewed in Coffee, kept — no lighter variant); in-page navigation (`.tm-toc`) uses the item grammar instead of a rail with a side bar; collapsible side-nav groups (added for review). Display headings stay **Plex Mono bold**: titles are one or two lines with room to spare, so there is no space to win by switching to the narrower Plex Sans (Sans was compared side by side and declined).
+Settled with the owner: structure rule (2px ink frames and dividers); fill-only selection with one item grammar; status plates vs. badges; compact tables = one line per record; `.tm-panel-grid` with 2px dividers; own date/time picker; menus, side nav and the green primary button kept as they are; Coffee alert/warning hues (reviewed in the gallery, kept); the current dialog weight (reviewed in Coffee, kept — no lighter variant); focus drawn in ink as a “lift” shadow instead of a blue ring; in-page navigation (`.tm-toc`) uses the item grammar instead of a rail with a side bar; collapsible side-nav groups (added for review). Display headings stay **Plex Mono bold**: titles are one or two lines with room to spare, so there is no space to win by switching to the narrower Plex Sans (Sans was compared side by side and declined).
 
 Still open:
 

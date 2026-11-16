@@ -71,6 +71,8 @@
     --tm-bw-3: 1px;       /* Level 3 — nested record / row separator */
     --tm-bw-control: 2px;       /* controls are drawn in ink at full strength */
     --tm-bw-focus: 2px;
+    /* Focus "lift": hard shadow in the focus (ink) color, no blur */
+    --tm-focus-lift: 3px 3px 0 var(--tm-focus);
     --tm-focus-offset: 2px;
 
     /* Selection block geometry, shared by nav items and list rows:

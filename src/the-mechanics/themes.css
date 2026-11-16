@@ -55,7 +55,7 @@
     --tm-press: rgb(43 49 42 / 0.12);
     --tm-select-bg: #dbe3bd;
     --tm-select-line: #5f7d34;
-    --tm-focus: #1d5fb0;
+    --tm-focus: #2b312a;         /* = ink: focus is drawn in the control ink (lift shadow / item frame) */
 
     --tm-success: #2f6b37;
     --tm-success-soft: #dbe8d3;
@@ -139,7 +139,7 @@
     --tm-press: rgb(233 235 230 / 0.12);
     --tm-select-bg: #4a5c3a;
     --tm-select-line: #aac67b;
-    --tm-focus: #7db3ff;
+    --tm-focus: #dfe2dc;         /* = ink */
 
     --tm-success: #94c78d;
     --tm-success-soft: #36473a;
@@ -223,7 +223,7 @@
     --tm-press: rgb(243 232 216 / 0.12);
     --tm-select-bg: #74492a;
     --tm-select-line: #d79560;
-    --tm-focus: #83cfc6;
+    --tm-focus: #ead9c2;         /* = ink */
 
     --tm-success: #b0c986;
     --tm-success-soft: #46452e;
