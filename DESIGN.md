@@ -45,7 +45,7 @@ Rules:
 
 ### Item grammar (one selection language)
 
-Every pickable item — side-nav link, selectable list row, menu item, select option, picker cell (day, hour, minute) — is the same inset block:
+Every pickable item — side-nav link, in-page navigation link (`.tm-toc`), selectable list row, menu item, select or multi-select option, command palette result, picker cell (day, hour, minute) — is the same inset block:
 
 | State | Look |
 |---|---|
@@ -54,7 +54,7 @@ Every pickable item — side-nav link, selectable list row, menu item, select op
 | keyboard focus | the same block's frame turns `--tm-focus` (never a second ring around it) |
 | selected + focus | selection fill + focus frame |
 
-The block geometry is the same for every item (`--tm-select-inset` 4px / `--tm-select-inset-y` 2px from the container, 2px reserved frame, `--tm-select-pad` 8px / `--tm-select-pad-y` 4px to the content), so nothing moves when an item is selected, hovered or focused. Selectable rows have no separator lines. In Dark and Coffee the selection fill is tuned to stay clearly distinct from hover without a frame. Select options carry no tick: the selected block marks the choice, so option labels sit exactly where the closed field's text sits. Segmented controls follow the same rule — the selected cell is filled and its frame is the control's own outline and ink dividers. Lists and menus are free-standing, so their container has a 2px ink frame.
+The block geometry is the same for every item (`--tm-select-inset` 4px / `--tm-select-inset-y` 2px from the container, 2px reserved frame, `--tm-select-pad` 8px / `--tm-select-pad-y` 4px to the content), so nothing moves when an item is selected, hovered or focused. Selectable rows have no separator lines. In Dark and Coffee the selection fill is tuned to stay clearly distinct from hover without a frame. Select options carry no tick: the selected block marks the choice, so option labels sit exactly where the closed field's text sits. Segmented controls follow the same rule — the selected cell is filled and its frame is the control's own outline and ink dividers. Lists and menus are free-standing, so their container has a 2px ink frame. Multi-select options add a small check box in front of the label so "several can be chosen" is visible before anything is chosen; the fill still marks the chosen ones, and the keyboard-active option gets the focus frame. In the command palette focus stays in the search field, so the result that Enter will run (`aria-activedescendant`) carries the selection fill. On touch screens (`hover: none`) nav and in-page links drop the hover tint, so a tapped link never looks selected after the tap.
 
 ### Standalone vs. inline status
 
@@ -125,12 +125,18 @@ Reading width 68ch; content max 1600 px; narrow 1120 px; sidebar 232 px (56 px c
 | Status plate | `.tm-status` (32px) / `.tm-status--sm` (28px) for standalone statuses: page head, panel head, KPI tile, image overlay. Ink frame, surface fill, state shown by `.tm-mark` (complete ✓ · active/info dot · review half · warning triangle · error · pending ring · skipped dashed · none faint). As a `<button>` it restores a hidden message. |
 | Alert vs toast | Alerts are in-flow, 2px ink frame, tone tint + icon. A warning may be hidden; `dismissibleAlert` leaves a status-plate button in the page head that restores it. Blocking errors cannot be hidden. Toasts use the same frame and are transient (5 s default, pause on hover, progress line); errors are persistent until dismissed. |
 | Tooltip | Supplementary only; appears on hover **and** focus; Escape dismisses without moving focus. |
+| Side nav groups | `.tm-nav__group` with a `.tm-nav__toggle` header (label + chevron, `aria-expanded`). A collapsed group still shows its current page; the icon rail and the phone strip always list every destination. |
+| In-page navigation | `.tm-toc` (content site, gallery): items in the item grammar — current section = selection fill, no rail and no side bar; on narrow screens the list wraps into rows. Scroll-spy sets `aria-current`. |
 | Tabs | Underline 3 px in selection color, weight unchanged; arrow-key roving. Prefer no tabs when all content fits as one view plus collapsible sections. |
 | Table density | Compact = one line per record (secondary details in the title tooltip, a note marker instead of the note line), 32px minimum rows; Comfortable = full secondary lines, 40px minimum and extra vertical padding. The toggle must make a visible difference, not just a few pixels. |
 | Table | Sticky mono header within bounded scroll containers, tabular numerals, numbers right-aligned, negative values in danger color with a real minus sign, selected row = selection fill (+ checked checkbox). On < 640 px `.tm-table--stack` turns rows into labelled records. |
 | Menu / popover | Native `popover`, 2px ink frame (free-standing) and hard shadow; items in the item grammar (hover grey, focus frame); arrow keys, Home/End, Escape, focus return. |
 | Date / time picker | Native `<input type="date|time">` stays the field (typing, validation); its browser popup is replaced by `.tm-picker` (playground helper `enhanceDateTime`): Monday-first month grid without weekend colouring, 24h hour/minute columns; cells use the item grammar. Keyboard: Alt+↓/F4 or the field button opens; arrows, PageUp/PageDown, Enter, Escape. |
 | Workflow | `.tm-pipeline` of `.tm-stage` cells (one framed strip split by dividers; a stage that opens a view is a link), `.tm-mark` status markers in pass matrices, `.tm-passcell` = [status][run] square buttons (status button pressed = shown in the preview), `.tm-section-head` = title + meta + the filter for that section, `.tm-collapsible` (`<details>`: title, count, description, chevron) for secondary information, `.tm-danger-zone` (explanation + destructive action, disabled with a reason when blocked) last on the page. |
+| Verification code | `.tm-otp` of `.tm-input.tm-otp__cell` boxes (one character each, mono, grouped with `.tm-otp__sep`), wrapped in `role="group"` with a label. Typing advances, Backspace goes back, paste fills all cells; invalid = `aria-invalid` on every cell + one error message. |
+| Multi-select | `.tm-multiselect` = a field holding `.tm-chip`s and a filter input (`role="combobox"`); the list is `.tm-menu.tm-listbox` with `aria-multiselectable`, `.tm-listbox__box` check boxes and a `.tm-listbox__foot` count + Clear. Enter toggles, Backspace in an empty input removes the last chip, Escape closes. |
+| Command palette | `.tm-palette` (modal `<dialog>` near the top, 2px ink frame): search field divided from the results by a 2px rule, grouped results (`.tm-palette__group` labels), the matched part of a label underlined, a key-hint footer. Ctrl/⌘+K opens, arrows move, Enter runs, Escape closes. |
+| Non-modal sheet | `.tm-sheet` with `popover="manual"`: docked bottom-right (full-width bottom on phones), no backdrop and no focus trap — the page stays usable. Dialog head/body/foot parts; Escape with focus inside or the close button closes it and returns focus to the trigger. |
 | Dialog / drawer | Native `<dialog>`; 2 px ink frame; head band `--tm-head-1`; destructive dialogs use a danger confirm button. Escape and backdrop close; focus returns to the trigger. |
 | Empty / error / stale | `.tm-state` (+ `--error`, `--warning`). Always title + explanation + (where possible) one recovery action. |
 | KPI | Mono value, unit in smaller muted type, trend with arrow + sign + text (“improving/worsening” for screen readers); good/bad depends on metric direction, not on sign. |
@@ -145,6 +151,7 @@ Reading width 68ch; content max 1600 px; narrow 1120 px; sidebar 232 px (56 px c
 - **Pass matrix:** rows = units/sections, columns = passes; each cell a `.tm-mark` (overview) or a `.tm-passcell` (working view). On phones secondary columns move under the name so all pass columns fit without horizontal scroll.
 - **A filter sits next to what it filters** (section head, list head), never in a distant toolbar.
 - Report state, not invented progress: no progress bars for work that does not report partial progress.
+- **Selection across pages:** the bulk bar counts the whole selection; the header checkbox acts on the visible page; when a full page is selected and more rows match, the bar offers “Select all N matching”; “Show selected only” lists the whole selection (and shows as a removable filter chip). The bar does not repeat what the table already shows.
 
 ### Documentation-only state classes
 `.is-hover`, `.is-active`, `.is-focus`, `.is-selected`, `.is-open` mirror interactive states for galleries and visual tests. Applications should rely on real pseudo-classes and ARIA states.
@@ -158,7 +165,7 @@ Reading width 68ch; content max 1600 px; narrow 1120 px; sidebar 232 px (56 px c
 - Thresholds are dashed `--tm-chart-threshold` lines, targets dotted `--tm-chart-target`. The line is named in the legend; the on-chart label is the short value (“750 ms”, “75% target”) at the left end, on a surface-colored background, away from the latest values.
 - Point labels that collide are moved apart by ECharts with a leader line; bar value labels that would overlap are hidden rather than drawn over each other. Time-axis labels may be thinned (order is implicit); named categories (routes, models, ranges) always show every label — bars switch to horizontal layout when names do not fit. Data value labels are never hidden. Value axes get one tick per ~64 px.
 - Bars with long category labels automatically switch to horizontal layout so labels are never rotated or clipped. Zero values render as a visible 1 px tick.
-- Donuts always carry a value + percentage legend; heatmaps print the value in every cell.
+- Donuts always carry a value + percentage legend; heatmaps print the value in every cell. The cell label takes whichever of text/surface contrasts more with the cell; mid-ramp cells where neither reaches 4.5:1 get a 2px halo in the other tone (measured in `docs/verification/contrast-derived.md`).
 - Tooltips sit below sticky app chrome (`--tm-z-sticky`) and close on scroll or a tap outside the chart, so they never drift away from their data.
 - Tooltips: hover **or** keyboard (focus chart, ←/→/Home/End, Escape); values are mirrored into a polite live region.
 - **Building blocks for composite time charts** (e.g. “cost over time, stacked by model, 30-minute buckets”): rich panel head `.tm-panel__head--rich` (`.tm-panel__heading` = title + `.tm-panel__subtitle`, `.tm-panel__actions` = legend + metric `.tm-segmented--sm`); ECharts adapter helpers `peakMarker()` (boxed “peak 12:00 285 k tokens” callout), `rangeArea()` (labelled band for quota windows / incidents, tone neutral|warning|danger|success), `rangeBrush()` (drag along x to select a span) and `dayBoundaryLabels()` (midnight shown as the bold date); `.tm-chart-readout` for the live sum of a selection and `.tm-chart-options` for overlay toggles under the chart. Leave ~25 % headroom above the tallest value for the peak callout. A working composition is in the Component Gallery › Data graphics (fixture data only); concrete product charts are assembled from these pieces when needed.
@@ -184,11 +191,9 @@ Reading width 68ch; content max 1600 px; narrow 1120 px; sidebar 232 px (56 px c
 
 ## 9. Decisions for owner review
 
-Settled with the owner: structure rule (2px ink frames and dividers); fill-only selection with one item grammar; status plates vs. badges; compact tables = one line per record; `.tm-panel-grid` with 2px dividers; own date/time picker; menus, side nav and the green primary button kept as they are.
+Settled with the owner: structure rule (2px ink frames and dividers); fill-only selection with one item grammar; status plates vs. badges; compact tables = one line per record; `.tm-panel-grid` with 2px dividers; own date/time picker; menus, side nav and the green primary button kept as they are; Coffee alert/warning hues (reviewed in the gallery, kept); the current dialog weight (reviewed in Coffee, kept — no lighter variant); in-page navigation (`.tm-toc`) uses the item grammar instead of a rail with a side bar; collapsible side-nav groups (added for review).
 
 Still open:
 
-1. **Monospace display headings** (Plex Mono bold) give the retro-tech character; an alternative is Plex Sans headings with mono only for labels.
-2. **Accent hues**: olive (Light/Dark) and copper (Coffee). Coffee's warning hue is close to the copper accent.
-3. **Dialogs**: a lighter modal variant from an owner reference is still to be evaluated.
-4. **Gallery section indicator** in the gallery's in-page navigation.
+1. **Monospace display headings** (Plex Mono bold) give the retro-tech character; the alternative is Plex Sans headings with mono only for labels (`--tm-font-display: var(--tm-font-ui)`, already a permitted variation). Both were offered side by side for review.
+2. **Heatmap label halo**: mid-ramp cells use a 2px halo to reach 4.5:1. Alternatives if it reads as too busy: stepped (bucketed) heat colors that skip the mid-luminance band, or values only in the tooltip plus a legend.

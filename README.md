@@ -25,8 +25,8 @@ Verification (after `build`):
 
 ```sh
 corepack pnpm exec playwright install --only-shell chromium   # once; see “Disk-backed temp” below
-corepack pnpm check:contrast   # WCAG ratios of token pairs → docs/verification/contrast.md
-corepack pnpm smoke            # 22 interaction/keyboard checks + state screenshots
+corepack pnpm check:contrast   # WCAG ratios: token pairs + derived colors → docs/verification/contrast*.md
+corepack pnpm smoke            # 24 interaction/keyboard checks + state screenshots (own port 4175)
 corepack pnpm shots [label]    # 7 views × 3 themes × desktop/mobile → tmp/screenshots/<label>/
 ```
 
@@ -54,7 +54,7 @@ Hash routes, with the theme in the query string (instant switching, persisted in
 | `#/data` | **Data Management** — searchable/sortable/paginated accounts table, selection + bulk actions, filter chips, inline rename, editor form with validation, loading/error/empty states, confirmation dialog |
 | `#/catalog` | **Catalog / Commerce** — image-led product grid, category chips, filters, sort, product drawer (with missing-image view), cart with discount error |
 | `#/content` | **Content Site** — editorial landing/doc page: hero, scroll-spy TOC, long-form prose, quote, figure, callout, table, code, FAQ, CTA |
-| `#/components` | **Component Gallery** — every primitive in default/hover/focus/active/disabled/error/loading/empty states, plus a daisyUI bridge section |
+| `#/components` | **Component Gallery** — every primitive in default/hover/focus/active/disabled/error/loading/empty states, the P1 components (verification code, multi-select, command palette on Ctrl/⌘+K, non-modal sheet), plus a daisyUI bridge section |
 
 Examples: `/?theme=dark#/analytics`, `/?theme=coffee#/workspace`.
 
@@ -73,7 +73,7 @@ src/playground/           playground only: shell, router, pages, ECharts chart m
 fixtures/demo-data.json   deterministic synthetic data (single source of demo content)
 public/products/          original generated product illustrations (scripts/gen-product-images.mjs)
 examples/plain-html/      CSS-only consumer example
-scripts/                  build-css, contrast, screenshots, smoke, image generator
+scripts/                  build-css, contrast, contrast-derived, screenshots, smoke, image generator
 docs/                     coverage contract, component status, distribution, derived data, verification, screenshots
 references/               visual concept reference (not production code)
 ```

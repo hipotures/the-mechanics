@@ -8,12 +8,14 @@ import { join } from "node:path";
 
 const shots = process.env.SHOT_DIR || "tmp/screenshots/states";
 mkdirSync(shots, { recursive: true });
-const server = spawn("node_modules/.bin/vite", ["preview", "--port", "4174", "--strictPort"], { stdio: ["ignore", "pipe", "inherit"] });
+// Own port, so a preview server left running on 4173/4174 is never tested by mistake.
+const PORT = process.env.SMOKE_PORT || "4175";
+const server = spawn("node_modules/.bin/vite", ["preview", "--port", PORT, "--strictPort"], { stdio: ["ignore", "pipe", "inherit"] });
 await new Promise((res, rej) => {
-  server.stdout.on("data", (d) => String(d).includes("4174") && res());
+  server.stdout.on("data", (d) => String(d).includes(PORT) && res());
   server.on("exit", (c) => rej(new Error(`preview exited ${c}`)));
 });
-const BASE = "http://localhost:4174/";
+const BASE = `http://localhost:${PORT}/`;
 const browser = await chromium.launch({ args: ["--disable-dev-shm-usage"] });
 const results = [];
 const errors = [];
@@ -80,6 +82,12 @@ try {
     await page.click('[data-nav="workspace"]');
     await page.waitForFunction(() => document.title.startsWith("Workspace"));
     assert((await page.getAttribute('[data-nav="workspace"]', "aria-current")) === "page", "aria-current");
+    await page.click('[data-nav-group="apps"]');
+    assert((await page.getAttribute('[data-nav-group="apps"]', "aria-expanded")) === "false", "group not collapsed");
+    assert(await page.locator('[data-nav="workspace"]').isVisible(), "current page hidden in collapsed group");
+    assert(!(await page.locator('[data-nav="catalog"]').isVisible()), "collapsed group still lists other pages");
+    await page.click('[data-nav-group="apps"]');
+    assert(await page.locator('[data-nav="catalog"]').isVisible(), "group not re-expanded");
     await page.click("#sidebar-toggle");
     assert((await page.getAttribute("#shell", "data-sidebar")) === "collapsed", "not collapsed");
     await shot("sidebar-collapsed");
@@ -162,6 +170,23 @@ try {
     await page.click("#clear-filters");
     await page.click("#check-all"); // re-renders the table, so no page.check() re-verification
     assert((await page.textContent("#bulk .tm-badge--count")) !== "3", "select all");
+  });
+  await check("data: selection across pages — selected-only view, select all matching, chip", async () => {
+    await go("data");
+    const count = async () => +(await page.textContent("#bulk .tm-badge--count"));
+    const n0 = await count();
+    await page.click('[data-bulk="only"]');
+    assert((await page.locator("#table-wrap tbody tr").count()) === n0, "selected-only row count");
+    assert(await page.locator('[data-chip="only"]').count(), "selected-only chip");
+    await page.click('[data-chip="only"]');
+    assert((await page.locator("#table-wrap tbody tr").count()) === 10, "chip removal restores rows");
+    await page.click('[data-page="2"]');
+    await page.click("#check-all"); // indeterminate → checked: the whole page
+    await page.waitForSelector('[data-bulk="all"]');
+    await page.click('[data-bulk="all"]');
+    assert((await count()) === 32, `select all matching: ${await count()}`);
+    await page.click('[data-bulk="clear"]');
+    assert(await page.locator("#bulk").isHidden(), "clear hides bar");
   });
   await check("data: confirmation dialog — Escape closes and returns focus; confirm applies", async () => {
     await go("data");
@@ -368,6 +393,43 @@ try {
     await page.waitForSelector("#g-dlg[open]");
     await shot("gallery-dialog");
     await page.keyboard.press("Escape");
+  });
+  await check("gallery P1: code cells, multi-select keyboard, command palette, non-modal sheet", async () => {
+    await go("components");
+    await page.click("#otp-0");
+    await page.keyboard.type("12");
+    assert((await page.evaluate(() => document.activeElement.id)) === "otp-2", "code cell did not advance");
+    await page.keyboard.press("Backspace");
+    assert((await page.evaluate(() => document.activeElement.id)) === "otp-1", "Backspace did not go back");
+    // Multi-select: type to filter, Enter toggles, Backspace removes the last chip, Escape closes.
+    await page.click("#g-ms-in");
+    const chips = () => page.locator("#g-ms .tm-chip").count();
+    const c0 = await chips();
+    await page.keyboard.type("plat");
+    await page.keyboard.press("Enter");
+    assert((await chips()) === c0 + 1, "Enter did not add a chip");
+    await page.fill("#g-ms-in", "");
+    await page.keyboard.press("Backspace");
+    assert((await chips()) === c0, "Backspace did not remove the chip");
+    await page.keyboard.press("Escape");
+    assert((await page.getAttribute("#g-ms-in", "aria-expanded")) === "false", "list not closed");
+    // Command palette: Ctrl+K, filter, arrows, Enter runs.
+    await page.keyboard.press("Control+k");
+    await page.waitForSelector(".tm-palette[open]");
+    await page.keyboard.type("dark");
+    assert((await page.locator(".tm-palette [role=option]").count()) === 1, "palette filter");
+    await page.keyboard.press("Enter");
+    await page.waitForFunction(() => document.documentElement.dataset.tmTheme === "dark");
+    assert(!(await page.locator(".tm-palette[open]").count()), "palette not closed after run");
+    // Sheet: page stays interactive, Escape returns focus to the trigger.
+    await page.click("#g-sheet-btn");
+    assert(await page.locator("#g-sheet:popover-open").count(), "sheet not open");
+    await page.click("#g-dialog"); // page behind is still usable
+    await page.waitForSelector("#g-dlg[open]");
+    await page.keyboard.press("Escape");
+    await page.focus("#g-sheet [data-close]");
+    await page.keyboard.press("Escape");
+    assert((await page.evaluate(() => document.activeElement.id)) === "g-sheet-btn", "focus not returned");
   });
   await ctx.close();
 

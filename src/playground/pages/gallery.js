@@ -1,11 +1,19 @@
 import { esc, icon, badge, toast, wireMenus, confirmDialog, rangeFill, fmtMoney, stepperHTML, wireSteppers, status, dismissibleAlert } from "../lib.js";
 import { mountChart, mountComposite } from "../charts.js";
+import { wireOtp, wireMultiSelect, createPalette, wireSheet } from "../p1.js";
 import { media, bindMedia } from "./catalog.js";
 
 const spec = (label, body, cls = "") => `<div class="pg-spec ${cls}"><div class="tm-label pg-spec__label">${label}</div><div class="pg-spec__body">${body}</div></div>`;
 const section = (id, title, desc, body) => `<section class="tm-region pg-gal-sec" id="g-${id}" aria-labelledby="gh-${id}">
   <header class="tm-region__head"><h2 class="tm-region__title" id="gh-${id}">${title}</h2><span class="tm-panel__meta">${desc}</span></header>
   <div class="tm-region__body pg-spec-grid">${body}</div></section>`;
+
+const otpCells = (id, n, value = "", invalid = false) =>
+  Array.from({ length: n }, (_, i) => `${i === n / 2 ? '<span class="tm-otp__sep" aria-hidden="true"></span>' : ""}<input class="tm-input tm-otp__cell" id="${id}-${i}" inputmode="numeric" autocomplete="${i === 0 ? "one-time-code" : "off"}" maxlength="1" aria-label="Digit ${i + 1} of ${n}" value="${value[i] || ""}" ${invalid ? 'aria-invalid="true"' : ""}>`).join("");
+const sheetHTML = (id, isStatic = false) => `<aside class="tm-sheet ${isStatic ? "is-open pg-static-sheet" : ""}" id="${id}" ${isStatic ? 'role="group" aria-label="Sheet specimen"' : `popover="manual" role="dialog" aria-labelledby="${id}-t"`}>
+  <div class="tm-dialog__head"><h3 class="tm-dialog__title" id="${id}-t">Inspector · ch0005_a001</h3><button class="tm-btn tm-btn--ghost tm-btn--icon tm-btn--sm" data-close aria-label="Close sheet" ${isStatic ? 'tabindex="-1"' : "data-autofocus"}>${icon("x")}</button></div>
+  <div class="tm-dialog__body"><dl class="pg-sheet-dl"><dt>Status</dt><dd>Waiting for review</dd><dt>Terms</dt><dd class="tm-num">14</dd><dt>Observations</dt><dd class="tm-num">3</dd><dt>Updated</dt><dd class="tm-num">Nov 14, 2026 09:42</dd></dl></div>
+  <div class="tm-dialog__foot"><button class="tm-btn tm-btn--outline tm-btn--sm" data-close ${isStatic ? 'tabindex="-1"' : ""}>Close</button><button class="tm-btn tm-btn--primary tm-btn--sm" data-close ${isStatic ? 'tabindex="-1"' : ""}>Mark reviewed</button></div></aside>`;
 
 const COLOR_ROLES = [
   ["Canvas", "--tm-canvas"], ["Surface", "--tm-surface"], ["Surface alt", "--tm-surface-alt"], ["Head L1", "--tm-head-1"], ["Head L2", "--tm-head-2"], ["Sunken L3", "--tm-sunken"], ["Inset", "--tm-inset"], ["Inverse", "--tm-inverse"],
@@ -77,7 +85,7 @@ export default {
         ${spec("Action toolbar", `<div class="tm-toolbar pg-bordered" role="toolbar" aria-label="Sample toolbar"><button class="tm-btn tm-btn--sm tm-btn--primary">${icon("plus", "tm-icon--sm")}New</button><button class="tm-btn tm-btn--sm tm-btn--outline">${icon("filter", "tm-icon--sm")}Filter</button><span class="tm-toolbar__sep"></span><button class="tm-btn tm-btn--sm tm-btn--ghost">${icon("download", "tm-icon--sm")}Export</button><span class="tm-toolbar__spacer"></span><span class="tm-meta">32 records</span></div>`, "pg-spec--wide")}
       `)}
 
-      ${section("forms", "Forms", "fields · validation · affixes · range · file", `
+      ${section("forms", "Forms", "fields · validation · affixes · range · file · code · multi-select", `
         ${spec("Text field states", `<div class="pg-form-grid">
           <div class="tm-field"><label class="tm-field__label" for="f1">Default</label><input class="tm-input" id="f1" placeholder="Placeholder text"><span class="tm-field__hint">Hint text explains the expected format.</span></div>
           <div class="tm-field"><label class="tm-field__label" for="f2">Hover</label><input class="tm-input is-hover" id="f2" value="${esc(fe.email)}"></div>
@@ -148,7 +156,11 @@ export default {
           <div class="tm-panel"><div class="tm-state tm-state--warning"><div class="tm-state__icon">${icon("clock")}</div><div class="tm-state__title">${esc(data.analytics.stalePanel.title)}</div><div class="tm-state__body">Last update ${data.analytics.stalePanel.ageMinutes} min ago. Showing cached values.</div></div></div></div>`, "pg-spec--wide")}
       `)}
 
-      ${section("navigation", "Navigation", "breadcrumbs · tabs · pagination · menu · chips · side nav", `
+      ${section("navigation", "Navigation", "breadcrumbs · tabs · pagination · menu · chips · side nav · command palette", `
+        ${spec("Command palette (P1)", `<div class="pg-stack-sm"><div class="pg-row-wrap"><button class="tm-btn tm-btn--outline" id="g-palette">${icon("search", "tm-icon--sm")}Open command palette</button><span class="tm-meta"><kbd class="tm-kbd">Ctrl</kbd> <kbd class="tm-kbd">K</kbd> on this page</span></div>
+          <div class="tm-palette pg-static-palette" role="group" aria-label="Command palette specimen"><div class="tm-palette__search">${icon("search")}<span class="tm-palette__input pg-static-input">the<span class="pg-caret"></span></span><kbd class="tm-kbd">Esc</kbd></div>
+          <div class="tm-palette__list"><div class="tm-palette__group tm-label">Theme</div><div class="tm-palette__item" aria-selected="true">${icon("sun", "tm-icon--sm")}<span>Switch <mark>the</mark>me: Light</span><span class="tm-palette__hint">current</span></div><div class="tm-palette__item is-hover">${icon("moon", "tm-icon--sm")}<span>Switch <mark>the</mark>me: Dark</span></div><div class="tm-palette__item">${icon("cup", "tm-icon--sm")}<span>Switch <mark>the</mark>me: Coffee</span></div></div>
+          <div class="tm-palette__foot"><span><kbd class="tm-kbd">↑</kbd> <kbd class="tm-kbd">↓</kbd> move</span><span><kbd class="tm-kbd">Enter</kbd> run</span><span><kbd class="tm-kbd">Esc</kbd> close</span></div></div></div>`, "pg-spec--wide")}
         ${spec("Breadcrumbs", `<nav aria-label="Breadcrumb sample"><ol class="tm-breadcrumbs"><li><a href="#/components">Projects</a></li><li><a href="#/components">Sample Field Manual</a></li><li><span aria-current="page">Analyse · P1</span></li></ol></nav>`)}
         ${spec("Tabs", `<div class="tm-tabs" role="tablist" aria-label="Sample tabs"><button class="tm-tab" role="tab" aria-selected="true">Preview</button><button class="tm-tab is-hover" role="tab" aria-selected="false" tabindex="-1">Terms <span class="tm-badge tm-badge--count">3</span></button><button class="tm-tab" role="tab" aria-selected="false" tabindex="-1">Observations</button><button class="tm-tab" role="tab" aria-selected="false" disabled>Locked</button></div>`)}
         ${spec("Pagination", `<div class="tm-pagination"><span class="tm-pagination__info">11–20 of 32</span><button class="tm-pagination__page" aria-label="Previous">‹</button><button class="tm-pagination__page">1</button><button class="tm-pagination__page" aria-current="page">2</button><button class="tm-pagination__page">3</button><button class="tm-pagination__page">4</button><button class="tm-pagination__page" aria-label="Next">›</button></div>
@@ -180,12 +192,24 @@ export default {
         ${spec("Loading · empty · error", `<div class="pg-stack-sm"><div class="tm-table-wrap" aria-busy="true"><table class="tm-table"><tbody>${[1, 2].map(() => `<tr><td><span class="tm-skeleton"></span></td><td><span class="tm-skeleton" style="width:60%"></span></td></tr>`).join("")}</tbody></table></div>
           <div class="tm-table-wrap"><div class="tm-state"><div class="tm-state__title">No rows</div><div class="tm-state__body">This view has no records yet.</div></div></div>
           <div class="tm-table-wrap"><div class="tm-state tm-state--error"><div class="tm-state__icon">${icon("danger")}</div><div class="tm-state__title">Could not load rows</div></div></div></div>`)}
+        ${spec("Verification code (P1)", `<div class="pg-stack-sm">
+          <div class="tm-field"><span class="tm-field__label" id="otp-l">Verification code</span><div class="tm-otp" id="g-otp" role="group" aria-labelledby="otp-l" aria-describedby="otp-h">${otpCells("otp", 6)}</div><span class="tm-field__hint" id="otp-h">6 digits from the test device. Paste fills every cell.</span></div>
+          <div class="tm-field"><span class="tm-field__label" id="otp2-l">Invalid code</span><div class="tm-otp" role="group" aria-labelledby="otp2-l" aria-describedby="otp2-e">${otpCells("otp2", 6, "481902", true)}</div><span class="tm-field__error" id="otp2-e">This code has expired. Request a new one.</span></div></div>`)}
+        ${spec("Multi-select (P1)", `<div class="pg-stack-sm">
+          <div class="tm-field"><label class="tm-field__label" for="g-ms-in">Teams</label><div class="tm-multiselect" id="g-ms"><input class="tm-multiselect__input" id="g-ms-in" data-placeholder="Choose teams…"></div><span class="tm-field__hint">Type to filter · Enter toggles · Backspace removes the last chip.</span></div>
+          <div class="tm-field"><span class="tm-field__label">Disabled</span><div class="tm-multiselect" aria-disabled="true"><span class="tm-chip">Research</span><span class="tm-chip">Sales</span></div></div>
+          <div class="tm-label">Open list (static)</div>
+          <div class="tm-menu tm-listbox pg-static-menu" role="group" aria-label="Open multi-select specimen">${["Research", "Sales", "Operations", "Finance"].map((t, i) => `<div class="tm-menu__item tm-listbox__option ${i === 2 ? "is-focus" : ""} ${i === 3 ? "is-hover" : ""}" aria-selected="${i < 2}"><span class="tm-listbox__box" aria-hidden="true">${icon("check")}</span>${t}${i === 2 ? " (keyboard)" : i === 3 ? " (hover)" : ""}</div>`).join("")}<div class="tm-listbox__foot"><span>2 of 4 selected</span><button type="button" class="tm-btn tm-btn--ghost tm-btn--sm" tabindex="-1">Clear</button></div></div></div>`)}
       `)}
 
-      ${section("overlays", "Overlays", "dialog · confirmation · drawer · menu", `
+      ${section("overlays", "Overlays", "dialog · confirmation · drawer · menu · non-modal sheet", `
         ${spec("Open live overlays", `<div class="pg-row-wrap"><button class="tm-btn tm-btn--outline" id="g-dialog">Open dialog</button><button class="tm-btn tm-btn--danger-outline" id="g-confirm">Confirmation</button><button class="tm-btn tm-btn--outline" id="g-drawer-btn">Open drawer</button></div>
           <p class="tm-meta pg-mt">Native <code>&lt;dialog&gt;</code>: top layer, Escape closes, backdrop click closes, focus returns to the trigger.</p>`)}
         ${spec("Dialog (static specimen)", `<div class="tm-dialog pg-static-dialog" role="group" aria-label="Dialog specimen"><div class="tm-dialog__head"><span class="tm-dialog__title">${esc(cs.confirmation.title)}</span><button class="tm-btn tm-btn--ghost tm-btn--icon tm-btn--sm" aria-label="Close" tabindex="-1">${icon("x")}</button></div><div class="tm-dialog__body">${esc(cs.confirmation.body)}</div><div class="tm-dialog__foot"><button class="tm-btn tm-btn--outline" tabindex="-1">${esc(cs.confirmation.cancel)}</button><button class="tm-btn tm-btn--danger" tabindex="-1">${esc(cs.confirmation.confirm)}</button></div></div>`, "pg-spec--wide")}
+        ${spec("Non-modal sheet (P1)", `<div class="pg-stack-sm"><div class="pg-row-wrap"><button class="tm-btn tm-btn--outline" id="g-sheet-btn">${icon("split", "tm-icon--sm")}Open inspector sheet</button></div>
+          <p class="tm-meta">No backdrop and no focus trap: the page stays usable while the sheet is open. Escape (with focus inside) or the close button closes it.</p>
+          ${sheetHTML("g-sheet-static", true)}</div>`)}
+        ${sheetHTML("g-sheet")}
         <dialog class="tm-dialog" id="g-dlg" aria-labelledby="g-dlg-t"><form method="dialog"><div class="tm-dialog__head"><h2 class="tm-dialog__title" id="g-dlg-t">Rename unit</h2><button class="tm-btn tm-btn--ghost tm-btn--icon tm-btn--sm" aria-label="Close">${icon("x")}</button></div>
           <div class="tm-dialog__body pg-stack-sm"><div class="tm-field"><label class="tm-field__label" for="g-dlg-in">Title</label><input class="tm-input" id="g-dlg-in" value="PROLOGUE" autofocus></div></div>
           <div class="tm-dialog__foot"><button class="tm-btn tm-btn--outline" value="cancel">Cancel</button><button class="tm-btn tm-btn--primary" value="ok">Save</button></div></form></dialog>
@@ -279,6 +303,39 @@ export default {
         t.querySelector("h2").focus({ preventScroll: true });
       }),
     );
+    // Scroll-spy: the section under the top fifth of the viewport is current.
+    const spyLinks = [...main.querySelectorAll("[data-jump]")];
+    const spy = new IntersectionObserver(
+      (entries) => entries.forEach((en) => {
+        if (en.isIntersecting) spyLinks.forEach((l) => (l.dataset.jump === en.target.id ? l.setAttribute("aria-current", "true") : l.removeAttribute("aria-current")));
+      }),
+      { rootMargin: "-20% 0px -70% 0px" },
+    );
+    main.querySelectorAll(".pg-gal-sec").forEach((sec) => spy.observe(sec));
+    spyLinks[0]?.setAttribute("aria-current", "true");
+    wireOtp($("#g-otp"), { onComplete: (v) => toast({ tone: "success", title: "Code complete", body: `Entered ${v} (demo only).`, timeout: 2500 }) });
+    const ms = wireMultiSelect($("#g-ms"), data.dataManagement.filters.team.filter((t) => t !== "all"), { selected: ["Research", "Sales"], label: "Teams" });
+    const go = (hash) => () => { location.hash = hash; };
+    const theme = (id) => () => document.querySelector(`[data-theme-option="${id}"]`)?.click();
+    const palette = createPalette(
+      [
+        { group: "Go to", label: "Analytics", icon: "analytics", run: go("#/analytics") },
+        { group: "Go to", label: "Workspace", icon: "workspace", run: go("#/workspace") },
+        { group: "Go to", label: "Workspace · Analyse", icon: "workspace", run: go("#/workspace/analyse") },
+        { group: "Go to", label: "Data Management", icon: "data", run: go("#/data") },
+        { group: "Go to", label: "Catalog", icon: "catalog", run: go("#/catalog") },
+        { group: "Go to", label: "Content Site", icon: "content", run: go("#/content") },
+        { group: "Theme", label: "Switch theme: Light", icon: "sun", run: theme("light") },
+        { group: "Theme", label: "Switch theme: Dark", icon: "moon", run: theme("dark") },
+        { group: "Theme", label: "Switch theme: Coffee", icon: "cup", run: theme("coffee") },
+        { group: "Actions", label: "Toggle navigation", icon: "collapse", hint: "sidebar", run: () => document.getElementById("sidebar-toggle").click() },
+        { group: "Actions", label: "Open inspector sheet", icon: "split", run: () => $("#g-sheet-btn").click() },
+        { group: "Actions", label: "Show a toast", icon: "info", run: () => toast({ tone: "info", title: "Command ran", body: "Palette commands are plain callbacks.", timeout: 2500 }) },
+      ],
+      { scope: main },
+    );
+    $("#g-palette").addEventListener("click", palette.open);
+    wireSheet($("#g-sheet"), $("#g-sheet-btn"));
     wireMenus(main);
     wireSteppers(main);
     bindMedia(main);
@@ -304,6 +361,6 @@ export default {
     main.querySelectorAll('input[name="cx-metric"]').forEach((r) => r.addEventListener("change", () => { cx.setMetric(r.value); drawLegend(); }));
     $("#cx-peak").addEventListener("change", (e) => cx.setPeak(e.target.checked));
     $("#cx-window").addEventListener("change", (e) => cx.setWindow(e.target.checked));
-    return () => { chart.destroy(); cx.destroy(); };
+    return () => { spy.disconnect(); ms.close(); palette.destroy(); $("#g-sheet")?.hidePopover?.(); chart.destroy(); cx.destroy(); };
   },
 };

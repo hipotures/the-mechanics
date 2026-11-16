@@ -44,3 +44,10 @@ All demo content comes from [`fixtures/demo-data.json`](../fixtures/demo-data.js
 
 ## Content site / gallery
 Website copy is used verbatim. The “About this project” paragraph, figure captions, CTA copy and token table are original synthetic text. The gallery reuses fixture strings (`stressText`, `statusValues`, `formExamples`, records, products).
+
+## Component Gallery — P1 specimens
+
+- **Multi-select** options are the Data Management team filter values (`dataManagement.filters.team` without `all`); the initial selection (Research, Sales) is fixed in code.
+- **Verification code** values (`481902` for the invalid specimen) and the inspector sheet contents (unit `ch0005_a001`, 14 terms, 3 observations, Nov 14, 2026 09:42) are fixed synthetic strings in the gallery code, not fixture fields.
+- **Command palette** commands are the playground's own routes, the three themes and three local actions; nothing is fetched or generated.
+

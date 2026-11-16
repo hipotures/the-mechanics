@@ -177,6 +177,24 @@ function donutOption(c, t, width) {
   };
 }
 
+// Heatmap cell label: the better of text/surface against the interpolated
+// cell color; mid-ramp cells, where neither reaches 4.5:1, get a 2px halo in the
+// opposite tone so the digits sit on a readable ground (see
+// docs/verification/contrast-derived.md).
+const hexRgb = (h) => (/^#[0-9a-f]{6}$/i.test(h) ? [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255) : null);
+const relLum = (c) => c.map((x) => (x <= 0.04045 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4)).reduce((s, x, i) => s + x * [0.2126, 0.7152, 0.0722][i], 0);
+const contrast = (a, b) => { const [x, y] = [relLum(a), relLum(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
+function heatLabel(t, v) {
+  const lo = hexRgb(t.heatLo), hi = hexRgb(t.heatHi), tx = hexRgb(t.text), sf = hexRgb(t.surface);
+  if (!lo || !hi || !tx || !sf) return { color: v >= 55 ? t.surface : t.text };
+  const bg = lo.map((x, i) => x + (hi[i] - x) * (v / 100));
+  const [rt, rs] = [contrast(tx, bg), contrast(sf, bg)];
+  const useText = rt >= rs;
+  return Math.max(rt, rs) >= 4.5
+    ? { color: useText ? t.text : t.surface }
+    : { color: useText ? t.text : t.surface, textBorderColor: useText ? t.surface : t.text, textBorderWidth: 2 };
+}
+
 function heatmapOption(c, t, width) {
   return {
     grid: catYGrid(c.series.map((r) => r.row), { right: 4, bottom: 22 }),
@@ -187,7 +205,7 @@ function heatmapOption(c, t, width) {
     series: [
       {
         type: "heatmap",
-        data: c.series.flatMap((r, ri) => r.values.map((v, i) => ({ value: [i, ri, v], label: { color: v >= 55 ? t.surface : t.text } }))),
+        data: c.series.flatMap((r, ri) => r.values.map((v, i) => ({ value: [i, ri, v], label: heatLabel(t, v) }))),
         label: { show: true, fontFamily: t.fontMono, fontSize: 10.5, fontWeight: 500 },
       },
     ],

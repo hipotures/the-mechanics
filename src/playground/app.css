@@ -304,9 +304,7 @@ tr:hover .pg-inline-edit,
 @media (max-width: 899px) {
   .pg-reading { grid-template-columns: minmax(0, 1fr); gap: var(--tm-space-4); padding-top: var(--tm-space-5); }
   .pg-toc-wrap { position: static; }
-  .pg-toc-wrap .tm-toc { display: flex; flex-wrap: wrap; border-left: 0; border-bottom: 1px solid var(--tm-line-3); }
-  .pg-toc-wrap .tm-toc a { border-left: 0; border-bottom: 2px solid transparent; margin: 0 0 -1px; }
-  .pg-toc-wrap .tm-toc a[aria-current] { border-bottom-color: var(--tm-select-line); }
+  .pg-toc-wrap .tm-toc { display: flex; flex-wrap: wrap; }
 }
 .pg-prose > section + section { margin-top: var(--tm-space-12); }
 .pg-prose h2:focus { outline: 0; }
@@ -336,8 +334,7 @@ h1:focus { outline: 0; }
 @media (max-width: 1099px) {
   .pg-gal-layout { grid-template-columns: minmax(0, 1fr); }
   .pg-gal-index { position: static; }
-  .pg-gal-index .tm-toc { display: flex; flex-wrap: wrap; border-left: 0; }
-  .pg-gal-index .tm-toc a { border-left: 0; padding: 2px var(--tm-space-2); }
+  .pg-gal-index .tm-toc { display: flex; flex-wrap: wrap; }
 }
 .pg-gal-sec { scroll-margin-top: calc(var(--tm-topbar-h) + 1rem); }
 .pg-gal-sec h2:focus { outline: 0; }
@@ -345,7 +342,8 @@ h1:focus { outline: 0; }
 .pg-spec { display: grid; gap: var(--tm-space-2); align-content: start; min-width: 0; }
 .pg-spec--wide { grid-column: 1 / -1; }
 .pg-spec__label { padding-bottom: var(--tm-space-1); border-bottom: 1px solid var(--tm-line-3); }
-.pg-spec__body { min-width: 0; }
+/* a specimen wider than its column (text-only zoom) scrolls in place */
+.pg-spec__body { min-width: 0; overflow-x: auto; padding: 0 6px 6px 2px; margin: 0 -6px -6px -2px; }
 .pg-swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr)); gap: var(--tm-space-2); }
 .pg-swatches--chart { grid-template-columns: repeat(auto-fill, minmax(5.5rem, 1fr)); }
 .pg-swatch { display: grid; grid-template-columns: 1.75rem minmax(0, 1fr); column-gap: var(--tm-space-2); align-items: center; }
@@ -440,3 +438,13 @@ h1:focus { outline: 0; }
   .pg-sections .pg-col-pass { width: 1.5rem; padding-inline: 1px; }
   .pg-sections .tm-mark { width: 0.95rem; height: 0.95rem; }
 }
+.pg-static-palette { margin: 0; width: 100%; max-width: 36rem; box-shadow: none; }
+.pg-static-input { display: flex; align-items: center; }
+.pg-caret { display: inline-block; width: 1px; height: 1.1em; margin-left: 1px; background: var(--tm-focus); }
+.pg-static-sheet, .tm-sheet.pg-static-sheet { position: static; width: 100%; max-width: 24rem; border-width: var(--tm-bw-1); border-radius: var(--tm-radius-2); box-shadow: none; animation: none; }
+.pg-sheet-dl { display: grid; grid-template-columns: auto 1fr; gap: var(--tm-space-1) var(--tm-space-4); margin: 0; }
+.pg-sheet-dl dt { color: var(--tm-text-2); }
+.pg-sheet-dl dd { margin: 0; color: var(--tm-text); }
+/* in-page nav labels line up with the item text (frame + pad) */
+.pg-gal-index > .tm-label,
+.pg-toc-wrap > .tm-label { padding-left: calc(var(--tm-bw-control) + var(--tm-select-pad)); }

@@ -85,10 +85,10 @@ export default {
               a2,
               `<div class="tm-alert tm-alert--${esc(s.callout.kind)}" role="note">${icon("info")}<div><div class="tm-alert__title">${esc(s.callout.heading)}</div><div class="tm-alert__body">${esc(s.callout.body)}</div></div></div>
                <h3>Border strength by level</h3>
-               <table><caption class="tm-sr-only">Border tokens by hierarchy level</caption><thead><tr><th scope="col">Level</th><th scope="col">Used for</th><th scope="col">Token</th></tr></thead><tbody>
+               <div class="tm-prose__scroll" tabindex="0" role="region" aria-label="Border tokens table"><table><caption class="tm-sr-only">Border tokens by hierarchy level</caption><thead><tr><th scope="col">Level</th><th scope="col">Used for</th><th scope="col">Token</th></tr></thead><tbody>
                  <tr><td>1 · Region</td><td>App shell, KPI strip, major sections</td><td><code>--tm-bw-1</code> + <code>--tm-line-1</code></td></tr>
                  <tr><td>2 · Panel</td><td>Panels, tables, cards, dialogs</td><td><code>--tm-bw-2</code> + <code>--tm-line-2</code></td></tr>
-                 <tr><td>3 · Record</td><td>Rows, nested groups, block labels</td><td><code>--tm-bw-3</code> + <code>--tm-line-3</code></td></tr></tbody></table>
+                 <tr><td>3 · Record</td><td>Rows, nested groups, block labels</td><td><code>--tm-bw-3</code> + <code>--tm-line-3</code></td></tr></tbody></table></div>
                <h3>Using the CSS without a framework</h3>
                <pre><code>&lt;link rel="stylesheet" href="the-mechanics/fonts.css"&gt;
 &lt;link rel="stylesheet" href="the-mechanics/the-mechanics.css"&gt;

@@ -182,6 +182,52 @@
     /* aligned with item text: inset + frame + pad */
     padding: var(--tm-space-3) calc(var(--tm-bw-control) + var(--tm-select-pad)) var(--tm-space-1);
   }
+  /* Collapsible group: the section label becomes a button with a chevron.
+     A collapsed group keeps only its current item visible. */
+  .tm-nav__group {
+    display: grid;
+    gap: var(--tm-space-1);
+  }
+  .tm-nav__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--tm-space-2);
+    width: 100%;
+    margin: 0;
+    border: var(--tm-bw-control) solid transparent;
+    border-radius: var(--tm-radius-control);
+    padding-left: var(--tm-select-pad);
+    padding-right: var(--tm-select-pad);
+    background: transparent;
+    color: var(--tm-text-2);
+    text-align: left;
+    cursor: pointer;
+  }
+  .tm-nav__toggle:hover {
+    color: var(--tm-text);
+  }
+  .tm-nav__toggle:focus-visible {
+    outline: 0;
+    border-color: var(--tm-focus);
+  }
+  .tm-nav__toggle .tm-icon {
+    flex: none;
+    transition: transform var(--tm-dur-fast) var(--tm-ease);
+  }
+  .tm-nav__toggle[aria-expanded="false"] .tm-icon {
+    transform: rotate(-90deg);
+  }
+  .tm-nav__group[data-open="false"] > .tm-nav > li:not(:has([aria-current="page"])) {
+    display: none;
+  }
+  /* Icon-only rail and the mobile strip always list every destination. */
+  .tm-shell[data-sidebar="collapsed"] .tm-nav__toggle {
+    display: none;
+  }
+  .tm-shell[data-sidebar="collapsed"] .tm-nav__group > .tm-nav > li {
+    display: list-item;
+  }
   .tm-nav__item {
     position: relative;
     display: flex;
@@ -257,8 +303,13 @@
       padding: var(--tm-space-1-5) var(--tm-space-2);
       scrollbar-width: thin;
     }
-    .tm-sidebar .tm-nav {
+    .tm-sidebar .tm-nav,
+    .tm-sidebar .tm-nav__group {
+      display: flex;
       flex-direction: row;
+    }
+    .tm-sidebar .tm-nav__group > .tm-nav > li {
+      display: list-item;
     }
     .tm-sidebar .tm-nav__section,
     .tm-sidebar [data-tm-desktop-only] {
@@ -2214,6 +2265,7 @@
     grid-template-columns: auto minmax(0, 1fr);
     gap: 2px var(--tm-space-2);
     align-items: center;
+    align-content: start; /* taller neighbours must not spread title and note apart */
     min-width: 0;
     padding: var(--tm-space-3);
     border: 0;
@@ -3203,6 +3255,12 @@
     font-size: var(--tm-text-xs);
     line-height: 1.6;
   }
+  /* Wide prose tables scroll inside this wrapper instead of widening the
+     page (narrow screens, text-only zoom). */
+  .tm-prose .tm-prose__scroll {
+    max-width: 100%;
+    overflow-x: auto;
+  }
   .tm-prose table {
     width: 100%;
     border-collapse: collapse;
@@ -3256,31 +3314,44 @@
     gap: var(--tm-space-2);
   }
 
+  /* In-page navigation follows the item grammar of the side nav: hover =
+     grey block, current section = selection fill, keyboard focus = the
+     block's frame. No rail and no side bar. */
   .tm-toc {
     display: grid;
-    gap: 1px;
+    gap: 0;
     margin: 0;
     padding: 0;
     list-style: none;
-    border-left: 1px solid var(--tm-line-3);
     font-size: var(--tm-text-sm);
   }
   .tm-toc a {
     display: block;
-    margin-left: -1px;
-    padding: var(--tm-space-1) var(--tm-space-3);
-    border-left: 2px solid transparent;
+    padding: var(--tm-select-pad-y) var(--tm-select-pad);
+    border: var(--tm-bw-control) solid transparent;
+    border-radius: var(--tm-radius-control);
     color: var(--tm-text-2);
     text-decoration: none;
   }
-  .tm-toc a:hover {
+  .tm-toc a:hover,
+  .tm-toc a.is-hover {
     color: var(--tm-text);
     background: var(--tm-hover);
   }
   .tm-toc a[aria-current="true"],
   .tm-toc a[aria-current="location"] {
-    border-left-color: var(--tm-select-line);
+    background: var(--tm-select-bg);
+    border-color: var(--tm-select-frame);
     color: var(--tm-text);
+  }
+  .tm-toc a:focus-visible,
+  .tm-toc a.is-focus {
+    outline: 0;
+    border-color: var(--tm-focus);
+  }
+  .tm-toc--row {
+    display: flex;
+    flex-wrap: wrap;
   }
 
   .tm-footer {
@@ -3289,5 +3360,269 @@
     color: var(--tm-text-3);
     font-family: var(--tm-font-mono);
     font-size: var(--tm-text-xs);
+  }
+
+  /* Touch screens keep :hover on the last tapped element. Item blocks drop
+     the hover tint there so a tapped link never looks selected. */
+  @media (hover: none) {
+    .tm-nav__item:hover:not([aria-current="page"]),
+    .tm-toc a:hover:not([aria-current]) {
+      background: transparent;
+    }
+    .tm-row--interactive:hover:not(.is-hover, .is-selected, [aria-selected="true"], [aria-current="true"])::before {
+      content: none;
+    }
+  }
+
+  /* =================================================================
+     P1 components — verification code, multi-select, command palette,
+     non-modal sheet. Built from the same controls and item grammar.
+     ================================================================= */
+
+  /* Verification code: one boxed cell per character, grouped. */
+  .tm-otp {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--tm-space-1-5);
+  }
+  .tm-otp__cell.tm-input {
+    width: var(--tm-control-lg);
+    min-height: var(--tm-control-lg);
+    padding: 0;
+    font-family: var(--tm-font-mono);
+    font-size: var(--tm-text-lg);
+    font-weight: var(--tm-weight-semibold);
+    text-align: center;
+    caret-color: var(--tm-focus);
+  }
+  .tm-otp__sep {
+    width: var(--tm-space-2);
+    height: var(--tm-bw-control);
+    background: var(--tm-text-3);
+  }
+
+  /* Multi-select: a field that holds chips and a filter input; the option
+     list is a .tm-menu.tm-listbox with aria-multiselectable. */
+  .tm-multiselect {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--tm-space-1);
+    min-height: var(--tm-control-md);
+    padding: 2px var(--tm-space-1);
+    border: var(--tm-bw-control) solid var(--tm-ink);
+    border-radius: var(--tm-radius-control);
+    background: var(--tm-inset);
+    cursor: text;
+  }
+  .tm-multiselect:focus-within,
+  .tm-multiselect.is-focus {
+    outline: var(--tm-bw-focus) solid var(--tm-focus);
+    outline-offset: 0;
+    border-color: var(--tm-focus);
+  }
+  .tm-multiselect[aria-disabled="true"] {
+    background: var(--tm-surface-alt);
+    border-color: var(--tm-line-disabled);
+    cursor: not-allowed;
+  }
+  .tm-multiselect .tm-chip {
+    min-height: 1.375rem;
+  }
+  .tm-multiselect__input {
+    flex: 1 1 6rem;
+    min-width: 4rem;
+    min-height: 1.5rem;
+    padding: 0 var(--tm-space-1);
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--tm-text);
+    font: inherit;
+    font-size: var(--tm-text-sm);
+  }
+  .tm-multiselect__input::placeholder {
+    color: var(--tm-text-3);
+    opacity: 1;
+  }
+  /* Multi-select options carry a check box so "several may be chosen" is
+     visible before anything is chosen; selection is still the fill. */
+  .tm-listbox__box {
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    width: 0.875rem;
+    height: 0.875rem;
+    border: var(--tm-bw-control) solid var(--tm-ink);
+    border-radius: 1px;
+    background: var(--tm-inset);
+  }
+  .tm-listbox__box .tm-icon {
+    width: 10px;
+    height: 10px;
+    visibility: hidden;
+  }
+  [aria-selected="true"] > .tm-listbox__box {
+    background: var(--tm-ink);
+    color: var(--tm-inset);
+  }
+  [aria-selected="true"] > .tm-listbox__box .tm-icon {
+    visibility: visible;
+  }
+  .tm-listbox__foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--tm-space-2);
+    margin: var(--tm-select-inset-y) calc(var(--tm-select-inset) * -1) calc(var(--tm-select-inset-y) * -1);
+    padding: var(--tm-space-1) var(--tm-space-2) var(--tm-space-1) var(--tm-space-3);
+    border-top: var(--tm-bw-3) solid var(--tm-line-3);
+    color: var(--tm-text-2);
+    font-size: var(--tm-text-xs);
+  }
+  .tm-listbox__empty {
+    padding: var(--tm-space-2) var(--tm-select-pad);
+    color: var(--tm-text-2);
+    font-size: var(--tm-text-sm);
+  }
+
+  /* Command palette: a dialog near the top with a search field and a
+     grouped result list. The active result (aria-activedescendant) uses the
+     selection fill; focus stays in the search field. */
+  .tm-palette {
+    width: min(36rem, calc(100vw - 2rem));
+    margin: 12vh auto auto;
+    padding: 0;
+    border: var(--tm-bw-1) solid var(--tm-line-1);
+    border-radius: var(--tm-radius-2);
+    background: var(--tm-surface);
+    color: var(--tm-text);
+    box-shadow: var(--tm-shadow-overlay);
+  }
+  .tm-palette::backdrop {
+    background: var(--tm-backdrop);
+  }
+  .tm-palette__search {
+    display: flex;
+    align-items: center;
+    gap: var(--tm-space-2);
+    padding: 0 var(--tm-space-3);
+    border-bottom: var(--tm-bw-1) solid var(--tm-line-1);
+    color: var(--tm-text-2);
+  }
+  .tm-palette__input {
+    flex: 1;
+    min-width: 0;
+    min-height: var(--tm-control-lg);
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--tm-text);
+    font: inherit;
+    font-size: var(--tm-text-md);
+  }
+  .tm-palette__input::placeholder {
+    color: var(--tm-text-3);
+    opacity: 1;
+  }
+  .tm-palette:has(.tm-palette__input:focus-visible) .tm-palette__search {
+    box-shadow: inset 0 calc(var(--tm-bw-focus) * -1) 0 var(--tm-focus);
+  }
+  .tm-palette__list {
+    max-height: min(22rem, 55vh);
+    overflow-y: auto;
+    margin: 0;
+    padding: var(--tm-select-inset-y) var(--tm-select-inset) var(--tm-space-1);
+    list-style: none;
+  }
+  .tm-palette__group {
+    padding: var(--tm-space-2) calc(var(--tm-bw-control) + var(--tm-select-pad)) var(--tm-space-1);
+  }
+  .tm-palette__item {
+    display: flex;
+    align-items: center;
+    gap: var(--tm-space-2);
+    min-height: var(--tm-control-md);
+    padding: 0 var(--tm-select-pad);
+    border: var(--tm-bw-control) solid transparent;
+    border-radius: var(--tm-radius-control);
+    color: var(--tm-text);
+    font-size: var(--tm-text-sm);
+    cursor: pointer;
+  }
+  .tm-palette__item > .tm-icon {
+    flex: none;
+    color: var(--tm-text-2);
+  }
+  .tm-palette__item:hover,
+  .tm-palette__item.is-hover {
+    background: var(--tm-hover);
+  }
+  .tm-palette__item[aria-selected="true"] {
+    background: var(--tm-select-bg);
+    border-color: var(--tm-select-frame);
+  }
+  .tm-palette__hint {
+    margin-left: auto;
+    color: var(--tm-text-2);
+    font-family: var(--tm-font-mono);
+    font-size: var(--tm-text-xs);
+  }
+  .tm-palette__item mark {
+    background: transparent;
+    color: inherit;
+    font-weight: var(--tm-weight-bold);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .tm-palette__empty {
+    padding: var(--tm-space-4) var(--tm-space-3);
+    color: var(--tm-text-2);
+  }
+  .tm-palette__foot {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--tm-space-1) var(--tm-space-4);
+    padding: var(--tm-space-1-5) var(--tm-space-3);
+    border-top: var(--tm-bw-3) solid var(--tm-line-3);
+    background: var(--tm-surface-alt);
+    color: var(--tm-text-2);
+    font-size: var(--tm-text-xs);
+  }
+
+  /* Non-modal sheet: a docked panel that leaves the page usable (no
+     backdrop, no focus trap). Use with popover="manual". */
+  .tm-sheet {
+    position: fixed;
+    inset: auto var(--tm-space-4) var(--tm-space-4) auto;
+    width: min(24rem, calc(100vw - 2rem));
+    max-height: min(32rem, 70dvh);
+    margin: 0;
+    padding: 0;
+    border: var(--tm-bw-1) solid var(--tm-line-1);
+    border-radius: var(--tm-radius-2);
+    background: var(--tm-surface);
+    color: var(--tm-text);
+    box-shadow: var(--tm-shadow-overlay);
+  }
+  .tm-sheet:popover-open,
+  .tm-sheet.is-open {
+    display: flex;
+    flex-direction: column;
+    animation: tm-dialog-in var(--tm-dur-base) var(--tm-ease);
+  }
+  .tm-sheet > .tm-dialog__body {
+    flex: 1;
+    overflow-y: auto;
+  }
+  @media (max-width: 639px) {
+    .tm-sheet {
+      inset: auto 0 0 0;
+      width: 100%;
+      max-height: 60dvh;
+      border-width: var(--tm-bw-1) 0 0;
+      border-radius: 0;
+    }
   }
 }

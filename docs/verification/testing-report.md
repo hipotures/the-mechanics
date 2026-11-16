@@ -64,32 +64,40 @@ Round 3 (owner review):
 48. Owner: selection differed between side nav, menus, select options (tick shifted labels) and rows (focus ring around the whole row) → one item grammar for all pickable items; select options without tick, aligned with the closed field; menus framed in ink. After comparing with an owner reference, selection is fill-only (`--tm-select-frame: transparent`); keyboard focus keeps its own frame; Dark/Coffee selection fills strengthened to stay distinct from hover (contrast re-checked, 0 failures).
 49. Owner: native date/time popups (rounded, blue, red weekends) → `.tm-picker` popover (Monday-first calendar, 24h hour/minute columns, full keyboard) over native inputs. The Chromium base-select option popup cannot be captured by the headless shell; the scripted fallback list was inspected instead.
 44. Owner: thin panel frames held thick controls (inverted hierarchy) → after reviewing the original theme and two rejected intermediate variants, approved structure rule: free-standing objects and container dividers 2px ink, lines that touch other lines thin, controls 2px; Workspace columns, analytics panels, KPI tiles and the product grid become cells of one framed container; field groups get a thick frame with the legend on it.
+50. Owner (Data Management): two rows looked selected but the counter said 3 (the third on page 2), the header checkbox deselected only the current page, and there was no way to see the whole selection → bulk bar adds “Show selected only” (toggle, also shown as a removable “Selected only” filter chip) and, when a full page is selected and more rows match, “Select all N matching”. An “N on this page” note was tried and removed at the owner's request (it repeated what the table shows). Smoke check added.
+51. Owner review closed: Coffee warning/alert hues kept; dialog weight kept (no lighter variant).
+52. Gallery SECTIONS had no current-section indicator, and the content-site TOC still used a rail with a side bar (against the no-side-bar rule) → `.tm-toc` now uses the item grammar (selection fill for the current section, hover block, focus frame); scroll-spy added to the gallery. Verified in Light/Dark/Coffee, desktop and narrow (wrapped) layouts.
+53. Owner phone screenshots: a tapped TOC link kept the grey hover block (sticky :hover on touch) → under `hover: none` nav/TOC links and list rows drop the hover tint. Pipeline stage cells stretched to the row height spread title and note apart (“Review” cell) → stage content is top-aligned.
+54. Collapsible side-nav groups (owner request after the lime reference): header button with chevron and `aria-expanded`, state persisted; a collapsed group keeps its current page visible; the icon rail and phone strip always list every destination. Smoke check added.
+55. P1 components added to the gallery: verification code, multi-select, command palette (Ctrl/⌘+K), non-modal sheet (bottom sheet on phones). Verified in Light/Dark/Coffee (static specimens + live open states), keyboard paths in smoke. The ↵ glyph is missing from IBM Plex Mono, so key hints say “Enter”.
+56. Derived-color contrast measured (`scripts/contrast-derived.mjs`, 69 checks): hover/press tints on every surface, danger button hover/press, chart range band and brush pass; the ECharts heatmap failed at mid-ramp (2.2:1 Light, 2.8:1 Dark, 3.1:1 Coffee at 55 %; no single label color reaches 4.5:1 there) → cell labels pick the higher-contrast color and mid-ramp cells get a 2px halo in the other tone; all checks pass.
+57. Reflow and text checks (Playwright, all 7 views): 320px wide, 200% text (`html { font-size: 200% }`) at 1280px, and WCAG 1.4.12 text spacing (line-height 1.5, letter 0.12em, word 0.16em, paragraph 2em). Found: content-site table and gallery specimens widened the page at 200% text → prose tables scroll in `.tm-prose__scroll`, gallery specimens scroll in place. After: no horizontal page scroll in any mode, no clipped text outside intentionally truncated/visually-hidden elements.
+58. Smoke test ran its own preview on port 4174, which collides with the side-by-side variant server → it now uses its own port (4175, `SMOKE_PORT`).
 
 ### Interaction / keyboard checks — `pnpm smoke` (all pass, [`smoke-results.json`](smoke-results.json))
 Desktop 1440×900, Chromium:
 - Theme switch: instant, reflected in `?theme=`, persisted across reload; **page width/height identical across Light/Dark/Coffee on all 6 pages**.
 - Keyboard: first Tab reaches the skip link; focus ring is `solid 2px`.
-- Navigation `aria-current`, sidebar collapse.
+- Navigation `aria-current`, sidebar collapse, side-nav group collapse (current page stays visible).
 - Analytics: 18 panels (15 SVG charts + incident table + 2 state panels), legend toggle `aria-pressed`, keyboard tooltip via arrow keys, service filter, 7d empty states, refresh loading skeleton + toast.
 - Workspace: no-results search, unit selection, arrow-key tabs, long-term wrap row, load-next loading → end notice.
-- Data: initial indeterminate header, sort `aria-sort`, pagination, empty query, select-all, bulk deactivate dialog (Escape closes and **focus returns** to trigger; confirm applies + toast), row menu via keyboard, inline rename with Enter, editor validation (invalid → fixed), loading and error states.
+- Data: selection across pages (selected-only view and chip, select all matching, clear); initial indeterminate header, sort `aria-sort`, pagination, empty query, select-all, bulk deactivate dialog (Escape closes and **focus returns** to trigger; confirm applies + toast), row menu via keyboard, inline rename with Enter, editor validation (invalid → fixed), loading and error states.
 - Catalog: no-results query, PROD-012 drawer with missing-image failure state, cart discount `NOTVALID` error, category filter.
 - Content: TOC moves focus to section heading.
-- Gallery: popover menu arrow keys + Escape, tooltip on focus + Escape dismissal, dialog.
+- Gallery: popover menu arrow keys + Escape, tooltip on focus + Escape dismissal, dialog; verification code advance/Backspace, multi-select filter/Enter/Backspace/Escape, command palette Ctrl+K → filter → Enter runs, non-modal sheet (page behind stays usable, Escape returns focus).
 - Reduced motion: spinner animation duration ≈ 0.
 - No uncaught page errors during the run.
 
 ### Contrast — `pnpm check:contrast`
-39 essential token pairs × 3 themes, all ≥ 4.5:1 (text) / ≥ 3:1 (graphics, control boundaries, focus ring, chart series). Full table: [`contrast.md`](contrast.md).
+48 essential token pairs × 3 themes, all ≥ 4.5:1 (text) / ≥ 3:1 (graphics, control boundaries, focus ring, chart series). Full table: [`contrast.md`](contrast.md). Derived colors (hover/press tints composited per surface, heatmap ramp, danger hover/press mixes, chart overlays): 69 checks, all pass — [`contrast-derived.md`](contrast-derived.md).
 
 ### Build
 `pnpm build` (CSS distribution + Vite production build) succeeds; the compiled CSS was loaded alone in `examples/plain-html/` and rendered correctly (fonts, Light and Coffee themes).
 
 ## Not tested / limitations
-- **Browsers:** only Chromium. Firefox and Safari were not run (native `popover`, `:has()`, `color-mix()` and range-thumb styling should be checked there; range fill uses a WebKit-only gradient with a Firefox `::-moz-range-progress` fallback).
-- **Screen readers:** no NVDA/JAWS/VoiceOver session. ARIA roles/labels were authored and spot-checked through DOM assertions only.
-- **Contrast of non-token colors:** translucent hover tints, `color-mix()` heatmap cells (mid-range cells, ~55 %, have the lowest text contrast) and chart text on fills were not measured.
-- **Tablet widths** (640–1200 px) were not screenshot-reviewed; layouts have breakpoints at 640/900/1200 but only 390 and 1440 were captured.
-- **Mobile interactions** (touch, drawers on mobile, menu positioning on narrow screens) were not exercised by the smoke test; only mobile static rendering was reviewed.
-- **Zoom / text-spacing** (WCAG 1.4.4, 1.4.12) not tested.
+- **Browsers:** automated runs use Chromium only. The owner uses **Firefox** day to day and reviewed the playground there manually (select fallback, layouts, themes); Safari was not checked. Automated Firefox runs still need GTK system libraries (sudo), not installed per project policy.
+- **Screen readers:** no NVDA/JAWS/VoiceOver/TalkBack session. ARIA roles/labels were authored and spot-checked through DOM assertions only.
+- **Tablet widths** (640–1200 px): not captured by the screenshot script; the owner reviewed a narrowed desktop window (about one third of a 4K screen) and found no issues. The smoke width sweep (360–1920px) asserts no overflow.
+- **Mobile interactions:** the owner exercised the apps on a phone (menus, select list, editor, tables, workspace, content site) and sent screenshots; findings are items 53. Automated touch checks cover chart tooltips only.
+- **Text-only zoom:** at 200% text the gallery's side index keeps its rem width, so the specimen column becomes narrow (no overflow, but cramped); browser zoom (which also changes the viewport width) switches layouts normally.
 - No claim of full WCAG 2.2 AA conformance is made.

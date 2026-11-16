@@ -15,6 +15,7 @@ export default {
       sort: { key: "updated", dir: "desc" },
       page: 1,
       selected: new Set(dm.selectionSample.selectedIds),
+      onlySelected: false,
       density: "compact",
       mode: "live",
       inline: null,
@@ -76,6 +77,7 @@ export default {
         (r) =>
           (st.status === "all" || r.status === st.status) &&
           (st.team === "all" || r.team === st.team) &&
+          (!st.onlySelected || st.selected.has(r.id)) &&
           (!q || [r.name, r.email, r.id, r.note || ""].some((v) => v.toLowerCase().includes(q))),
       );
       const { key, dir } = st.sort;
@@ -188,12 +190,22 @@ export default {
         </nav>`;
     }
 
+    // Selection spans pages: the count is the whole selection; "Show selected
+    // only" lists all of it, "Select all N matching" extends a full page.
     function renderBulk() {
       const n = st.selected.size;
       const bulk = $("#bulk");
+      if (!n && st.onlySelected) st.onlySelected = false;
       bulk.hidden = n === 0;
       if (!n) return;
+      const rows = st.mode === "live" ? filtered() : [];
+      const pageRows = rows.slice((st.page - 1) * dm.pageSize, st.page * dm.pageSize);
+      const onPage = pageRows.filter((r) => st.selected.has(r.id)).length;
+      const unselected = rows.filter((r) => !st.selected.has(r.id)).length;
+      const pageFull = pageRows.length > 0 && onPage === pageRows.length;
       bulk.innerHTML = `<span class="tm-badge tm-badge--count">${n}</span><span class="pg-bulk__label">selected</span>
+        ${pageFull && unselected ? `<button class="tm-btn tm-btn--sm tm-btn--ghost" data-bulk="all">Select all ${rows.length} matching</button>` : ""}
+        <button class="tm-btn tm-btn--sm tm-btn--outline" data-bulk="only" aria-pressed="${st.onlySelected}">${icon(st.onlySelected ? "x" : "filter", "tm-icon--sm")}${st.onlySelected ? "Show all rows" : "Show selected only"}</button>
         <button class="tm-btn tm-btn--sm tm-btn--outline" data-bulk="export">${icon("download", "tm-icon--sm")}${esc(dm.bulkActions[0])}</button>
         <button class="tm-btn tm-btn--sm tm-btn--outline" popovertarget="assign-menu">${esc(dm.bulkActions[1])}${icon("chevronDown", "tm-icon--sm")}</button>
         <div class="tm-menu" id="assign-menu" popover role="menu" aria-label="Assign team">
@@ -210,6 +222,7 @@ export default {
       if (st.query) chips.push(["query", `Search: ${st.query}`]);
       if (st.status !== "all") chips.push(["status", `Status: ${st.status}`]);
       if (st.team !== "all") chips.push(["team", `Team: ${st.team}`]);
+      if (st.onlySelected) chips.push(["only", "Selected only"]);
       const el = $("#chips");
       el.hidden = !chips.length;
       el.innerHTML = chips.length
@@ -227,6 +240,7 @@ export default {
       st.query = "";
       st.status = "all";
       st.team = "all";
+      st.onlySelected = false;
       $("#q").value = "";
       $("#f-status").value = "all";
       $("#f-team").value = "all";
@@ -357,6 +371,7 @@ export default {
         if (k === "query") { st.query = ""; $("#q").value = ""; }
         if (k === "status") { st.status = "all"; $("#f-status").value = "all"; }
         if (k === "team") { st.team = "all"; $("#f-team").value = "all"; }
+        if (k === "only") st.onlySelected = false;
         render();
         $("#q").focus();
         return;
@@ -376,7 +391,9 @@ export default {
       const bulk = t.closest("[data-bulk]");
       if (bulk) {
         const k = bulk.dataset.bulk;
-        if (k === "clear") { st.selected.clear(); render(); $("#q").focus(); }
+        if (k === "clear") { st.selected.clear(); st.onlySelected = false; render(); $("#q").focus(); }
+        if (k === "only") { st.onlySelected = !st.onlySelected; st.page = 1; render(); $('[data-bulk="only"]').focus(); }
+        if (k === "all") { filtered().forEach((r) => st.selected.add(r.id)); render(); $('[data-bulk="only"]').focus(); }
         if (k === "export") toast({ tone: "success", title: `${st.selected.size} accounts exported`, body: [...st.selected].join(", ") });
         if (k === "deactivate") deactivate([...st.selected]);
         return;
@@ -393,14 +410,12 @@ export default {
       if (t.id === "check-all") {
         const ids = [...main.querySelectorAll("[data-select]")].map((c) => c.dataset.select);
         ids.forEach((id) => (t.checked ? st.selected.add(id) : st.selected.delete(id)));
-        renderTable();
-        renderBulk();
-        $("#check-all").focus();
+        render();
+        $("#check-all")?.focus();
       } else if (t.dataset.select) {
         t.checked ? st.selected.add(t.dataset.select) : st.selected.delete(t.dataset.select);
-        renderTable();
-        renderBulk();
-        $(`[data-select="${t.dataset.select}"]`).focus();
+        render();
+        ($(`[data-select="${t.dataset.select}"]`) || $("#check-all"))?.focus();
       }
     });
     function saveInline() {

@@ -44,6 +44,15 @@ function navItem(p) {
   return `<li><a class="tm-nav__item" href="#/${p.id}" data-nav="${p.id}" title="${esc(p.label)}">${icon(p.icon)}<span class="tm-nav__label">${esc(p.label)}</span></a></li>`;
 }
 
+// Collapsible nav group: the header toggles the list; a collapsed group still
+// shows its current page so the active destination never disappears.
+function navGroup(id, label) {
+  return `<div class="tm-nav__group" data-open="true">
+    <button type="button" class="tm-nav__section tm-nav__toggle tm-label" aria-expanded="true" aria-controls="nav-${id}" data-nav-group="${id}"><span>${esc(label)}</span>${icon("chevronDown", "tm-icon--sm")}</button>
+    <ul class="tm-nav" id="nav-${id}">${PAGES.filter((p) => p.group === id).map(navItem).join("")}</ul>
+  </div>`;
+}
+
 app.innerHTML = `
 <a class="pg-skip tm-btn tm-btn--primary" href="#main">Skip to content</a>
 <div class="tm-shell" data-sidebar="expanded" id="shell">
@@ -62,10 +71,8 @@ app.innerHTML = `
     </fieldset>
   </header>
   <nav class="tm-sidebar" id="sidebar" aria-label="Destinations"><div class="tm-sidebar__inner">
-    <div class="tm-nav__section tm-label">Example apps</div>
-    <ul class="tm-nav">${PAGES.filter((p) => p.group === "apps").map(navItem).join("")}</ul>
-    <div class="tm-nav__section tm-label">System</div>
-    <ul class="tm-nav">${PAGES.filter((p) => p.group === "system").map(navItem).join("")}</ul>
+    ${navGroup("apps", "Example apps")}
+    ${navGroup("system", "System")}
     <div class="pg-sidebar-foot" data-tm-desktop-only>
       <p class="tm-meta pg-sidebar-note">Synthetic fixtures only. Themes change color, never geometry.</p>
     </div>
@@ -89,6 +96,21 @@ document.getElementById("sidebar-toggle").addEventListener("click", (e) => {
 try {
   if (localStorage.getItem("tm-sidebar") === "collapsed") document.getElementById("sidebar-toggle").click();
 } catch {}
+
+function setGroup(btn, open) {
+  btn.setAttribute("aria-expanded", String(open));
+  btn.closest(".tm-nav__group").dataset.open = String(open);
+}
+let closedGroups = [];
+try { closedGroups = JSON.parse(localStorage.getItem("tm-nav-closed") || "[]"); } catch {}
+document.querySelectorAll("[data-nav-group]").forEach((btn) => {
+  if (closedGroups.includes(btn.dataset.navGroup)) setGroup(btn, false);
+  btn.addEventListener("click", () => {
+    setGroup(btn, btn.getAttribute("aria-expanded") !== "true");
+    const closed = [...document.querySelectorAll('[data-nav-group][aria-expanded="false"]')].map((b) => b.dataset.navGroup);
+    try { localStorage.setItem("tm-nav-closed", JSON.stringify(closed)); } catch {}
+  });
+});
 
 let cleanup = null;
 let currentId = null;
