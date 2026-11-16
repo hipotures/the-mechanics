@@ -344,6 +344,10 @@ h1:focus { outline: 0; }
 .pg-spec__label { padding-bottom: var(--tm-space-1); border-bottom: 1px solid var(--tm-line-3); }
 /* a specimen wider than its column (text-only zoom) scrolls in place */
 .pg-spec__body { min-width: 0; overflow-x: auto; padding: 0 6px 6px 2px; margin: 0 -6px -6px -2px; }
+/* specimens with tooltips must not clip their bubbles */
+.pg-spec__body:has(.tm-tip) { overflow: visible; }
+/* the hovered and the forced-open demo tooltips must not overlap */
+.pg-tip-demo { gap: var(--tm-space-4) 12rem; align-items: flex-end; padding-top: 4.5rem; }
 .pg-swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr)); gap: var(--tm-space-2); }
 .pg-swatches--chart { grid-template-columns: repeat(auto-fill, minmax(5.5rem, 1fr)); }
 .pg-swatch { display: grid; grid-template-columns: 1.75rem minmax(0, 1fr); column-gap: var(--tm-space-2); align-items: center; }
@@ -360,7 +364,7 @@ h1:focus { outline: 0; }
 .pg-matrix th { font-family: var(--tm-font-mono); font-size: var(--tm-text-2xs); text-transform: uppercase; letter-spacing: var(--tm-tracking-label); color: var(--tm-text-3); font-weight: 600; text-align: left; padding: 4px 10px 4px 0; }
 .pg-matrix td { padding: 6px 10px 6px 0; }
 .pg-form-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr)); gap: var(--tm-space-4); }
-.pg-tip-demo { padding-top: 3rem; }
+
 .pg-static-menu { position: static; box-shadow: var(--tm-shadow-overlay); }
 .pg-mini-nav { width: 12rem; padding: var(--tm-space-2); background: var(--tm-surface); border: var(--tm-bw-1) solid var(--tm-line-1); }
 .pg-mini-nav--collapsed { width: auto; }
