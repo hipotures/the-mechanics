@@ -54,7 +54,7 @@ function panel(c, staleMin) {
   return `<article class="tm-panel ${WIDE.has(c.id) ? "pg-span-2" : ""} ${FULL.has(c.id) ? "pg-span-full" : ""}" data-panel="${esc(c.id)}" aria-labelledby="p-${esc(c.id)}">
     <header class="tm-panel__head">
       <h3 class="tm-panel__title" id="p-${esc(c.id)}">${esc(c.title)}</h3>
-      ${stale ? status("warning", `Delayed ${staleMin} min`) : `<span class="tm-panel__meta">${esc(c.unit)}</span>`}
+      ${stale ? status("warning", `Delayed ${staleMin} min`) : c.kind === "heatmap" ? `<button type="button" class="tm-meta-toggle" data-heat-labels aria-pressed="${heatAuto()}" aria-label="Auto label color (values in ${esc(c.unit)})" title="Label color — off: every value in the text color · on: dark or light per cell">${esc(c.unit || "")}</button>` : `<span class="tm-panel__meta">${esc(c.unit)}</span>`}
     </header>
     <div class="tm-panel__body ${c.kind === "table" ? "tm-panel__body--flush" : ""}" data-body>
       ${
@@ -74,7 +74,6 @@ function panel(c, staleMin) {
             : ""
       }
       ${c.kind === "table" ? incidentTable(c) : `<div class="tm-chart" data-chart="${esc(c.id)}"></div>`}
-      ${c.kind === "heatmap" ? `<div class="tm-chart-options"><button type="button" class="tm-btn tm-btn--sm tm-btn--outline tm-btn--toggle" data-heat-labels aria-pressed="${heatAuto()}" title="Off: every value in the text color. On: dark or light per cell.">Auto label color</button></div>` : ""}
     </div>
   </article>`;
 }

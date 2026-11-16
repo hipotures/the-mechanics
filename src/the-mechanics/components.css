@@ -401,6 +401,34 @@
     background: var(--tm-head-2);
     border-bottom: var(--tm-bw-2) solid var(--tm-line-3);
   }
+  /* A panel-head meta value (usually the unit) that doubles as an on/off
+     toggle for how the panel presents its values: the text in an empty
+     2px ink frame; on = ink fill (the "own state" signal). Fits the head
+     without changing its height. */
+  .tm-meta-toggle {
+    display: inline-grid;
+    place-items: center;
+    min-width: 1.375rem;
+    height: 1.375rem;
+    padding: 0 var(--tm-space-1);
+    border: var(--tm-bw-control) solid var(--tm-ink);
+    border-radius: var(--tm-radius-control);
+    background: transparent;
+    color: var(--tm-text);
+    font-family: var(--tm-font-mono);
+    font-size: var(--tm-text-2xs);
+    font-weight: var(--tm-weight-semibold);
+    line-height: 1;
+    cursor: pointer;
+  }
+  .tm-meta-toggle:hover,
+  .tm-meta-toggle.is-hover {
+    background: var(--tm-hover);
+  }
+  .tm-meta-toggle[aria-pressed="true"] {
+    background: var(--tm-ink);
+    color: var(--tm-inset);
+  }
   .tm-panel__title {
     display: flex;
     align-items: center;
@@ -3697,7 +3725,7 @@
      the item grammar: their block frame turns ink. Placed last so it
      overrides the per-component focus outlines above.
      ================================================================= */
-  :is(.tm-btn, .tm-input, .tm-select, .tm-textarea, .tm-chip--toggle, .tm-pagination__page, .tm-legend__item, .tm-picker-field__btn, .tm-check, .tm-radio, .tm-switch):is(:focus-visible, .is-focus),
+  :is(.tm-btn, .tm-input, .tm-select, .tm-textarea, .tm-chip--toggle, .tm-pagination__page, .tm-legend__item, .tm-picker-field__btn, .tm-check, .tm-radio, .tm-switch, .tm-meta-toggle):is(:focus-visible, .is-focus),
   .tm-multiselect:is(:focus-within, .is-focus),
   .tm-input-group:focus-within,
   .tm-stepper:is(:focus-within, .is-focus),
