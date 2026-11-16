@@ -74,7 +74,8 @@ fixtures/demo-data.json   deterministic synthetic data (single source of demo co
 public/products/          original generated product illustrations (scripts/gen-product-images.mjs)
 examples/plain-html/      CSS-only consumer example
 scripts/                  build-css, contrast, contrast-derived, screenshots, smoke, image generator
-skills/the-mechanics/     agent skill for applying the system in other projects (not installed)
+skills/the-mechanics/     agent skill for applying the system in other projects (not installed);
+                          scripts/audit.mjs (source) and scripts/ui-audit.mjs (rendered page, all themes)
 docs/                     coverage contract, component status, distribution, derived data, verification, screenshots
 references/               visual concept reference (not production code)
 ```

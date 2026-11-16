@@ -40,3 +40,15 @@
     --noise: 0;
   }
 }
+
+/* daisyUI derives the toggle and range rounding from --radius-selector plus
+   its own padding, which ends up at ~6px; keep them square like ours.
+   Unlayered so it wins over daisyUI's components layer. */
+.d-toggle,
+.d-toggle::before,
+.d-range {
+  border-radius: var(--tm-radius-1);
+}
+.d-range::-webkit-slider-thumb { border-radius: var(--tm-radius-1); }
+.d-range::-moz-range-thumb { border-radius: var(--tm-radius-1); }
+

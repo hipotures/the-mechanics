@@ -188,6 +188,21 @@ Reading width 68ch; content max 1600 px; narrow 1120 px; sidebar 232 px (56 px c
 ### Documentation-only state classes
 `.is-hover`, `.is-active`, `.is-focus`, `.is-selected`, `.is-open` mirror interactive states for galleries and visual tests. Applications should rely on real pseudo-classes and ARIA states.
 
+### Native leftovers
+
+`.tm-root` takes over what the browser would otherwise draw: `color-scheme` per theme, `accent-color` = ink, scrollbar colors, and elements with no class at all (buttons, fields, selects, dialogs, checkboxes, radios, ranges, progress bars) get the same look as their `tm-` counterparts. Some things CSS can never restyle, so the system replaces them instead of using them:
+
+| Browser feature | Use instead |
+|---|---|
+| `title` tooltip | `.tm-tip` / `data-tm-tip` |
+| `alert` / `confirm` / `prompt` | `<dialog class="tm-dialog">` (danger confirm) |
+| validation bubbles (`required`, `pattern`, `reportValidity`) | `novalidate` + inline `.tm-field__error` (`validateInline`, `setFieldError`) |
+| `<select>` list without `appearance: base-select` (Firefox) | `enhanceSelects` styled list |
+| date/time picker | `.tm-picker` (`enhanceDateTime`) |
+| file chooser button | `.tm-dropzone` |
+
+Verify with the rendered audit `skills/the-mechanics/scripts/ui-audit.mjs <url>`: it reports, per theme, radii, soft shadows, non-Plex fonts, colors outside the tokens, controls that still draw the browser or OS look, `title` tooltips, system popups and validation bubbles.
+
 ## 6. Chart grammar
 
 - **Renderer: Apache ECharts** (SVG renderer). Charts are never hand-drawn; ECharts owns layout, axis label thinning and label-collision handling (`labelLayout: moveOverlap / hideOverlap`). All visual values come from `--tm-*` tokens through `adapters/echarts.js` (`readChartTokens` → `createEChartsTheme`), so charts follow the active theme and are rebuilt on theme switch. KPI sparklines stay as tiny inline SVG (no labels).

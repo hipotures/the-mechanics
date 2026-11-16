@@ -18,6 +18,39 @@
   .tm-root *::after {
     box-sizing: border-box;
   }
+  /* Native leftovers take the theme: checkboxes, radios, ranges and progress
+     bars without a tm- class use ink instead of the OS blue; scrollbars use
+     the line color on the canvas (color-scheme comes from the theme). */
+  .tm-root {
+    accent-color: var(--tm-ink);
+    scrollbar-color: var(--tm-line-2) transparent;
+  }
+  /* Controls nobody styled (no class at all) still look like ours, never like
+     the browser: ink frame, square corners, our surfaces. Zero specificity,
+     so any component class wins. */
+  .tm-root :where(button:not([class])) {
+    padding: var(--tm-space-1) var(--tm-control-pad-x-sm);
+    border: var(--tm-bw-control) solid var(--tm-ink);
+    border-radius: var(--tm-radius-control);
+    background: transparent;
+    cursor: pointer;
+  }
+  .tm-root :where(input:not([class]):not([type="checkbox"], [type="radio"], [type="range"], [type="hidden"], [type="file"], [type="color"]), select:not([class]), textarea:not([class])) {
+    padding: var(--tm-space-1) var(--tm-space-2);
+    border: var(--tm-bw-control) solid var(--tm-ink);
+    border-radius: var(--tm-radius-control);
+    background: var(--tm-inset);
+  }
+  .tm-root :where(dialog:not([class])) {
+    padding: var(--tm-space-4);
+    border: var(--tm-bw-1) solid var(--tm-line-1);
+    border-radius: 0;
+    background: var(--tm-surface);
+    color: var(--tm-text);
+  }
+  .tm-root :where(dialog)::backdrop {
+    background: var(--tm-backdrop);
+  }
   .tm-root :where(h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd) {
     margin: 0;
   }

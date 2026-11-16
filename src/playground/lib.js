@@ -367,7 +367,7 @@ export function enhanceSelects(root = document) {
     });
     enhanceSelects.observer.observe(document.body, { childList: true, subtree: true });
   }
-  root.querySelectorAll("select.tm-select:not([data-tm-enhanced])").forEach((sel) => {
+  root.querySelectorAll("select.tm-select:not([data-tm-enhanced]), .tm-root select:not([class]):not([data-tm-enhanced])").forEach((sel) => {
     sel.dataset.tmEnhanced = "1";
     let list = null;
     const close = (focus = true) => {
@@ -693,5 +693,43 @@ export function enhanceTips() {
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") hide(); });
   window.addEventListener("scroll", hide, { capture: true, passive: true });
   window.addEventListener("hashchange", hide);
+}
+
+/* ---------- Inline validation ----------------------------------------
+   Browser validation bubbles cannot be styled. Forms get novalidate and this
+   helper: on submit every invalid control gets aria-invalid and its message
+   in a .tm-field__error below it (the control's own validationMessage, or
+   data-error), focus goes to the first one, and submit is stopped. Editing a
+   field clears its error. Custom checks: setFieldError(input, "message"). */
+export function setFieldError(input, message) {
+  const field = input.closest(".tm-field") || input.parentElement;
+  let err = field.querySelector(":scope > .tm-field__error");
+  if (!message) {
+    input.removeAttribute("aria-invalid");
+    input.setCustomValidity("");
+    err?.remove();
+    return;
+  }
+  input.setCustomValidity(message);
+  input.setAttribute("aria-invalid", "true");
+  if (!err) {
+    err = document.createElement("span");
+    err.className = "tm-field__error";
+    err.id = `${input.id || `f${Math.random().toString(36).slice(2, 7)}`}-err`;
+    field.append(err);
+  }
+  err.textContent = message;
+  if (!(input.getAttribute("aria-describedby") || "").includes(err.id)) input.setAttribute("aria-describedby", [input.getAttribute("aria-describedby"), err.id].filter(Boolean).join(" "));
+}
+export function validateInline(form, check = () => {}) {
+  form.noValidate = true;
+  form.addEventListener("input", (e) => { if (e.target.getAttribute?.("aria-invalid") === "true") setFieldError(e.target, ""); });
+  form.addEventListener("submit", (e) => {
+    form.querySelectorAll("[aria-invalid='true']").forEach((el) => setFieldError(el, ""));
+    check(form); // custom rules call setFieldError
+    const invalid = [...form.elements].filter((el) => el.willValidate && !el.checkValidity());
+    invalid.forEach((el) => setFieldError(el, el.dataset.error || el.validationMessage));
+    if (invalid.length) { e.preventDefault(); e.stopImmediatePropagation(); invalid[0].focus(); }
+  }, true);
 }
 

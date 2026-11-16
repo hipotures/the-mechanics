@@ -1080,7 +1080,8 @@
 
   .tm-input,
   .tm-select,
-  .tm-textarea {
+  .tm-textarea,
+  .tm-root :where(select:not([class])) {
     display: block;
     width: 100%;
     min-width: 0;
@@ -1117,20 +1118,23 @@
   .tm-input:hover,
   .tm-select:hover,
   .tm-textarea:hover,
-  .tm-input.is-hover {
+  .tm-input.is-hover,
+  .tm-root :where(select:not([class])):hover {
     border-color: var(--tm-ink);
   }
   .tm-input:focus-visible,
   .tm-select:focus-visible,
   .tm-textarea:focus-visible,
-  .tm-input.is-focus {
+  .tm-input.is-focus,
+  .tm-root :where(select:not([class])):focus-visible {
     outline: var(--tm-bw-focus) solid var(--tm-focus);
     outline-offset: 0;
     border-color: var(--tm-focus);
   }
   .tm-input[aria-invalid="true"],
   .tm-select[aria-invalid="true"],
-  .tm-textarea[aria-invalid="true"] {
+  .tm-textarea[aria-invalid="true"],
+  .tm-root :where(select:not([class]))[aria-invalid="true"] {
     /* Error = thin solid border in the error color + the message below. */
     border-color: var(--tm-danger);
   }
@@ -1139,7 +1143,8 @@
   }
   .tm-input:disabled,
   .tm-select:disabled,
-  .tm-textarea:disabled {
+  .tm-textarea:disabled,
+  .tm-root :where(select:not([class])):disabled {
     background: var(--tm-surface-alt);
     border-color: var(--tm-line-disabled);
     color: var(--tm-text-disabled);
@@ -1157,7 +1162,8 @@
     padding-block: var(--tm-space-2);
     line-height: var(--tm-leading-ui);
   }
-  .tm-select {
+  .tm-select,
+  .tm-root :where(select:not([class])) {
     appearance: none;
     padding-right: 1.75rem;
     background-image:
@@ -1176,17 +1182,22 @@
      native list; the closed control looks the same everywhere. */
   @supports (appearance: base-select) {
     .tm-select,
-    .tm-select::picker(select) {
+    .tm-select::picker(select),
+    .tm-root :where(select:not([class])),
+    .tm-root :where(select:not([class]))::picker(select) {
       appearance: base-select;
     }
-    .tm-select {
+    .tm-select,
+    .tm-root :where(select:not([class])) {
       display: flex;
       align-items: center;
     }
-    .tm-select::picker-icon {
+    .tm-select::picker-icon,
+    .tm-root :where(select:not([class]))::picker-icon {
       display: none; /* the closed control keeps its own drawn caret */
     }
-    .tm-select::picker(select) {
+    .tm-select::picker(select),
+    .tm-root :where(select:not([class]))::picker(select) {
       margin-block: 4px;
       padding: var(--tm-select-inset-y) var(--tm-select-inset);
       border: var(--tm-bw-control) solid var(--tm-ink);
@@ -1198,7 +1209,8 @@
     /* Options use the shared item grammar. No tick: the selected option is
        the framed block, so labels sit exactly where the closed control's
        text sits and the list is as wide as its longest label. */
-    .tm-select option {
+    .tm-select option,
+    .tm-root :where(select:not([class])) option {
       display: flex;
       align-items: center;
       min-height: var(--tm-control-sm);
@@ -1210,24 +1222,30 @@
       font-size: var(--tm-text-sm);
       cursor: pointer;
     }
-    .tm-select option + option {
+    .tm-select option + option,
+    .tm-root :where(select:not([class])) option + option {
       margin-top: 2px;
     }
-    .tm-select option::checkmark {
+    .tm-select option::checkmark,
+    .tm-root :where(select:not([class])) option::checkmark {
       display: none;
     }
-    .tm-select option:hover {
+    .tm-select option:hover,
+    .tm-root :where(select:not([class])) option:hover {
       background: var(--tm-hover);
     }
-    .tm-select option:checked {
+    .tm-select option:checked,
+    .tm-root :where(select:not([class])) option:checked {
       background: var(--tm-select-bg);
       border-color: var(--tm-select-frame);
     }
-    .tm-select option:focus-visible {
+    .tm-select option:focus-visible,
+    .tm-root :where(select:not([class])) option:focus-visible {
       outline: 0;
       border-color: var(--tm-focus);
     }
-    .tm-select option:disabled {
+    .tm-select option:disabled,
+    .tm-root :where(select:not([class])) option:disabled {
       color: var(--tm-text-disabled);
       cursor: not-allowed;
     }
@@ -1584,7 +1602,8 @@
   }
 
   /* Range */
-  .tm-range {
+  .tm-range,
+  .tm-root :where(input[type="range"]:not([class])) {
     width: 100%;
     height: 1.25rem;
     margin: 0;
@@ -1592,7 +1611,8 @@
     background: transparent;
     cursor: pointer;
   }
-  .tm-range::-webkit-slider-runnable-track {
+  .tm-range::-webkit-slider-runnable-track,
+  .tm-root :where(input[type="range"]:not([class]))::-webkit-slider-runnable-track {
     height: 4px;
     background: linear-gradient(
       to right,
@@ -1601,15 +1621,18 @@
     );
     border: 0;
   }
-  .tm-range::-moz-range-track {
+  .tm-range::-moz-range-track,
+  .tm-root :where(input[type="range"]:not([class]))::-moz-range-track {
     height: 4px;
     background: var(--tm-line-3);
   }
-  .tm-range::-moz-range-progress {
+  .tm-range::-moz-range-progress,
+  .tm-root :where(input[type="range"]:not([class]))::-moz-range-progress {
     height: 4px;
     background: var(--tm-accent);
   }
-  .tm-range::-webkit-slider-thumb {
+  .tm-range::-webkit-slider-thumb,
+  .tm-root :where(input[type="range"]:not([class]))::-webkit-slider-thumb {
     appearance: none;
     width: 0.875rem;
     height: 1.125rem;
@@ -1619,17 +1642,20 @@
     background: var(--tm-surface);
     box-shadow: var(--tm-shadow-raised);
   }
-  .tm-range::-moz-range-thumb {
+  .tm-range::-moz-range-thumb,
+  .tm-root :where(input[type="range"]:not([class]))::-moz-range-thumb {
     width: 0.875rem;
     height: 1.125rem;
     border: var(--tm-bw-control) solid var(--tm-ink);
     border-radius: var(--tm-radius-1);
     background: var(--tm-surface);
   }
-  .tm-range:focus-visible {
+  .tm-range:focus-visible,
+  .tm-root :where(input[type="range"]:not([class])):focus-visible {
     outline-offset: 4px;
   }
-  .tm-range:disabled {
+  .tm-range:disabled,
+  .tm-root :where(input[type="range"]:not([class])):disabled {
     cursor: not-allowed;
     opacity: 0.5;
   }
@@ -1669,7 +1695,9 @@
      Selection controls
      ================================================================= */
   .tm-check,
-  .tm-radio {
+  .tm-radio,
+  .tm-root :where(input[type="checkbox"]:not([class])),
+  .tm-root :where(input[type="radio"]:not([class])) {
     position: relative;
     display: inline-grid;
     place-items: center;
@@ -1683,24 +1711,33 @@
     cursor: pointer;
     vertical-align: middle;
   }
-  .tm-check {
+  .tm-check,
+  .tm-root :where(input[type="checkbox"]:not([class])) {
     border-radius: var(--tm-radius-1);
   }
-  .tm-radio {
+  .tm-radio,
+  .tm-root :where(input[type="radio"]:not([class])) {
     border-radius: 50%;
   }
   .tm-check:hover,
   .tm-radio:hover,
-  .tm-check.is-hover {
+  .tm-check.is-hover,
+  .tm-root :where(input[type="checkbox"]:not([class])):hover,
+  .tm-root :where(input[type="radio"]:not([class])):hover,
+  .tm-root :where(input[type="checkbox"]:not([class])).is-hover {
     border-color: var(--tm-ink);
   }
   .tm-check:checked,
   .tm-check:indeterminate,
-  .tm-radio:checked {
+  .tm-radio:checked,
+  .tm-root :where(input[type="checkbox"]:not([class])):checked,
+  .tm-root :where(input[type="checkbox"]:not([class])):indeterminate,
+  .tm-root :where(input[type="radio"]:not([class])):checked {
     background: var(--tm-ink);
     border-color: var(--tm-ink);
   }
-  .tm-check:checked::after {
+  .tm-check:checked::after,
+  .tm-root :where(input[type="checkbox"]:not([class])):checked::after {
     content: "";
     width: 0.3rem;
     height: 0.55rem;
@@ -1709,13 +1746,15 @@
     border-width: 0 2px 2px 0;
     transform: rotate(45deg);
   }
-  .tm-check:indeterminate::after {
+  .tm-check:indeterminate::after,
+  .tm-root :where(input[type="checkbox"]:not([class])):indeterminate::after {
     content: "";
     width: 0.5rem;
     height: 2px;
     background: var(--tm-surface);
   }
-  .tm-radio:checked::after {
+  .tm-radio:checked::after,
+  .tm-root :where(input[type="radio"]:not([class])):checked::after {
     content: "";
     width: 0.375rem;
     height: 0.375rem;
@@ -1723,17 +1762,23 @@
     background: var(--tm-surface);
   }
   .tm-check:disabled,
-  .tm-radio:disabled {
+  .tm-radio:disabled,
+  .tm-root :where(input[type="checkbox"]:not([class])):disabled,
+  .tm-root :where(input[type="radio"]:not([class])):disabled {
     background: var(--tm-surface-alt);
     border-color: var(--tm-line-disabled);
     cursor: not-allowed;
   }
   .tm-check:disabled:checked,
   .tm-check:disabled:indeterminate,
-  .tm-radio:disabled:checked {
+  .tm-radio:disabled:checked,
+  .tm-root :where(input[type="checkbox"]:not([class])):disabled:checked,
+  .tm-root :where(input[type="checkbox"]:not([class])):disabled:indeterminate,
+  .tm-root :where(input[type="radio"]:not([class])):disabled:checked {
     background: var(--tm-line-disabled);
   }
-  .tm-check[aria-invalid="true"] {
+  .tm-check[aria-invalid="true"],
+  .tm-root :where(input[type="checkbox"]:not([class]))[aria-invalid="true"] {
     border-color: var(--tm-danger);
   }
 
@@ -2010,7 +2055,8 @@
   }
 
   /* Progress */
-  .tm-progress {
+  .tm-progress,
+  .tm-root :where(progress:not([class])) {
     display: block;
     width: 100%;
     height: 0.5rem;
@@ -2021,14 +2067,15 @@
     color: var(--tm-accent);
     overflow: hidden;
   }
-  .tm-progress::-webkit-progress-bar { background: var(--tm-inset); }
-  .tm-progress::-webkit-progress-value { background: currentColor; }
-  .tm-progress::-moz-progress-bar { background: currentColor; }
+  .tm-progress::-webkit-progress-bar, .tm-root :where(progress:not([class]))::-webkit-progress-bar { background: var(--tm-inset); }
+  .tm-progress::-webkit-progress-value, .tm-root :where(progress:not([class]))::-webkit-progress-value { background: currentColor; }
+  .tm-progress::-moz-progress-bar, .tm-root :where(progress:not([class]))::-moz-progress-bar { background: currentColor; }
   .tm-progress--success { color: var(--tm-success); }
   .tm-progress--warning { color: var(--tm-warning); }
   .tm-progress--danger { color: var(--tm-danger); }
   .tm-progress--sm { height: 0.25rem; }
-  .tm-progress:indeterminate {
+  .tm-progress:indeterminate,
+  .tm-root :where(progress:not([class])):indeterminate {
     background: repeating-linear-gradient(
       -45deg,
       var(--tm-accent) 0 6px,
@@ -2037,8 +2084,8 @@
     background-size: 200% 100%;
     animation: tm-stripes 1.2s linear infinite;
   }
-  .tm-progress:indeterminate::-webkit-progress-bar { background: transparent; }
-  .tm-progress:indeterminate::-moz-progress-bar { background: transparent; }
+  .tm-progress:indeterminate::-webkit-progress-bar, .tm-root :where(progress:not([class])):indeterminate::-webkit-progress-bar { background: transparent; }
+  .tm-progress:indeterminate::-moz-progress-bar, .tm-root :where(progress:not([class])):indeterminate::-moz-progress-bar { background: transparent; }
   @keyframes tm-stripes {
     to { background-position: -34px 0; }
   }
