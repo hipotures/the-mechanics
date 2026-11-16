@@ -450,3 +450,17 @@ h1:focus { outline: 0; }
 .pg-toc-wrap > .tm-label { padding-left: calc(var(--tm-bw-control) + var(--tm-select-pad)); }
 /* two-digit counter width, so 9 → 10 selected does not shift the bar */
 .pg-bulk .tm-badge--count { min-width: calc(2ch + 0.6rem); }
+
+/* ---------- Focus style variants for owner review (?focus=ink|lift) ------
+   Temporary: the default stays the token focus color until a variant is
+   chosen; the chosen one then moves into the public CSS. */
+:root[data-pg-focus="ink"],
+:root[data-pg-focus="lift"] { --tm-focus: var(--tm-ink); }
+:root[data-pg-focus="lift"] :is(.tm-btn, .tm-input, .tm-select, .tm-textarea, .tm-chip--toggle, .tm-pagination__page, .tm-legend__item, .tm-picker-field__btn):is(:focus-visible, .is-focus),
+:root[data-pg-focus="lift"] .tm-multiselect:focus-within,
+:root[data-pg-focus="lift"] .tm-segmented__option:has(input:focus-visible) {
+  outline: 0 !important;
+  box-shadow: 3px 3px 0 var(--tm-ink) !important;
+}
+:root[data-pg-focus="lift"] .tm-input-group > .tm-input { box-shadow: none !important; }
+:root[data-pg-focus="lift"] .tm-input-group:focus-within { outline: 0; box-shadow: 3px 3px 0 var(--tm-ink); }

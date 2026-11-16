@@ -23,6 +23,9 @@ const THEMES = [
 ];
 
 const root = document.documentElement;
+// Owner review switch for focus styles (?focus=ink|lift); kept in the URL.
+const focusVariant = new URLSearchParams(location.search).get("focus");
+if (focusVariant === "ink" || focusVariant === "lift") root.dataset.pgFocus = focusVariant;
 const app = document.getElementById("app");
 
 function currentTheme() {
