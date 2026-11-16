@@ -750,6 +750,16 @@
     background: var(--_bg-press);
     box-shadow: inset 0 2px 0 rgb(0 0 0 / 0.12);
   }
+  /* On/off toggle with a fixed label (the label never changes, so nothing
+     shifts): on = ink fill like a checked checkbox, readable on any tinted
+     bar, including the selection-colored bulk bar. */
+  .tm-btn--toggle[aria-pressed="true"],
+  .tm-btn--toggle.is-on {
+    border-color: var(--tm-ink);
+    background: var(--tm-ink);
+    color: var(--tm-inset);
+    box-shadow: none;
+  }
   .tm-btn.is-focus {
     outline: var(--tm-bw-focus) solid var(--tm-focus);
     outline-offset: var(--tm-focus-offset);

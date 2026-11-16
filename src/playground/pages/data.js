@@ -190,8 +190,10 @@ export default {
         </nav>`;
     }
 
-    // Selection spans pages: the count is the whole selection; "Show selected
-    // only" lists all of it, "Select all N matching" extends a full page.
+    // Selection spans pages: the count is the whole selection; the "Selected
+    // only" toggle (fixed label, state = pressed fill, so nothing shifts) lists
+    // all of it; "Select all N matching" (last, so it moves nothing) extends a
+    // full page.
     function renderBulk() {
       const n = st.selected.size;
       const bulk = $("#bulk");
@@ -204,14 +206,14 @@ export default {
       const unselected = rows.filter((r) => !st.selected.has(r.id)).length;
       const pageFull = pageRows.length > 0 && onPage === pageRows.length;
       bulk.innerHTML = `<span class="tm-badge tm-badge--count">${n}</span><span class="pg-bulk__label">selected</span>
-        ${pageFull && unselected ? `<button class="tm-btn tm-btn--sm tm-btn--ghost" data-bulk="all">Select all ${rows.length} matching</button>` : ""}
-        <button class="tm-btn tm-btn--sm tm-btn--outline" data-bulk="only" aria-pressed="${st.onlySelected}">${icon(st.onlySelected ? "x" : "filter", "tm-icon--sm")}${st.onlySelected ? "Show all rows" : "Show selected only"}</button>
+        <button class="tm-btn tm-btn--sm tm-btn--outline tm-btn--toggle" data-bulk="only" aria-pressed="${st.onlySelected}">${icon("filter", "tm-icon--sm")}Selected only</button>
         <button class="tm-btn tm-btn--sm tm-btn--outline" data-bulk="export">${icon("download", "tm-icon--sm")}${esc(dm.bulkActions[0])}</button>
         <button class="tm-btn tm-btn--sm tm-btn--outline" popovertarget="assign-menu">${esc(dm.bulkActions[1])}${icon("chevronDown", "tm-icon--sm")}</button>
         <div class="tm-menu" id="assign-menu" popover role="menu" aria-label="Assign team">
           ${dm.filters.team.filter((t) => t !== "all").map((t) => `<button class="tm-menu__item" role="menuitem" data-assign="${esc(t)}">${esc(t)}</button>`).join("")}
         </div>
         <button class="tm-btn tm-btn--sm tm-btn--danger-outline" data-bulk="deactivate">${icon("trash", "tm-icon--sm")}${esc(dm.bulkActions[2])}</button>
+        ${pageFull && unselected ? `<button class="tm-btn tm-btn--sm tm-btn--ghost" data-bulk="all">Select all ${rows.length} matching</button>` : ""}
         <span class="tm-toolbar__spacer"></span>
         <button class="tm-btn tm-btn--sm tm-btn--ghost" data-bulk="clear">Clear selection</button>`;
       wireMenus(bulk);

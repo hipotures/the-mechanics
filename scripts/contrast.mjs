@@ -57,6 +57,7 @@ const pairs = [
   ["line-input", "inset", G, "form control boundary"],
   ["ink", "inset", G, "control border (ink) on field"],
   ["ink", "surface", G, "control border / checked fill on panel"],
+  ["inset", "ink", T, "label of a pressed toggle button"],
   ["surface", "ink", G, "check mark on checked fill"],
   ["focus", "surface", G, "focus ring on panel"],
   ["focus", "canvas", G, "focus ring on canvas"],

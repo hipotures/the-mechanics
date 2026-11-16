@@ -73,6 +73,7 @@ Round 3 (owner review):
 56. Derived-color contrast measured (`scripts/contrast-derived.mjs`, 69 checks): hover/press tints on every surface, danger button hover/press, chart range band and brush pass; the ECharts heatmap failed at mid-ramp (2.2:1 Light, 2.8:1 Dark, 3.1:1 Coffee at 55 %; no single label color reaches 4.5:1 there) → cell labels pick the higher-contrast color and mid-ramp cells get a 2px halo in the other tone; all checks pass.
 57. Reflow and text checks (Playwright, all 7 views): 320px wide, 200% text (`html { font-size: 200% }`) at 1280px, and WCAG 1.4.12 text spacing (line-height 1.5, letter 0.12em, word 0.16em, paragraph 2em). Found: content-site table and gallery specimens widened the page at 200% text → prose tables scroll in `.tm-prose__scroll`, gallery specimens scroll in place. After: no horizontal page scroll in any mode, no clipped text outside intentionally truncated/visually-hidden elements.
 59. Owner: “Clear selection” jumped focus to the search field and lit its focus ring → a mouse click leaves focus where it is; keyboard activation moves focus to the header checkbox. Owner compared Plex Sans headings with Plex Mono and kept Mono.
+60. Owner: the toggle relabelled itself (“Show selected only” ↔ “Show all rows”), so the buttons after it jumped left/right → fixed label “Selected only” with a constant filter icon; on = ink fill (`.tm-btn--toggle`, contrast pair inset-on-ink added); counter reserves two digits; “Select all N matching” moved to the end of the action row. Measured: the next button keeps x = 490.6px when toggling, in all three themes.
 58. Smoke test ran its own preview on port 4174, which collides with the side-by-side variant server → it now uses its own port (4175, `SMOKE_PORT`).
 
 ### Interaction / keyboard checks — `pnpm smoke` (all pass, [`smoke-results.json`](smoke-results.json))
@@ -90,7 +91,7 @@ Desktop 1440×900, Chromium:
 - No uncaught page errors during the run.
 
 ### Contrast — `pnpm check:contrast`
-48 essential token pairs × 3 themes, all ≥ 4.5:1 (text) / ≥ 3:1 (graphics, control boundaries, focus ring, chart series). Full table: [`contrast.md`](contrast.md). Derived colors (hover/press tints composited per surface, heatmap ramp, danger hover/press mixes, chart overlays): 69 checks, all pass — [`contrast-derived.md`](contrast-derived.md).
+49 essential token pairs × 3 themes, all ≥ 4.5:1 (text) / ≥ 3:1 (graphics, control boundaries, focus ring, chart series). Full table: [`contrast.md`](contrast.md). Derived colors (hover/press tints composited per surface, heatmap ramp, danger hover/press mixes, chart overlays): 69 checks, all pass — [`contrast-derived.md`](contrast-derived.md).
 
 ### Build
 `pnpm build` (CSS distribution + Vite production build) succeeds; the compiled CSS was loaded alone in `examples/plain-html/` and rendered correctly (fonts, Light and Coffee themes).

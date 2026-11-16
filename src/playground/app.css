@@ -448,3 +448,5 @@ h1:focus { outline: 0; }
 /* in-page nav labels line up with the item text (frame + pad) */
 .pg-gal-index > .tm-label,
 .pg-toc-wrap > .tm-label { padding-left: calc(var(--tm-bw-control) + var(--tm-select-pad)); }
+/* two-digit counter width, so 9 → 10 selected does not shift the bar */
+.pg-bulk .tm-badge--count { min-width: calc(2ch + 0.6rem); }
