@@ -20,6 +20,16 @@
     "errors": []
   },
   {
+    "page": "workspace/analyse",
+    "theme": "light",
+    "viewport": "desktop",
+    "file": "workspace-analyse-light-desktop.png",
+    "overflowX": false,
+    "offenders": [],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
     "page": "data",
     "theme": "light",
     "viewport": "desktop",
@@ -74,6 +84,16 @@
     "theme": "dark",
     "viewport": "desktop",
     "file": "workspace-dark-desktop.png",
+    "overflowX": false,
+    "offenders": [],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "workspace/analyse",
+    "theme": "dark",
+    "viewport": "desktop",
+    "file": "workspace-analyse-dark-desktop.png",
     "overflowX": false,
     "offenders": [],
     "themeApplied": true,
@@ -140,6 +160,16 @@
     "errors": []
   },
   {
+    "page": "workspace/analyse",
+    "theme": "coffee",
+    "viewport": "desktop",
+    "file": "workspace-analyse-coffee-desktop.png",
+    "overflowX": false,
+    "offenders": [],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
     "page": "data",
     "theme": "coffee",
     "viewport": "desktop",
@@ -194,6 +224,22 @@
     "theme": "light",
     "viewport": "mobile",
     "file": "workspace-light-mobile.png",
+    "overflowX": false,
+    "offenders": [
+      "li.",
+      "li.",
+      "li.",
+      "li.",
+      "li."
+    ],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "workspace/analyse",
+    "theme": "light",
+    "viewport": "mobile",
+    "file": "workspace-analyse-light-mobile.png",
     "overflowX": false,
     "offenders": [],
     "themeApplied": true,
@@ -257,6 +303,22 @@
     "viewport": "mobile",
     "file": "workspace-dark-mobile.png",
     "overflowX": false,
+    "offenders": [
+      "li.",
+      "li.",
+      "li.",
+      "li.",
+      "li."
+    ],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "workspace/analyse",
+    "theme": "dark",
+    "viewport": "mobile",
+    "file": "workspace-analyse-dark-mobile.png",
+    "overflowX": false,
     "offenders": [],
     "themeApplied": true,
     "errors": []
@@ -318,6 +380,22 @@
     "theme": "coffee",
     "viewport": "mobile",
     "file": "workspace-coffee-mobile.png",
+    "overflowX": false,
+    "offenders": [
+      "li.",
+      "li.",
+      "li.",
+      "li.",
+      "li."
+    ],
+    "themeApplied": true,
+    "errors": []
+  },
+  {
+    "page": "workspace/analyse",
+    "theme": "coffee",
+    "viewport": "mobile",
+    "file": "workspace-analyse-coffee-mobile.png",
     "overflowX": false,
     "offenders": [],
     "themeApplied": true,

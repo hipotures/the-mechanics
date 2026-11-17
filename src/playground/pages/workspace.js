@@ -185,7 +185,7 @@ function renderAnalyse(main, data, preselect) {
       ? items
           .map((u) => {
             const on = u.id === selected;
-            return `<li class="tm-row pg-unit" data-unit="${u.id}" ${on ? 'aria-current="true"' : ""}>
+            return `<li class="tm-row tm-row--interactive pg-unit" data-unit="${u.id}" ${on ? 'aria-current="true"' : ""}>
               <span class="pg-unit__text"><span class="pg-unit__name">${esc(u.title)}</span><span class="pg-unit__id">${esc(u.id)}</span></span>
               <span class="tm-passcell">
                 <button class="tm-btn" data-select="${u.id}" data-state="${u.status}" aria-pressed="${on}" aria-label="P1 ${esc(STATE_LABEL[u.status])}: show ${esc(u.title)}" data-tm-tip="P1 · ${esc(STATE_LABEL[u.status])}">${icon(statusIcon[u.status] || "check", "tm-icon--sm")}</button>

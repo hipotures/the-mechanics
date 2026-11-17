@@ -801,126 +801,126 @@
     "units": [
       {
         "id": "ch0001_a001",
-        "title": "PROLOGUE",
+        "title": "Before You Begin",
         "status": "complete",
         "progress": 100,
         "selected": true
       },
       {
         "id": "ch0002_a001",
-        "title": "SIX YEARS LATER",
+        "title": "Part One · Field Work",
         "status": "complete",
         "progress": 100,
         "selected": false
       },
       {
         "id": "ch0003_a001",
-        "title": "ONE",
+        "title": "Planning the Survey",
         "status": "complete",
         "progress": 100,
         "selected": false
       },
       {
         "id": "ch0004_a001",
-        "title": "TWO",
+        "title": "Equipment and Packing",
         "status": "complete",
         "progress": 100,
         "selected": false
       },
       {
         "id": "ch0005_a001",
-        "title": "THREE",
+        "title": "Site Access and Permits",
         "status": "review",
         "progress": 86,
         "selected": false
       },
       {
         "id": "ch0006_a001",
-        "title": "FOUR",
+        "title": "Setting Up the Station",
         "status": "complete",
         "progress": 100,
         "selected": false
       },
       {
         "id": "ch0007_a001",
-        "title": "FIVE",
+        "title": "Calibrating Instruments",
         "status": "complete",
         "progress": 100,
         "selected": false
       },
       {
         "id": "ch0008_a001",
-        "title": "SIX",
+        "title": "Daily Measurement Routine",
         "status": "complete",
         "progress": 100,
         "selected": false
       },
       {
         "id": "ch0009_a001",
-        "title": "SEVEN",
+        "title": "Recording Observations",
         "status": "complete",
         "progress": 100,
         "selected": false
       },
       {
         "id": "ch0010_a001",
-        "title": "EIGHT",
+        "title": "Sampling Soil and Water",
         "status": "complete",
         "progress": 100,
         "selected": false
       },
       {
         "id": "ch0011_a001",
-        "title": "NINE",
+        "title": "Weather and Safety",
         "status": "complete",
         "progress": 100,
         "selected": false
       },
       {
         "id": "ch0012_a001",
-        "title": "TEN",
+        "title": "Radio Procedures",
         "status": "complete",
         "progress": 100,
         "selected": false
       },
       {
         "id": "ch0013_a001",
-        "title": "ELEVEN",
+        "title": "Data Backup in the Field",
         "status": "warning",
         "progress": 100,
         "selected": false
       },
       {
         "id": "ch0014_a001",
-        "title": "TWELVE",
+        "title": "Handling Faults",
         "status": "complete",
         "progress": 100,
         "selected": false
       },
       {
         "id": "ch0015_a001",
-        "title": "THIRTEEN",
+        "title": "Moving Between Sites",
         "status": "complete",
         "progress": 100,
         "selected": false
       },
       {
         "id": "ch0016_a001",
-        "title": "FOURTEEN",
+        "title": "Closing a Station",
         "status": "complete",
         "progress": 100,
         "selected": false
       },
       {
         "id": "ch0017_a001",
-        "title": "FIFTEEN",
+        "title": "Writing the Field Report",
         "status": "complete",
         "progress": 100,
         "selected": false
       },
       {
         "id": "ch0018_a001",
-        "title": "SIXTEEN",
+        "title": "Returning Equipment",
         "status": "complete",
         "progress": 100,
         "selected": false
@@ -928,7 +928,7 @@
     ],
     "preview": {
       "unitId": "ch0001_a001",
-      "title": "PROLOGUE",
+      "title": "Before You Begin",
       "tabs": [
         "Preview",
         "Terms",
@@ -937,17 +937,17 @@
       "blocks": [
         {
           "id": "B0000218",
-          "english": "PROLOGUE",
+          "english": "Before You Begin",
           "annotations": []
         },
         {
           "id": "B0000219",
-          "english": "Several years later, the distant survey station began transmitting again.",
+          "english": "This manual describes how a two-person team sets up and runs a temporary survey station.",
           "annotations": []
         },
         {
           "id": "B0000220",
-          "english": "The research team prepared another expedition to a region beyond their mapped routes.",
+          "english": "Every survey station covers one frontier sector; write the sector code on each form.",
           "annotations": [
             {
               "term": "Frontier",
@@ -967,7 +967,7 @@
         },
         {
           "id": "B0000221",
-          "english": "The discovery changed the team's priorities for the entire season.",
+          "english": "If the station director changes the plan, note the time and the reason in the log.",
           "annotations": [
             {
               "term": "Director",
@@ -980,7 +980,7 @@
         },
         {
           "id": "B0000222",
-          "english": "The next report arrived at dawn.",
+          "english": "Check the radio at dawn and again at dusk.",
           "annotations": []
         }
       ]
@@ -1088,7 +1088,7 @@
         {
           "n": 3,
           "id": "ch0001_a001",
-          "title": "PROLOGUE",
+          "title": "Before You Begin",
           "processing": "full",
           "words": 2702,
           "passes": [
@@ -1103,7 +1103,7 @@
         {
           "n": 4,
           "id": "ch0002_a001",
-          "title": "SIX YEARS LATER",
+          "title": "Part One · Field Work",
           "processing": "full",
           "words": 4,
           "passes": [
@@ -1118,7 +1118,7 @@
         {
           "n": 5,
           "id": "ch0003_a001",
-          "title": "ONE",
+          "title": "Planning the Survey",
           "processing": "full",
           "words": 1642,
           "passes": [
@@ -1133,7 +1133,7 @@
         {
           "n": 6,
           "id": "ch0004_a001",
-          "title": "TWO",
+          "title": "Equipment and Packing",
           "processing": "full",
           "words": 874,
           "passes": [
@@ -1148,7 +1148,7 @@
         {
           "n": 7,
           "id": "ch0005_a001",
-          "title": "THREE",
+          "title": "Site Access and Permits",
           "processing": "full",
           "words": 2084,
           "passes": [
@@ -1163,7 +1163,7 @@
         {
           "n": 8,
           "id": "ch0006_a001",
-          "title": "FOUR",
+          "title": "Setting Up the Station",
           "processing": "full",
           "words": 1553,
           "passes": [
@@ -1178,7 +1178,7 @@
         {
           "n": 9,
           "id": "ch0007_a001",
-          "title": "FIVE",
+          "title": "Calibrating Instruments",
           "processing": "full",
           "words": 910,
           "passes": [
@@ -1193,7 +1193,7 @@
         {
           "n": 10,
           "id": "ch0008_a001",
-          "title": "SIX",
+          "title": "Daily Measurement Routine",
           "processing": "full",
           "words": 1178,
           "passes": [
@@ -1208,7 +1208,7 @@
         {
           "n": 11,
           "id": "ch0009_a001",
-          "title": "SEVEN",
+          "title": "Recording Observations",
           "processing": "full",
           "words": 1356,
           "passes": [
@@ -1223,7 +1223,7 @@
         {
           "n": 12,
           "id": "ch0010_a001",
-          "title": "EIGHT",
+          "title": "Sampling Soil and Water",
           "processing": "full",
           "words": 1283,
           "passes": [
@@ -1238,7 +1238,7 @@
         {
           "n": 13,
           "id": "ch0011_a001",
-          "title": "NINE",
+          "title": "Weather and Safety",
           "processing": "full",
           "words": 1356,
           "passes": [
@@ -1253,7 +1253,7 @@
         {
           "n": 14,
           "id": "ch0012_a001",
-          "title": "TEN",
+          "title": "Radio Procedures",
           "processing": "full",
           "words": 1340,
           "passes": [
@@ -1268,7 +1268,7 @@
         {
           "n": 15,
           "id": "ch0013_a001",
-          "title": "ELEVEN",
+          "title": "Data Backup in the Field",
           "processing": "full",
           "words": 1346,
           "passes": [
@@ -1283,7 +1283,7 @@
         {
           "n": 16,
           "id": "ch0014_a001",
-          "title": "TWELVE",
+          "title": "Handling Faults",
           "processing": "full",
           "words": 660,
           "passes": [
@@ -1298,7 +1298,7 @@
         {
           "n": 17,
           "id": "ch0015_a001",
-          "title": "THIRTEEN",
+          "title": "Moving Between Sites",
           "processing": "full",
           "words": 1448,
           "passes": [
@@ -1313,7 +1313,7 @@
         {
           "n": 18,
           "id": "ch0016_a001",
-          "title": "FOURTEEN",
+          "title": "Closing a Station",
           "processing": "full",
           "words": 1558,
           "passes": [
@@ -1328,7 +1328,7 @@
         {
           "n": 19,
           "id": "ch0017_a001",
-          "title": "FIFTEEN",
+          "title": "Writing the Field Report",
           "processing": "full",
           "words": 1405,
           "passes": [
@@ -1343,7 +1343,7 @@
         {
           "n": 20,
           "id": "ch0018_a001",
-          "title": "SIXTEEN",
+          "title": "Returning Equipment",
           "processing": "full",
           "words": 1212,
           "passes": [

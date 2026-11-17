@@ -214,7 +214,7 @@ export default {
           ${sheetHTML("g-sheet-static", true)}</div>`)}
         ${sheetHTML("g-sheet")}
         <dialog class="tm-dialog" id="g-dlg" aria-labelledby="g-dlg-t"><form method="dialog"><div class="tm-dialog__head"><h2 class="tm-dialog__title" id="g-dlg-t">Rename unit</h2><button class="tm-btn tm-btn--ghost tm-btn--icon tm-btn--sm" aria-label="Close">${icon("x")}</button></div>
-          <div class="tm-dialog__body pg-stack-sm"><div class="tm-field"><label class="tm-field__label" for="g-dlg-in">Title</label><input class="tm-input" id="g-dlg-in" value="PROLOGUE" autofocus></div></div>
+          <div class="tm-dialog__body pg-stack-sm"><div class="tm-field"><label class="tm-field__label" for="g-dlg-in">Title</label><input class="tm-input" id="g-dlg-in" value="Before You Begin" autofocus></div></div>
           <div class="tm-dialog__foot"><button class="tm-btn tm-btn--outline" value="cancel">Cancel</button><button class="tm-btn tm-btn--primary" value="ok">Save</button></div></form></dialog>
         <dialog class="tm-drawer" id="g-drawer" aria-labelledby="g-drawer-t"><div class="tm-dialog__head"><h2 class="tm-dialog__title" id="g-drawer-t">Drawer</h2><button class="tm-btn tm-btn--ghost tm-btn--icon tm-btn--sm" data-close aria-label="Close drawer">${icon("x")}</button></div><div class="tm-dialog__body"><p>Drawers hold secondary detail views (product detail, cart, record inspector). Width: <code>--tm-drawer-w</code>.</p></div><div class="tm-dialog__foot"><button class="tm-btn tm-btn--primary" data-close>Done</button></div></dialog>
       `)}
