@@ -82,7 +82,8 @@ Test for anything new: *choice among siblings* → selection fill; *own on/off s
 
 ## 7. Fields (§5)
 - Label above, hint below, error message with a "!" glyph; invalid = `aria-invalid="true"` (red frame). Read-only = dashed frame.
-- Native number spinners are hidden; use `.tm-stepper`. Native date/time popups are replaced by `.tm-picker` (Monday-first, 24h, no weekend colors).
+- Native number spinners are hidden; use `.tm-stepper`. Native date/time popups are replaced by `.tm-picker` (Monday-first, 24h, no weekend colors). CSS cannot do this: a bare `<input type="date|time">` still opens the browser's own calendar/clock (rounded, Sunday-first, colored weekends in Firefox). The field must be wrapped by the picker script (`enhanceDateTime` → `.tm-picker-field`); the rendered audit reports `system-popup` for any date/time input without it. Check every view that has one, including fields inside menus and dialogs.
+- Outline buttons have the control face (`--tm-inset`) like fields and selects; do not make them transparent so they match a row of fields. Ghost buttons stay transparent.
 - Text/search/email/url/tel fields get a clear ✕ (`.tm-input-clear`) while they hold text: space reserved, "Clear" tooltip, click clears and keeps focus, Escape clears search. Not on number/date/code/read-only/disabled fields, nor where a cancel ✕ already exists.
 - Selects: styled option list (base-select or scripted fallback), no tick, option text aligned with the closed field.
 - Anchored popups (select list, menu, date/time picker, multi-select) follow their anchor while the page scrolls and close once it leaves the viewport; scrolling inside the popup is ignored. Reference: `followAnchor()` in `lib.js`. Why: popups are fixed in the top layer and otherwise stay put while the field scrolls away.

@@ -20,7 +20,7 @@ curl -fsSL https://github.com/hipotures/the-mechanics/releases/latest/download/i
 # → .claude/skills/the-mechanics/    Claude Code skill
 ```
 
-Options: `--version v0.1.7` (pin a release; default latest), `--css <dir>` (e.g. `public/vendor/the-mechanics` so your server serves it), `--skill <dir>` or `--global-skill` (`~/.claude/skills/`), `--no-css`, `--no-skill`, `--force`. Re-running updates: it replaces only directories the installer created (they contain `.the-mechanics-version`) and prints a report meant to be pasted to the agent working on the app: old → new version, every changed/added/removed file (files that differ only in the version stamp are counted separately), the release notes of every skipped release and a closing instruction for the agent. Release notes: [docs/releases/](docs/releases/). Then follow [docs/distribution.md](docs/distribution.md) to load the CSS for your framework.
+Options: `--version v0.1.8` (pin a release; default latest), `--css <dir>` (e.g. `public/vendor/the-mechanics` so your server serves it), `--skill <dir>` or `--global-skill` (`~/.claude/skills/`), `--no-css`, `--no-skill`, `--force`. Re-running updates: it replaces only directories the installer created (they contain `.the-mechanics-version`) and prints a report meant to be pasted to the agent working on the app: old → new version, every changed/added/removed file (files that differ only in the version stamp are counted separately), the release notes of every skipped release and a closing instruction for the agent. Release notes: [docs/releases/](docs/releases/). Then follow [docs/distribution.md](docs/distribution.md) to load the CSS for your framework.
 
 Skill only, with the [`skills` CLI](https://skills.sh) (installs into Claude Code and other agents; finds `skills/the-mechanics/` in this repo):
 
@@ -48,6 +48,7 @@ Verification (after `build`):
 corepack pnpm exec playwright install --only-shell chromium   # once; see “Disk-backed temp” below
 corepack pnpm check:contrast   # WCAG ratios: token pairs + derived colors → docs/verification/contrast*.md
 corepack pnpm smoke            # 26 interaction/keyboard checks + state screenshots (own port 4175)
+SMOKE_BROWSER=firefox corepack pnpm smoke   # the same checks in Firefox
 corepack pnpm shots [label]    # 7 views × 3 themes × desktop/mobile → tmp/screenshots/<label>/
 ```
 

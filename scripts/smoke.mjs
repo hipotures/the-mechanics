@@ -1,7 +1,7 @@
 // Focused interaction / keyboard / state smoke checks (one browser, sequential).
 // Also captures interaction-state screenshots to tmp/screenshots/states.
 //   pnpm build && pnpm smoke
-import { chromium } from "playwright";
+import { chromium, firefox } from "playwright";
 import { spawn } from "node:child_process";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
@@ -16,7 +16,13 @@ await new Promise((res, rej) => {
   server.on("exit", (c) => rej(new Error(`preview exited ${c}`)));
 });
 const BASE = `http://localhost:${PORT}/`;
-const browser = await chromium.launch({ args: ["--disable-dev-shm-usage"] });
+// SMOKE_BROWSER=firefox runs the same checks in Firefox (the owner's browser;
+// it uses the scripted select fallback instead of base-select).
+const BROWSER = process.env.SMOKE_BROWSER === "firefox" ? "firefox" : "chromium";
+const browser = BROWSER === "firefox"
+  ? await firefox.launch()
+  : await chromium.launch({ args: ["--disable-dev-shm-usage"] });
+console.log(`browser: ${BROWSER}`);
 const results = [];
 const errors = [];
 
@@ -264,7 +270,7 @@ try {
     await shot("catalog-detail-drawer");
     await page.keyboard.press("Escape");
     await page.click("#open-cart");
-    await page.click('#discount button');
+    await page.click('#discount button:not(.tm-input-clear__btn)');
     assert(await page.locator("#code-err").isVisible(), "discount error");
     await shot("catalog-cart-discount-error");
     await page.keyboard.press("Escape");

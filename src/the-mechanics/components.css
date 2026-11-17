@@ -815,11 +815,16 @@
     --_bg-hover: var(--tm-accent-hover);
     --_bg-press: var(--tm-accent-press);
   }
+  /* A framed button shares the control face with fields, selects and
+     segmented controls (--tm-inset), so a row of framed controls has one
+     surface on any background (owner review: a transparent outline button
+     beside selects looked like a hole on the page canvas). Hover / press
+     tints are layered over that face. Frameless (ghost) stays transparent. */
   .tm-btn--outline {
-    --_bg: transparent;
+    --_bg: var(--tm-inset);
     --_bd: var(--tm-ink);
-    --_bg-hover: var(--tm-hover);
-    --_bg-press: var(--tm-press);
+    --_bg-hover: linear-gradient(var(--tm-hover), var(--tm-hover)), var(--tm-inset);
+    --_bg-press: linear-gradient(var(--tm-press), var(--tm-press)), var(--tm-inset);
   }
   .tm-btn--ghost {
     --_bg: transparent;
@@ -1344,6 +1349,20 @@
      .tm-picker built from the shared item grammar. */
   .tm-input::-webkit-calendar-picker-indicator {
     display: none;
+  }
+  /* Firefox draws its own calendar / clock button inside date and time
+     inputs and offers no pseudo-element to hide it (appearance: textfield
+     does not remove it either, checked in Firefox 159). In a picker field
+     our button slides over it: the field ends under the button, so the
+     native icon is covered and cannot be clicked. Scoped to Firefox. */
+  @supports (-moz-appearance: none) {
+    .tm-picker-field > .tm-input:is([type="date"], [type="time"]) {
+      margin-right: -28px;
+    }
+    .tm-picker-field > .tm-picker-field__btn {
+      position: relative;
+      z-index: 1;
+    }
   }
   .tm-picker-field > .tm-picker-field__btn {
     display: grid;
