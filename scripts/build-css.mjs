@@ -44,10 +44,14 @@ for (const [dir, family] of families) {
   const pkgDir = join(root, "node_modules/@fontsource", dir);
   copyFileSync(join(pkgDir, "LICENSE"), join(out, "fonts", `${dir}-LICENSE.txt`));
   for (const w of weights) {
+    // The per-subset files (latin-400.css) carry no unicode-range; the
+    // all-subsets file (400.css) has one block per subset, named in a comment.
+    const css = readFileSync(join(pkgDir, `${w}.css`), "utf8");
     for (const subset of ["latin-ext", "latin"]) {
-      const css = readFileSync(join(pkgDir, `${subset}-${w}.css`), "utf8");
-      const range = css.match(/unicode-range:\s*([^;]+);/)?.[1];
       const file = `${dir}-${subset}-${w}-normal.woff2`;
+      const block = css.split("/* ").find((b) => b.startsWith(`${dir}-${subset}-${w}-normal */`));
+      const range = block?.match(/unicode-range:\s*([^;]+);/)?.[1]?.trim();
+      if (!range || !/^U\+[0-9A-F]/i.test(range)) throw new Error(`no unicode-range for ${file} in ${dir}/${w}.css`);
       copyFileSync(join(pkgDir, "files", file), join(out, "fonts", file));
       fontsCss += `@font-face{font-family:"${family}";font-style:normal;font-weight:${w};font-display:swap;src:url(./fonts/${file}) format("woff2");unicode-range:${range};}\n`;
     }

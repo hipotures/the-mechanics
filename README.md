@@ -20,7 +20,7 @@ curl -fsSL https://github.com/hipotures/the-mechanics/releases/latest/download/i
 # → .claude/skills/the-mechanics/    Claude Code skill
 ```
 
-Options: `--version v0.1.1` (pin a release; default latest), `--css <dir>` (e.g. `public/vendor/the-mechanics` so your server serves it), `--skill <dir>` or `--global-skill` (`~/.claude/skills/`), `--no-css`, `--no-skill`, `--force`. Re-running replaces only directories the installer created (they contain `.the-mechanics-version`). Then follow [docs/distribution.md](docs/distribution.md) to load the CSS for your framework.
+Options: `--version v0.1.2` (pin a release; default latest), `--css <dir>` (e.g. `public/vendor/the-mechanics` so your server serves it), `--skill <dir>` or `--global-skill` (`~/.claude/skills/`), `--no-css`, `--no-skill`, `--force`. Re-running replaces only directories the installer created (they contain `.the-mechanics-version`). Then follow [docs/distribution.md](docs/distribution.md) to load the CSS for your framework.
 
 Skill only, with the [`skills` CLI](https://skills.sh) (installs into Claude Code and other agents; finds `skills/the-mechanics/` in this repo):
 
