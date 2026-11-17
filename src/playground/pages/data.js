@@ -208,7 +208,7 @@ export default {
       bulk.innerHTML = `<span class="tm-badge tm-badge--count">${n}</span><span class="pg-bulk__label">selected</span>
         <button class="tm-btn tm-btn--sm tm-btn--outline tm-btn--toggle" data-bulk="only" aria-pressed="${st.onlySelected}">${icon("filter", "tm-icon--sm")}Selected only</button>
         <button class="tm-btn tm-btn--sm tm-btn--outline" data-bulk="export">${icon("download", "tm-icon--sm")}${esc(dm.bulkActions[0])}</button>
-        <button class="tm-btn tm-btn--sm tm-btn--outline" popovertarget="assign-menu">${esc(dm.bulkActions[1])}${icon("chevronDown", "tm-icon--sm")}</button>
+        <button class="tm-btn tm-btn--sm tm-btn--outline" popovertarget="assign-menu">${esc(dm.bulkActions[1])}<span class="tm-caret" aria-hidden="true"></span></button>
         <div class="tm-menu" id="assign-menu" popover role="menu" aria-label="Assign team">
           ${dm.filters.team.filter((t) => t !== "all").map((t) => `<button class="tm-menu__item" role="menuitem" data-assign="${esc(t)}">${esc(t)}</button>`).join("")}
         </div>

@@ -83,6 +83,7 @@ Test for anything new: *choice among siblings* → selection fill; *own on/off s
 - Native number spinners are hidden; use `.tm-stepper`. Native date/time popups are replaced by `.tm-picker` (Monday-first, 24h, no weekend colors).
 - Text/search/email/url/tel fields get a clear ✕ (`.tm-input-clear`) while they hold text: space reserved, "Clear" tooltip, click clears and keeps focus, Escape clears search. Not on number/date/code/read-only/disabled fields, nor where a cancel ✕ already exists.
 - Selects: styled option list (base-select or scripted fallback), no tick, option text aligned with the closed field.
+- One caret for "opens a list below": a menu button ("More", "Actions") ends with `.tm-caret`, the select's own solid triangle in the same color — never a stroked chevron icon. Why: side by side, two different down-arrows read as two systems. Chevrons stay for back/next and in-place expansion.
 
 ## 8. Tables and selection (§5)
 - Compact = one line per record (details in tooltip); Comfortable = full detail. The toggle must make a visible difference.
