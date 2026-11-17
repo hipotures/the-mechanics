@@ -370,8 +370,11 @@ export function enhanceSelects(root = document) {
   root.querySelectorAll("select.tm-select:not([data-tm-enhanced]), .tm-root select:not([class]):not([data-tm-enhanced])").forEach((sel) => {
     sel.dataset.tmEnhanced = "1";
     let list = null;
+    let dismiss = null; // removes the light-dismiss listeners
     const close = (focus = true) => {
       if (!list) return;
+      dismiss?.();
+      dismiss = null;
       list.remove();
       list = null;
       sel.setAttribute("aria-expanded", "false");
@@ -424,11 +427,20 @@ export function enhanceSelects(root = document) {
           next?.focus();
         }
       });
-      // Light dismiss: pointer outside the list or scrolling closes it.
+      // Light dismiss: a pointer outside the list, or scrolling the page,
+      // closes it. Scrolling the list itself (wheel, touch, dragging or
+      // clicking its scrollbar) must not: a capturing scroll listener on
+      // window also sees the list's own scroll events.
       setTimeout(() => {
-        const away = (e) => { if (list && !list.contains(e.target) && e.target !== sel) { close(false); document.removeEventListener("pointerdown", away, true); } };
+        if (!list) return;
+        const away = (e) => { if (list && !list.contains(e.target) && e.target !== sel) close(false); };
+        const scrolled = (e) => { if (list && !list.contains(e.target)) close(false); };
         document.addEventListener("pointerdown", away, true);
-        window.addEventListener("scroll", () => close(false), { once: true, capture: true, passive: true });
+        window.addEventListener("scroll", scrolled, { capture: true, passive: true });
+        dismiss = () => {
+          document.removeEventListener("pointerdown", away, true);
+          window.removeEventListener("scroll", scrolled, { capture: true });
+        };
       });
     };
     sel.setAttribute("aria-haspopup", "listbox");

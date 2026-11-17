@@ -2343,6 +2343,7 @@
     display: flex;
     align-items: center;
     gap: var(--tm-space-2);
+    user-select: none; /* a drag across a menu or option list never selects its text */
     width: 100%;
     min-height: var(--tm-control-sm);
     padding: 0 var(--tm-select-pad);
