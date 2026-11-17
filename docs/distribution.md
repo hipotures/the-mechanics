@@ -4,7 +4,17 @@ The Mechanics ships as **plain, compiled CSS** with no runtime JavaScript. Tailw
 
 > Integration into existing applications (Intelitex, HomeStack, Gitiary, …) is **not** part of this work and requires owner approval. The snippets below describe the intended path only.
 
-## 1. Build the distribution
+## 1. Get the distribution
+
+**From a release (recommended).** Every release attaches `the-mechanics-css-<tag>.zip`, `the-mechanics-skill-<tag>.zip`, `SHA256SUMS` and `install.sh`. From the consuming project's root:
+
+```sh
+curl -fsSL https://github.com/hipotures/the-mechanics/releases/latest/download/install.sh | sh -s -- --version v0.1.0 --css public/vendor/the-mechanics
+```
+
+This puts the files below into `--css` (default `vendor/the-mechanics`) and the agent skill into `.claude/skills/the-mechanics` (`--no-skill` to skip). Commit the vendored files in the consuming project so builds do not depend on GitHub. See `scripts/install.sh --help` for all options.
+
+**From source.** Clone, then:
 
 ```sh
 corepack pnpm install
@@ -19,7 +29,7 @@ corepack pnpm build:css      # → dist/the-mechanics/
 
 Source files (`src/the-mechanics/*.css`) are also importable directly by any bundler.
 
-`dist/` is git-ignored; consumers should pin a commit and build, or vendor the three files.
+`dist/` is git-ignored; consumers should install a pinned release (above), or pin a commit and build.
 
 ## 2. Public contract
 

@@ -9,7 +9,28 @@ A standalone **design system and visual playground** in the *Sharp Retro-Tech / 
 | ![Workspace, Coffee](docs/screenshots/apps/workspace-coffee-desktop.jpg) | ![Data, Dark](docs/screenshots/apps/data-dark-desktop.jpg) | ![Catalog, Light](docs/screenshots/apps/catalog-light-desktop.jpg) |
 | Workspace · Coffee | Data Management · Dark | Catalog · Light |
 
-## Quick start
+## Install in another project (no clone)
+
+Each [GitHub release](https://github.com/hipotures/the-mechanics/releases) ships the compiled CSS + fonts and the agent skill as zips with `SHA256SUMS`. The installer downloads them, verifies the checksums and copies them into the project you run it from (needs `curl` or `wget`, `unzip`, `sha256sum`/`shasum`; no Node.js):
+
+```sh
+cd <your-project>
+curl -fsSL https://github.com/hipotures/the-mechanics/releases/latest/download/install.sh | sh
+# → vendor/the-mechanics/            CSS, fonts, licenses, distribution.md
+# → .claude/skills/the-mechanics/    Claude Code skill
+```
+
+Options: `--version v0.1.0` (pin a release; default latest), `--css <dir>` (e.g. `public/vendor/the-mechanics` so your server serves it), `--skill <dir>` or `--global-skill` (`~/.claude/skills/`), `--no-css`, `--no-skill`, `--force`. Re-running replaces only directories the installer created (they contain `.the-mechanics-version`). Then follow [docs/distribution.md](docs/distribution.md) to load the CSS for your framework.
+
+Skill only, with the [`skills` CLI](https://skills.sh) (installs into Claude Code and other agents; finds `skills/the-mechanics/` in this repo):
+
+```sh
+npx skills add hipotures/the-mechanics          # or: corepack pnpm dlx skills add hipotures/the-mechanics
+```
+
+Manual alternative: download the two zips from the release page and unzip them into the same places.
+
+## Quick start (this repository)
 
 Requires Node.js ≥ 22 with `corepack` (no global npm needed).
 
@@ -73,7 +94,8 @@ src/playground/           playground only: shell, router, pages, ECharts chart m
 fixtures/demo-data.json   deterministic synthetic data (single source of demo content)
 public/products/          original generated product illustrations (scripts/gen-product-images.mjs)
 examples/plain-html/      CSS-only consumer example
-scripts/                  build-css, contrast, contrast-derived, screenshots, smoke, image generator
+scripts/                  build-css, contrast, contrast-derived, screenshots, smoke, image generator;
+                          install.sh (release installer, also attached to each release)
 skills/the-mechanics/     agent skill for applying the system in other projects (not installed);
                           scripts/audit.mjs (source) and scripts/ui-audit.mjs (rendered page, all themes)
 docs/                     coverage contract, component status, distribution, derived data, verification, screenshots
@@ -93,7 +115,7 @@ references/               visual concept reference (not production code)
 
 `skills/the-mechanics/` is a Claude Code skill that teaches an agent working in *another* project how to apply this design system: wiring the CSS, the owner-approved rules that are not visible in the CSS (structure rule, item grammar, two “on” signals, focus lift, fixed-label toggles, status plates, clear buttons, layout and chart rules), copy-ready markup (`references/recipes.md`) and a heuristic audit of the app's own source (`node skills/the-mechanics/scripts/audit.mjs <dir>`). It points to `DESIGN.md` and `docs/distribution.md` at the pinned version instead of copying them.
 
-It is **not installed anywhere yet**: using The Mechanics in another application needs the owner's approval. To try it in a project later, link it into that project's `.claude/skills/` (or `~/.claude/skills/` for all projects), e.g. `ln -s ~/DEV/the-mechanics/skills/the-mechanics <project>/.claude/skills/the-mechanics`.
+Using The Mechanics in another application is an owner decision per project. Install the skill from a release (see [Install in another project](#install-in-another-project-no-clone)), or, while developing the skill itself, link a checkout: `ln -s ~/DEV/the-mechanics/skills/the-mechanics <project>/.claude/skills/the-mechanics`.
 
 ## Provenance and licensing
 
