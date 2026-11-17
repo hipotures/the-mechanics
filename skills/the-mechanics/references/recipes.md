@@ -1,6 +1,6 @@
 # The Mechanics — markup recipes
 
-Copy-ready markup taken from the playground (v0.1.0). Icons are omitted (`<svg class="tm-icon">…</svg>` where shown as `[icon]`); use the app's own icon set at 16px (`tm-icon--sm` = 14px). Behaviour for the marked items lives in the playground's reference helpers (`src/playground/lib.js`, `p1.js`, `charts.js`) — port them, do not reinvent them.
+Copy-ready markup taken from the playground. Icons are omitted (`<svg class="tm-icon">…</svg>` where shown as `[icon]`); use the app's own icon set at 16px (`tm-icon--sm` = 14px). Behaviour for the marked items lives in the playground's reference helpers (`src/playground/lib.js`, `p1.js`, `charts.js`) — port them, do not reinvent them.
 
 ## Contents
 - Page shell and page head

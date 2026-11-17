@@ -20,7 +20,7 @@ curl -fsSL https://github.com/hipotures/the-mechanics/releases/latest/download/i
 # → .claude/skills/the-mechanics/    Claude Code skill
 ```
 
-Options: `--version v0.1.0` (pin a release; default latest), `--css <dir>` (e.g. `public/vendor/the-mechanics` so your server serves it), `--skill <dir>` or `--global-skill` (`~/.claude/skills/`), `--no-css`, `--no-skill`, `--force`. Re-running replaces only directories the installer created (they contain `.the-mechanics-version`). Then follow [docs/distribution.md](docs/distribution.md) to load the CSS for your framework.
+Options: `--version v0.1.1` (pin a release; default latest), `--css <dir>` (e.g. `public/vendor/the-mechanics` so your server serves it), `--skill <dir>` or `--global-skill` (`~/.claude/skills/`), `--no-css`, `--no-skill`, `--force`. Re-running replaces only directories the installer created (they contain `.the-mechanics-version`). Then follow [docs/distribution.md](docs/distribution.md) to load the CSS for your framework.
 
 Skill only, with the [`skills` CLI](https://skills.sh) (installs into Claude Code and other agents; finds `skills/the-mechanics/` in this repo):
 
@@ -95,8 +95,9 @@ fixtures/demo-data.json   deterministic synthetic data (single source of demo co
 public/products/          original generated product illustrations (scripts/gen-product-images.mjs)
 examples/plain-html/      CSS-only consumer example
 scripts/                  build-css, contrast, contrast-derived, screenshots, smoke, image generator;
-                          install.sh (release installer, also attached to each release)
-skills/the-mechanics/     agent skill for applying the system in other projects (not installed);
+                          install.sh (release installer, also attached to each release),
+                          release-assets.sh (builds the release zips + SHA256SUMS)
+skills/the-mechanics/     agent skill for applying the system in other projects;
                           scripts/audit.mjs (source) and scripts/ui-audit.mjs (rendered page, all themes)
 docs/                     coverage contract, component status, distribution, derived data, verification, screenshots
 references/               visual concept reference (not production code)
@@ -113,7 +114,7 @@ references/               visual concept reference (not production code)
 
 ## Agent skill for other projects
 
-`skills/the-mechanics/` is a Claude Code skill that teaches an agent working in *another* project how to apply this design system: wiring the CSS, the owner-approved rules that are not visible in the CSS (structure rule, item grammar, two “on” signals, focus lift, fixed-label toggles, status plates, clear buttons, layout and chart rules), copy-ready markup (`references/recipes.md`) and a heuristic audit of the app's own source (`node skills/the-mechanics/scripts/audit.mjs <dir>`). It points to `DESIGN.md` and `docs/distribution.md` at the pinned version instead of copying them.
+`skills/the-mechanics/` is a Claude Code skill that teaches an agent working in *another* project how to apply this design system: wiring the CSS, the owner-approved rules that are not visible in the CSS (structure rule, item grammar, two “on” signals, focus lift, fixed-label toggles, status plates, clear buttons, layout and chart rules), copy-ready markup (`references/recipes.md`) and a heuristic audit of the app's own source (`node skills/the-mechanics/scripts/audit.mjs <dir>`). In the repository it points to `DESIGN.md` and `docs/distribution.md`; release zips bundle both into the skill's `references/`, so an install without a checkout has the full rules.
 
 Using The Mechanics in another application is an owner decision per project. Install the skill from a release (see [Install in another project](#install-in-another-project-no-clone)), or, while developing the skill itself, link a checkout: `ln -s ~/DEV/the-mechanics/skills/the-mechanics <project>/.claude/skills/the-mechanics`.
 

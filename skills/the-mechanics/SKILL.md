@@ -7,13 +7,13 @@ description: Apply The Mechanics design system (Sharp Retro-Tech — ink-framed 
 
 The Mechanics is a CSS-only design system: compiled CSS, three themes, no runtime JavaScript. A consuming app gets the look from **class names and native/ARIA state attributes**, never from re-creating the styles. The rules below are owner decisions; most are not visible in the CSS itself, which is why this skill exists: an agent that only reads the class list will invent rounded cards, blue focus rings and side bars that were explicitly rejected.
 
-Source of truth (pin the version you use; v0.1.0 at the time of writing):
+Source of truth (pin the version you use; the installed version is in `.the-mechanics-version` next to this file when it came from a release):
+- `references/DESIGN.md` — full rules, tokens, component table, chart grammar, anti-patterns. Bundled with release installs; in a checkout of the repository it is `DESIGN.md` at the root.
+- `references/distribution.md` — how to install and import per framework (`docs/distribution.md` in the repository)
 - Repository: `github.com/hipotures/the-mechanics` (local checkout often at `~/DEV/the-mechanics`)
-- `DESIGN.md` — full rules, tokens, component table, chart grammar, anti-patterns
-- `docs/distribution.md` — how to install and import per framework
 - Component Gallery — run the playground (`corepack pnpm build && corepack pnpm preview`) and open `#/components`; every component in every state, in all three themes
 
-If the checkout is available, read the relevant `DESIGN.md` section before inventing anything. This skill is the short version; when they disagree, `DESIGN.md` at the pinned version wins.
+Read the relevant `DESIGN.md` section before inventing anything. This skill is the short version; when they disagree, `DESIGN.md` at the pinned version wins.
 
 ## 1. Before you start
 

@@ -5,7 +5,7 @@
 # sha256sum or shasum.
 #
 #   curl -fsSL https://github.com/hipotures/the-mechanics/releases/latest/download/install.sh | sh
-#   curl -fsSL .../install.sh | sh -s -- --version v0.1.0 --css public/vendor/the-mechanics
+#   curl -fsSL .../install.sh | sh -s -- --version v0.1.1 --css public/vendor/the-mechanics
 #
 # Run it from the root of the project that will use The Mechanics.
 set -eu
@@ -22,7 +22,7 @@ usage() {
   cat <<'EOF'
 Usage: install.sh [options]
 
-  --version TAG     release tag to install, e.g. v0.1.0 (default: latest)
+  --version TAG     release tag to install, e.g. v0.1.1 (default: latest)
   --css DIR         where to put the CSS + fonts (default: vendor/the-mechanics)
   --skill DIR       where to put the agent skill (default: .claude/skills/the-mechanics)
   --global-skill    put the skill in ~/.claude/skills/the-mechanics (all projects)
