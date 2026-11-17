@@ -3286,6 +3286,12 @@
     background: var(--tm-surface);
     border: var(--tm-bw-1) solid var(--tm-line-1);
   }
+  /* Lines inside one card (image | body | price · action) are parts of one
+     object, so they are 1px ink; the card frame and the lines between cards
+     in a grid stay 2px (same rule as segmented controls). */
+  .tm-product > .tm-media {
+    border-bottom-width: var(--tm-bw-3);
+  }
   .tm-product__body {
     display: grid;
     gap: var(--tm-space-1);
@@ -3328,7 +3334,7 @@
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: stretch;
     min-height: var(--tm-control-lg);
-    border-top: var(--tm-bw-1) solid var(--tm-line-1);
+    border-top: var(--tm-bw-3) solid var(--tm-line-1);
   }
   .tm-product__foot > .tm-price {
     align-self: center;
@@ -3337,7 +3343,7 @@
   .tm-product__foot > .tm-btn {
     min-height: var(--tm-control-lg);
     padding: 0 var(--tm-space-4);
-    border-width: 0 0 0 var(--tm-bw-1);
+    border-width: 0 0 0 var(--tm-bw-3);
     border-color: var(--tm-line-1);
     border-radius: 0;
     box-shadow: none;

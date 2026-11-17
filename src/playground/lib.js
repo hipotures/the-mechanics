@@ -194,6 +194,33 @@ export function anchorPopover(pop, anchor) {
   pop.style.top = `${top}px`;
 }
 
+/* Keeps an anchored popup attached to its anchor while the page scrolls or
+   resizes (popups are fixed in the top layer, so they would otherwise stay
+   put while the field moves away). Scrolling inside the popup itself is
+   ignored. When the anchor leaves the viewport, onGone() runs (close it).
+   Returns a function that removes the listeners. */
+export function followAnchor(pop, anchor, onGone) {
+  let queued = false;
+  const update = (e) => {
+    if (e?.type === "scroll" && pop.contains(e.target)) return;
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(() => {
+      queued = false;
+      if (!pop.isConnected) return;
+      const r = anchor.getBoundingClientRect();
+      if (r.bottom < 0 || r.top > window.innerHeight || r.right < 0 || r.left > window.innerWidth) onGone?.();
+      else anchorPopover(pop, anchor);
+    });
+  };
+  window.addEventListener("scroll", update, { capture: true, passive: true });
+  window.addEventListener("resize", update, { passive: true });
+  return () => {
+    window.removeEventListener("scroll", update, { capture: true });
+    window.removeEventListener("resize", update);
+  };
+}
+
 // Wires every [popovertarget] invoker inside root: anchoring, focus first
 // item, arrow-key roving, and focus return (Escape/light-dismiss are native).
 export function wireMenus(root) {
@@ -207,8 +234,11 @@ export function wireMenus(root) {
       const open = e.newState === "open";
       const invoker = root.querySelector(`[popovertarget="${pop.id}"][data-last-invoker]`) || btn;
       invoker.setAttribute("aria-expanded", String(open));
+      pop._unfollow?.();
+      pop._unfollow = null;
       if (open) {
         anchorPopover(pop, invoker);
+        pop._unfollow = followAnchor(pop, invoker, () => pop.hidePopover());
         pop.querySelector('[role="menuitem"]:not(:disabled), button:not(:disabled), input, select')?.focus();
       }
     });
@@ -440,19 +470,18 @@ export function enhanceSelects(root = document) {
           next?.focus();
         }
       });
-      // Light dismiss: a pointer outside the list, or scrolling the page,
-      // closes it. Scrolling the list itself (wheel, touch, dragging or
-      // clicking its scrollbar) must not: a capturing scroll listener on
-      // window also sees the list's own scroll events.
+      // Light dismiss: a pointer outside the list closes it. While the page
+      // scrolls the list follows its select (followAnchor ignores scrolling
+      // inside the list: wheel, touch, dragging or clicking its scrollbar)
+      // and closes once the select leaves the viewport.
       setTimeout(() => {
         if (!list) return;
         const away = (e) => { if (list && !list.contains(e.target) && e.target !== sel) close(false); };
-        const scrolled = (e) => { if (list && !list.contains(e.target)) close(false); };
         document.addEventListener("pointerdown", away, true);
-        window.addEventListener("scroll", scrolled, { capture: true, passive: true });
+        const unfollow = followAnchor(list, sel, () => close(false));
         dismiss = () => {
           document.removeEventListener("pointerdown", away, true);
-          window.removeEventListener("scroll", scrolled, { capture: true });
+          unfollow();
         };
       });
     };
@@ -498,7 +527,7 @@ export function enhanceDateTime(root = document) {
     btn.disabled = input.disabled;
     group.append(btn);
 
-    let pop = null;
+    let pop = null, unfollow = null;
     const set = (v) => {
       input.value = v;
       input.dispatchEvent(new Event("input", { bubbles: true }));
@@ -508,6 +537,8 @@ export function enhanceDateTime(root = document) {
       if (!pop) return;
       pop.remove();
       pop = null;
+      unfollow?.();
+      unfollow = null;
       btn.setAttribute("aria-expanded", "false");
       document.removeEventListener("pointerdown", outside, true);
       if (focus) btn.focus();
@@ -603,6 +634,7 @@ export function enhanceDateTime(root = document) {
       if (isDate) { const v = input.value ? new Date(input.value + "T00:00:00Z") : new Date(Date.UTC(2026, 10, 1)); drawDate(new Date(Date.UTC(v.getUTCFullYear(), v.getUTCMonth(), 1))); }
       else drawTime();
       anchorPopover(pop, group);
+      unfollow = followAnchor(pop, group, () => close(false));
       pop.addEventListener("keydown", (e) => { if (e.key === "Escape") { e.preventDefault(); close(); } });
       btn.setAttribute("aria-expanded", "true");
       document.addEventListener("pointerdown", outside, true);

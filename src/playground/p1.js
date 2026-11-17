@@ -1,7 +1,7 @@
 // P1 component behaviour for the Component Gallery: verification code,
 // multi-select, command palette and non-modal sheet. Playground glue only;
 // the look lives in the public components.css.
-import { esc, icon, anchorPopover } from "./lib.js";
+import { esc, icon, anchorPopover, followAnchor } from "./lib.js";
 
 /* ---------- Verification code ------------------------------------------
    One input per character: typing advances, Backspace goes back, arrows
@@ -91,8 +91,11 @@ export function wireMultiSelect(field, options, { selected = [], label = "Option
     renderList();
     onChange?.([...chosen]);
   };
+  let unfollow = null;
   const close = () => {
     if (!list) return;
+    unfollow?.();
+    unfollow = null;
     list.remove();
     list = null;
     input.setAttribute("aria-expanded", "false");
@@ -120,6 +123,7 @@ export function wireMultiSelect(field, options, { selected = [], label = "Option
     input.setAttribute("aria-expanded", "true");
     renderList();
     anchorPopover(list, field);
+    unfollow = followAnchor(list, field, close);
   };
 
   field.addEventListener("mousedown", (e) => {
@@ -142,7 +146,6 @@ export function wireMultiSelect(field, options, { selected = [], label = "Option
     }
   });
   input.addEventListener("blur", () => setTimeout(() => { if (document.activeElement !== input) close(); }));
-  window.addEventListener("scroll", () => list && anchorPopover(list, field), { passive: true, capture: true });
   renderChips();
   return { value: () => [...chosen], close };
 }
