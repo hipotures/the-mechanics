@@ -73,14 +73,21 @@ else
   die "needs sha256sum or shasum"
 fi
 
+WORK=$(mktemp -d "${TMPDIR:-/tmp}/the-mechanics.XXXXXX")
+trap 'rm -rf "$WORK"' EXIT INT TERM
+
 if [ "$VERSION" = "latest" ]; then
-  VERSION=$(resolve_latest | sed 's#.*/tag/##')
+  # The API is current right after a release; the /releases/latest redirect is
+  # cached for a few minutes, so it is only the fallback (e.g. API rate limit).
+  VERSION=""
+  if fetch "https://api.github.com/repos/$REPO/releases/latest" "$WORK/latest.json" 2>/dev/null; then
+    VERSION=$(tr -d '\n' < "$WORK/latest.json" | sed -n 's/.*"tag_name": *"\([^"]*\)".*/\1/p')
+  fi
+  case "$VERSION" in v[0-9]*) ;; *) VERSION=$(resolve_latest | sed 's#.*/tag/##') ;; esac
   case "$VERSION" in v[0-9]*) ;; *) die "could not resolve the latest release" ;; esac
 fi
 BASE="https://github.com/$REPO/releases/download/$VERSION"
 
-WORK=$(mktemp -d "${TMPDIR:-/tmp}/the-mechanics.XXXXXX")
-trap 'rm -rf "$WORK"' EXIT INT TERM
 
 CSS_ZIP="the-mechanics-css-$VERSION.zip"
 SKILL_ZIP="the-mechanics-skill-$VERSION.zip"
