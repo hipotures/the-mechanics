@@ -4,6 +4,19 @@
 export const esc = (v) =>
   String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 
+/* ---------- Input modality ------------------------------------------------
+   Keeps data-tm-input="pointer" | "key" on <html>. The CSS uses it so that a
+   popup opened with the mouse does not paint its scripted focus as keyboard
+   focus (see "Pointer sessions" in components.css). Call once at start-up. */
+export function trackInputModality() {
+  if (trackInputModality.done) return;
+  trackInputModality.done = true;
+  const root = document.documentElement;
+  const set = (v) => { if (root.dataset.tmInput !== v) root.dataset.tmInput = v; };
+  document.addEventListener("pointerdown", () => set("pointer"), true);
+  document.addEventListener("keydown", (e) => { if (!["Shift", "Control", "Alt", "Meta"].includes(e.key)) set("key"); }, true);
+}
+
 /* ---------- Deterministic formatting (fixed locale + UTC) ------------- */
 const LOCALE = "en-US";
 export const fmtInt = (n) => (n == null ? "—" : new Intl.NumberFormat(LOCALE, { maximumFractionDigits: 0 }).format(n));

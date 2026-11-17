@@ -3867,6 +3867,26 @@
     background: var(--tm-press);
   }
 
+  /* Pointer sessions (optional hook: `data-tm-input="pointer" | "key"` on
+     <html>, kept by the reference helper trackInputModality). Popups move
+     focus in script when they open (the selected option, the first menu
+     item, today's cell), and browsers guess whether to paint that as
+     keyboard focus — typically yes before the first click on the page, no
+     after. With the hook, a list opened with the mouse shows no focus frame
+     and a select clicked open shows no lift; the first key press brings
+     both back. Without the hook nothing changes. */
+  :root[data-tm-input="pointer"] :is(.tm-menu__item, .tm-picker__cell):focus-visible {
+    border-color: transparent;
+  }
+  :root[data-tm-input="pointer"] :is(.tm-menu__item, .tm-picker__cell):is([aria-selected="true"], [aria-checked="true"], [aria-current="true"]):focus-visible {
+    border-color: var(--tm-select-frame);
+  }
+  :root[data-tm-input="pointer"] :is(.tm-select, .tm-root select:not([class])):focus-visible {
+    outline: 0;
+    border-color: var(--tm-ink);
+    box-shadow: none;
+  }
+
   /* Text selection inside fields uses the selection colors instead of the
      system blue. (The highlighted date/time segment is a browser system
      color that cannot be styled.) */

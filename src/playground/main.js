@@ -1,6 +1,6 @@
 import "./app.css";
 import data from "../../fixtures/demo-data.json";
-import { icon, esc, enhanceSelects, enhanceDateTime, enhanceClearable, enhanceTips } from "./lib.js";
+import { icon, esc, enhanceSelects, enhanceDateTime, enhanceClearable, enhanceTips, trackInputModality } from "./lib.js";
 import analytics from "./pages/analytics.js";
 import workspace from "./pages/workspace.js";
 import dataManagement from "./pages/data.js";
@@ -153,6 +153,7 @@ document.addEventListener("pointerover", (e) => {
 
 setTheme(currentTheme());
 route();
+trackInputModality();
 enhanceSelects(document);
 enhanceClearable(document);
 enhanceTips();

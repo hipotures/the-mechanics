@@ -55,6 +55,7 @@ Test for anything new: *choice among siblings* → selection fill; *own on/off s
 - Composite controls (stepper, input group with affixes, date/time field, multi-select, drop zone) lift as one piece; the focused part inside is marked with the press tint `--tm-press`, never with a second frame.
 - Pickable items: ink frame on the block (item grammar). Tabs, accordion summaries, charts and links: 2px ink outline.
 - Never a blue/teal ring, never two different focus looks on one screen. Do not move focus programmatically into a text field after a mouse action (text fields always show focus).
+- Popups that move focus when they open (select list, menu, picker) must look the same opened by mouse the first time and every later time. Browsers paint scripted focus as keyboard focus before the first click on a page, so keep the input-modality hook: `data-tm-input="pointer"|"key"` on `<html>` (reference `trackInputModality()` in `lib.js`, or the same few lines in the app). With it, a mouse-opened list shows the selection fill but no focus frame, and the first key press brings the frame back.
 
 ## 6. Status, alerts, feedback (§2, §5)
 - Standalone status → `.tm-status` plate (`--sm` in panel heads and overlays) with a `.tm-mark` (`data-state`: complete, active, info, review, warning, error, pending, skipped, none). Inline status in rows/cells/text → `.tm-badge` with its marker shape. Never color alone.
