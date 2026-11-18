@@ -52,6 +52,7 @@ corepack pnpm check:contrast   # WCAG ratios: token pairs + derived colors → d
 corepack pnpm smoke            # 27 interaction/keyboard checks + state screenshots (own port 4175)
 SMOKE_BROWSER=firefox corepack pnpm smoke   # the same checks in Firefox
 corepack pnpm a11y             # axe-core WCAG 2.2 AA scan: 6 pages × 3 themes × desktop/mobile → tmp/a11y/axe.json
+corepack pnpm vitals           # lab LCP / CLS / long tasks per page (mobile, throttled) — compare builds
 corepack pnpm shots [label]    # 7 views × 3 themes × desktop/mobile → tmp/screenshots/<label>/
 ```
 

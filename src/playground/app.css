@@ -102,6 +102,13 @@ html {
   .pg-3col { grid-template-columns: minmax(0, 1fr); }
 }
 .pg-controls { display: flex; flex-wrap: wrap; align-items: center; gap: var(--tm-space-2); }
+/* Narrow screens: the trailing action always starts its own line. Without
+   this the row fits in one line with fallback fonts and wraps only after
+   the web font loads, which shifts the whole page (CLS). */
+@media (max-width: 479px) {
+  .pg-controls--break::after { content: ""; flex-basis: 100%; order: 1; }
+  .pg-controls--break > .tm-btn:last-child { order: 2; }
+}
 .pg-inline { display: flex; gap: var(--tm-space-2); align-items: center; min-width: 0; }
 .pg-inline > :is(.tm-input, .tm-clearable) { flex: 1 1 auto; }
 .pg-plain-fieldset { margin: 0; padding: 0; border: 0; min-width: 0; }

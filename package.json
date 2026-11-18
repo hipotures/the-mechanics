@@ -17,7 +17,8 @@
     "check:contrast": "node scripts/contrast.mjs && node scripts/contrast-derived.mjs",
     "shots": "node scripts/screenshots.mjs",
     "smoke": "node scripts/smoke.mjs",
-    "a11y": "node scripts/a11y.mjs"
+    "a11y": "node scripts/a11y.mjs",
+    "vitals": "node scripts/vitals.mjs"
   },
   "devDependencies": {
     "@fontsource/ibm-plex-mono": "5.3.0",

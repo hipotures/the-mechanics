@@ -1,5 +1,11 @@
 import { esc, icon, fmtInt, fmtNum, fmtMoney, fmtSigned, fmtDateTime, badge, toast, wait, balanceGrid, status, dismissibleAlert } from "../lib.js";
-import { mountChart, legendItems, sparkline, isTimeSeries } from "../charts.js";
+import { legendItems, sparkline, isTimeSeries } from "../chart-helpers.js";
+
+// ECharts loads after the page is on screen: header, KPIs and panel frames
+// paint first (LCP), charts fill their reserved boxes when the chunk arrives.
+let mountChart = null;
+const chartsReady = () => import("../charts.js").then((m) => (mountChart = m.mountChart));
+const chartH = (c) => (c.kind === "donut" ? 150 : 168);
 import { KPI_META, SERVICE_TAGS, ANALYTICS_REGIONS, STALE_CHART } from "../derived.js";
 
 const WIDE = new Set(["worker-util"]);
@@ -73,7 +79,7 @@ function panel(c, staleMin) {
             ? `<ul class="tm-legend pg-legend"><li><span class="tm-legend__item"><span class="tm-legend__swatch tm-series-1"></span>${esc(c.series[0].name)}</span></li><li><span class="tm-legend__item"><span class="tm-legend__swatch tm-legend__swatch--rule" style="--_series:var(--tm-chart-target)"></span>Target</span></li></ul>`
             : ""
       }
-      ${c.kind === "table" ? incidentTable(c) : `<div class="tm-chart" data-chart="${esc(c.id)}"></div>`}
+      ${c.kind === "table" ? incidentTable(c) : `<div class="tm-chart" data-chart="${esc(c.id)}" style="min-height:${chartH(c)}px"></div>`}
     </div>
   </article>`;
 }
@@ -109,7 +115,7 @@ export default {
         <h1 class="tm-page-title">${esc(a.pageTitle)}</h1>
         <p class="tm-subtitle">${esc(a.description)} <span class="tm-mono">As of ${esc(fmtDateTime(data.meta.asOf))}.</span></p>
       </div>
-      <div class="pg-controls" role="group" aria-label="Dashboard filters">
+      <div class="pg-controls pg-controls--break" role="group" aria-label="Dashboard filters">
         <fieldset class="tm-segmented" aria-label="Time range">
           <legend class="tm-sr-only">Time range</legend>
           ${a.timeRangeOptions
@@ -156,6 +162,7 @@ export default {
 
     function mountAll() {
       mounts.splice(0).forEach((m) => m.destroy());
+      if (!mountChart) return;
       main.querySelectorAll("[data-panel]").forEach((p) => {
         const id = p.dataset.panel;
         const c = byId[id];
@@ -174,7 +181,7 @@ export default {
         }
         const el = p.querySelector("[data-chart]");
         el.innerHTML = "";
-        const m = mountChart(el, c, { height: c.kind === "donut" ? 150 : 168, heatLabels: heatAuto() ? "auto" : "ink" });
+        const m = mountChart(el, c, { height: chartH(c), heatLabels: heatAuto() ? "auto" : "ink" });
         mounts.push(m);
         p.querySelector("[data-heat-labels]")?.addEventListener("click", (e) => {
           const on = e.currentTarget.getAttribute("aria-pressed") !== "true";
@@ -247,8 +254,10 @@ export default {
 
     const grids = [...main.querySelectorAll(".tm-panel-grid")].map((g) => balanceGrid(g));
     applyFilter();
-    mountAll();
+    let alive = true;
+    chartsReady().then(() => alive && mountAll());
     return () => {
+      alive = false;
       mounts.forEach((m) => m.destroy());
       grids.forEach((g) => g.destroy());
     };

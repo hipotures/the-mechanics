@@ -1,12 +1,14 @@
 import "./app.css";
 import data from "../../fixtures/demo-data.json";
 import { icon, esc, enhanceSelects, enhanceDateTime, enhanceClearable, enhanceTips, trackInputModality } from "./lib.js";
-import analytics from "./pages/analytics.js";
-import workspace from "./pages/workspace.js";
-import dataManagement from "./pages/data.js";
-import catalog from "./pages/catalog.js";
-import content from "./pages/content.js";
-import gallery from "./pages/gallery.js";
+// Pages load on demand: each route is its own chunk, so ECharts is fetched
+// only by the pages that draw charts (Analytics, Component Gallery).
+const analytics = () => import("./pages/analytics.js");
+const workspace = () => import("./pages/workspace.js");
+const dataManagement = () => import("./pages/data.js");
+const catalog = () => import("./pages/catalog.js");
+const content = () => import("./pages/content.js");
+const gallery = () => import("./pages/gallery.js");
 
 const PAGES = [
   { id: "analytics", label: "Analytics", icon: "analytics", page: analytics, group: "apps" },
@@ -116,12 +118,14 @@ document.querySelectorAll("[data-nav-group]").forEach((btn) => {
 
 let cleanup = null;
 let currentId = null;
-function route() {
+async function route() {
   const id = (location.hash.match(/^#\/([\w-]+)/) || [])[1] || "analytics";
   const entry = PAGES.find((p) => p.id === id) || PAGES[0];
   if (entry.id === currentId) return;
   const first = currentId === null;
   currentId = entry.id;
+  const page = (await entry.page()).default;
+  if (currentId !== entry.id) return; // a newer navigation won the race
   cleanup?.();
   // Fresh element per route: drops every listener the previous page attached.
   const fresh = main.cloneNode(false);
@@ -133,7 +137,7 @@ function route() {
     if (a.dataset.nav === entry.id) a.setAttribute("aria-current", "page");
     else a.removeAttribute("aria-current");
   });
-  cleanup = entry.page.render(main, data) || null;
+  cleanup = page.render(main, data) || null;
   enhanceDateTime(main);
   window.scrollTo(0, 0);
   if (!first) main.focus({ preventScroll: true });

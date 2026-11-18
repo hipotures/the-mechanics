@@ -1,5 +1,4 @@
 import { esc, icon, badge, toast, wireMenus, confirmDialog, rangeFill, fmtMoney, stepperHTML, wireSteppers, status, dismissibleAlert } from "../lib.js";
-import { mountChart, mountComposite } from "../charts.js";
 import { wireOtp, wireMultiSelect, createPalette, wireSheet } from "../p1.js";
 import { media, bindMedia } from "./catalog.js";
 
@@ -226,7 +225,7 @@ export default {
           <div class="tm-kpi"><div class="tm-kpi__label">Neutral</div><div class="tm-kpi__value">748,378</div><div class="tm-kpi__foot"><span class="tm-trend">${icon("arrowUp", "tm-icon--sm")}+8.1%</span></div></div>
           <div class="tm-kpi"><div class="tm-kpi__label">No comparison</div><div class="tm-kpi__value">5<span class="tm-kpi__unit">/ 6</span></div><div class="tm-kpi__foot"><span class="tm-trend">— n/a</span></div></div></div>`, "pg-spec--wide")}
         ${spec("Legend with many series · threshold", `<ul class="tm-legend">${legendChart.series.map((s, i) => `<li><span class="tm-legend__item"><span class="tm-legend__swatch tm-series-${i + 1} tm-legend__swatch--line ${i ? `tm-dash-${Math.min(i + 1, 4)}` : ""}"></span>${esc(s.name)}</span></li>`).join("")}<li><button class="tm-legend__item" aria-pressed="false"><span class="tm-legend__swatch tm-series-6"></span>Hidden series</button></li><li><span class="tm-legend__item"><span class="tm-legend__swatch tm-legend__swatch--rule" style="--_series:var(--tm-chart-threshold)"></span>Threshold</span></li></ul>
-          <div class="tm-chart pg-mt" id="g-chart"></div>`, "pg-spec--wide")}
+          <div class="tm-chart pg-mt" id="g-chart" style="min-height:160px"></div>`, "pg-spec--wide")}
         ${spec("Composite time chart · building blocks", `<div class="tm-panel">
           <header class="tm-panel__head tm-panel__head--rich">
             <div class="tm-panel__heading"><h3 class="tm-panel__title">Activity over time</h3><span class="tm-panel__subtitle">3-hour buckets · stacked by series · drag across the chart to sum a span</span></div>
@@ -235,7 +234,7 @@ export default {
                 <label class="tm-segmented__option"><input type="radio" name="cx-metric" value="Tokens" checked>Tokens</label>
                 <label class="tm-segmented__option"><input type="radio" name="cx-metric" value="Requests">Requests</label></fieldset></div>
           </header>
-          <div class="tm-panel__body"><div class="tm-chart" id="cx-chart"></div>
+          <div class="tm-panel__body"><div class="tm-chart" id="cx-chart" style="min-height:230px"></div>
             <div class="tm-chart-readout" id="cx-readout" aria-live="polite"></div>
             <div class="tm-chart-options">
               <label class="tm-choice"><input class="tm-check" type="checkbox" id="cx-peak" checked><span class="tm-choice__label">Peak marker</span></label>
@@ -342,12 +341,18 @@ export default {
     wireMenus(main);
     wireSteppers(main);
     bindMedia(main);
-    const chart = mountChart($("#g-chart"), sampleChart, { height: 160 });
+    // ECharts loads after the gallery is on screen; the boxes keep their height meanwhile.
+    let chart = null;
+    let cx = null;
+    let alive = true;
+    import("../charts.js").then(({ mountChart, mountComposite }) => {
+    if (!alive) return;
+    chart = mountChart($("#g-chart"), sampleChart, { height: 160 });
     const byId = Object.fromEntries(data.analytics.charts.map((c) => [c.id, c]));
     const readout = $("#cx-readout");
     const idle = "Drag across the chart to sum a span.";
     readout.textContent = idle;
-    const cx = mountComposite(
+    cx = mountComposite(
       $("#cx-chart"),
       {
         metrics: { Tokens: byId.tokens, Requests: byId.requests },
@@ -364,6 +369,7 @@ export default {
     main.querySelectorAll('input[name="cx-metric"]').forEach((r) => r.addEventListener("change", () => { cx.setMetric(r.value); drawLegend(); }));
     $("#cx-peak").addEventListener("change", (e) => cx.setPeak(e.target.checked));
     $("#cx-window").addEventListener("change", (e) => cx.setWindow(e.target.checked));
-    return () => { spy.disconnect(); ms.close(); palette.destroy(); $("#g-sheet")?.hidePopover?.(); chart.destroy(); cx.destroy(); };
+    });
+    return () => { alive = false; spy.disconnect(); ms.close(); palette.destroy(); $("#g-sheet")?.hidePopover?.(); chart?.destroy(); cx?.destroy(); };
   },
 };

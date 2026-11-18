@@ -8,6 +8,7 @@ import { LineChart, BarChart, PieChart, HeatmapChart, ScatterChart } from "echar
 import { GridComponent, TooltipComponent, MarkLineComponent, VisualMapComponent, LegendComponent, TitleComponent, MarkPointComponent, MarkAreaComponent, BrushComponent } from "echarts/components";
 import { LabelLayout } from "echarts/features";
 import { SVGRenderer } from "echarts/renderers";
+import { seriesCls, dashCls, isTimeSeries, legendItems, sparkline } from "./chart-helpers.js";
 import { readChartTokens, createEChartsTheme, seriesLineType, referenceLine, peakMarker, rangeArea, rangeBrush, dayBoundaryLabels } from "../the-mechanics/adapters/echarts.js";
 import { esc, fmtNum } from "./lib.js";
 
@@ -15,8 +16,6 @@ echarts.use([LineChart, BarChart, PieChart, HeatmapChart, ScatterChart, GridComp
 
 const CHAR_W = 6.7; // approx. advance of 11px IBM Plex Mono (medium), used for layout decisions
 const textW = (s) => String(s).length * CHAR_W;
-const seriesCls = (i) => `tm-series-${(i % 8) + 1}`;
-const dashCls = (i) => (i > 0 && i < 4 ? `tm-dash-${i + 1}` : "");
 const fmtVal = (v, unit) => (v == null ? "no data" : unit === "%" ? `${fmtNum(v, 2)}%` : `${fmtNum(v, 2)}${unit ? ` ${unit}` : ""}`);
 const reducedMotion = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -259,13 +258,8 @@ function formatter(c) {
 }
 
 /* ---------- Public API --------------------------------------------- */
-export const isTimeSeries = (c) => Array.isArray(c.xLabels) && c.xLabels[0]?.includes(":");
+export { isTimeSeries, legendItems, sparkline };
 
-export function legendItems(c) {
-  if (["line", "area", "stacked-bar", "grouped-bar"].includes(c.kind) && c.series.length > 1)
-    return c.series.map((s, i) => ({ name: s.name, cls: seriesCls(i), dash: dashCls(i), line: c.kind === "line" }));
-  return [];
-}
 
 export function summarize(c) {
   const kind = c.kind.replace("-", " ");
@@ -441,16 +435,6 @@ export function mountChart(el, chart, { height = 180, heatLabels = "ink" } = {})
   };
 }
 
-// Inline sparkline for KPI tiles (decorative, no labels; the value is in text).
-export function sparkline(values, { w = 84, h = 22, tone = "tm-series-1" } = {}) {
-  if (!values?.length) return "";
-  const min = Math.min(...values);
-  const max = Math.max(...values);
-  const x = (i) => 1 + (i * (w - 2)) / (values.length - 1);
-  const y = (v) => h - 2 - ((v - min) / (max - min || 1)) * (h - 4);
-  const d = values.map((v, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join("");
-  return `<svg class="pg-spark ${tone}" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" preserveAspectRatio="none" aria-hidden="true"><path class="tm-chart__area" d="${d}L${w - 1},${h}L1,${h}Z"/><path class="tm-chart__line" style="stroke-width:1.5" d="${d}"/><circle class="tm-chart__point tm-chart__point--solid" cx="${x(values.length - 1)}" cy="${y(values.at(-1))}" r="2"/></svg>`;
-}
 
 /* ---------- Composite example: building blocks together -------------
  * Stacked time buckets + metric switcher + peak callout + optional range

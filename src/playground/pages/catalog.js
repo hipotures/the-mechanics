@@ -3,9 +3,10 @@ import { esc, icon, fmtMoney, fmtNum, badge, toast, rangeFill, stepperHTML, wire
 const BASE = import.meta.env.BASE_URL;
 const img = (key) => `${BASE}products/${key}.svg`;
 
-export function media(key, alt, { cls = "", badgeHTML = "" } = {}) {
+// eager: images likely above the fold (first catalog row) load at once; the first gets fetchpriority=high (LCP).
+export function media(key, alt, { cls = "", badgeHTML = "", eager = false, priority = false } = {}) {
   return `<div class="tm-media ${cls}" data-state="loading">
-    <img src="${img(key)}" alt="${esc(alt)}" loading="lazy" decoding="async" width="400" height="300">
+    <img src="${img(key)}" alt="${esc(alt)}" loading="${eager ? "eager" : "lazy"}"${priority ? ' fetchpriority="high"' : ""} decoding="async" width="400" height="300">
     <div class="tm-media__fallback" role="img" aria-label="Image unavailable: ${esc(alt)}">${icon("image", "tm-icon--lg")}<span>Image unavailable</span></div>
     ${badgeHTML ? `<span class="tm-media__badge">${badgeHTML}</span>` : ""}
   </div>`;
@@ -113,10 +114,10 @@ export default {
       return list;
     }
 
-    function card(p) {
+    function card(p, i) {
       const b = p.badge ? status(BADGE_TONE[p.badge], p.badge) : "";
       return `<article class="tm-product" aria-labelledby="t-${p.id}">
-        ${media(p.imageKey, p.title, { badgeHTML: b })}
+        ${media(p.imageKey, p.title, { badgeHTML: b, eager: i < 4, priority: i === 0 })}
         <div class="tm-product__body">
           <div class="tm-meta-row"><span>${esc(p.category)}</span><span>${esc(p.id)}</span></div>
           <h3 class="tm-product__title" id="t-${p.id}"><button data-detail="${p.id}">${esc(p.title)}</button></h3>
