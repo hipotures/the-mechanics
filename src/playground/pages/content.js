@@ -108,7 +108,7 @@ export default {
             <p>A short, occasional digest about structured interfaces. No real emails are sent from this demo.</p>
             <form class="pg-inline" id="subscribe" novalidate>
               <label class="tm-sr-only" for="sub-email">Email address</label>
-              <input class="tm-input" type="email" id="sub-email" placeholder="you@example.test" autocomplete="off">
+              <input class="tm-input" type="email" id="sub-email" name="email" placeholder="you@example.test" autocomplete="email" spellcheck="false">
               <button class="tm-btn tm-btn--primary">Subscribe</button>
             </form>
           </section>

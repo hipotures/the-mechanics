@@ -54,6 +54,26 @@
   .tm-root :where(h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd) {
     margin: 0;
   }
+  /* Headings break into balanced lines, paragraphs avoid a lone last word. */
+  .tm-root :where(h1, h2, h3, h4) {
+    text-wrap: balance;
+  }
+  .tm-root :where(p, li, dd, blockquote) {
+    text-wrap: pretty;
+  }
+  /* Taps: no grey flash (controls have their own press state) and no
+     double-tap zoom delay on controls. */
+  .tm-root {
+    -webkit-tap-highlight-color: transparent;
+  }
+  .tm-root :where(a, button, input, select, textarea, label, summary, [role="button"], [role="tab"], [role="option"], [role="menuitem"]) {
+    touch-action: manipulation;
+  }
+  /* A sticky .tm-topbar must not cover the element that keyboard focus or an
+     in-page link scrolls to (WCAG 2.4.11). The page scroller is <html>. */
+  :root:has(.tm-root .tm-topbar, .tm-root.tm-topbar) {
+    scroll-padding-top: calc(var(--tm-topbar-h) + var(--tm-space-2));
+  }
   .tm-root :where(button, input, select, textarea) {
     font: inherit;
     color: inherit;

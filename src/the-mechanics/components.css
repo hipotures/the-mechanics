@@ -155,6 +155,7 @@
     border-right: var(--tm-bw-1) solid var(--tm-line-1);
   }
   .tm-sidebar__inner {
+    overscroll-behavior: contain;
     position: sticky;
     top: var(--tm-topbar-h);
     height: calc(100dvh - var(--tm-topbar-h));
@@ -1284,6 +1285,7 @@
   /* Listbox (option list) for the scripted select fallback: same look as the
      base-select picker — ink frame, drawn tick on the chosen option. */
   .tm-menu.tm-listbox {
+    overscroll-behavior: contain;
     border: var(--tm-bw-control) solid var(--tm-ink);
     max-height: min(20rem, 60vh);
     overflow-y: auto;
@@ -1451,6 +1453,7 @@
     gap: var(--tm-space-2);
   }
   .tm-picker__col {
+    overscroll-behavior: contain;
     display: flex;
     flex-direction: column;
     gap: 2px;
@@ -3004,6 +3007,7 @@
     animation: tm-drawer-in var(--tm-dur-slow) var(--tm-ease);
   }
   .tm-drawer > .tm-dialog__body {
+    overscroll-behavior: contain;
     flex: 1;
     overflow-y: auto;
   }
@@ -3776,6 +3780,7 @@
     box-shadow: inset 0 calc(var(--tm-bw-focus) * -1) 0 var(--tm-focus);
   }
   .tm-palette__list {
+    overscroll-behavior: contain;
     max-height: min(22rem, 55vh);
     overflow-y: auto;
     margin: 0;
@@ -3859,6 +3864,7 @@
     animation: tm-dialog-in var(--tm-dur-base) var(--tm-ease);
   }
   .tm-sheet > .tm-dialog__body {
+    overscroll-behavior: contain;
     flex: 1;
     overflow-y: auto;
   }

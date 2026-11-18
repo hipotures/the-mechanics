@@ -32,6 +32,8 @@ function setTheme(id) {
   if (!THEMES.some((t) => t.id === id)) return;
   root.classList.add("tm-theme-switching");
   root.setAttribute("data-tm-theme", id);
+  // Browser UI (mobile address bar) matches the topbar color of the theme.
+  document.querySelector('meta[name="theme-color"]')?.setAttribute("content", getComputedStyle(root).getPropertyValue("--tm-chrome").trim());
   requestAnimationFrame(() => requestAnimationFrame(() => root.classList.remove("tm-theme-switching")));
   try { localStorage.setItem("tm-theme", id); } catch {}
   const url = new URL(location.href);

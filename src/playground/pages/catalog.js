@@ -226,7 +226,7 @@ export default {
               : `<div class="tm-state"><div class="tm-state__icon">${icon("cart")}</div><div class="tm-state__title">Your cart is empty</div><div class="tm-state__body">Add a product from the catalog to continue.</div></div>`
           }
           <form class="tm-field" id="discount" novalidate><label class="tm-field__label" for="code">Discount code</label>
-            <div class="pg-inline"><input class="tm-input tm-input--mono" id="code" value="${esc(c.cart.discountCode)}" aria-describedby="code-err" autocomplete="off"><button class="tm-btn tm-btn--outline">Apply</button></div>
+            <div class="pg-inline"><input class="tm-input tm-input--mono" id="code" name="discount-code" value="${esc(c.cart.discountCode)}" aria-describedby="code-err" autocomplete="off" spellcheck="false"><button class="tm-btn tm-btn--outline">Apply</button></div>
             <span class="tm-field__error" id="code-err" hidden></span></form>
           <dl class="pg-dl pg-totals"><dt>Subtotal</dt><dd class="tm-num">${money(subtotal)}</dd><dt>Discount</dt><dd class="tm-num">${money(0)}</dd><dt>Shipping</dt><dd class="tm-muted">Calculated at checkout</dd><dt class="pg-total">Total</dt><dd class="tm-num pg-total">${money(subtotal)}</dd></dl>
         </div></div>
