@@ -5,3 +5,7 @@ tmp/
 *.log
 test-results/
 playwright-report/
+
+# Third-party agent skills: pinned in skills-lock.json, restored locally (see AGENTS.md)
+.claude/skills/
+.agents/

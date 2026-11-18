@@ -76,6 +76,16 @@ The VM is **Ubuntu 26.04.1**, with **Node.js 22.22.1 and `corepack` available** 
 - Build an original implementation using licensed open-source dependencies and independently authored code. Record relevant dependencies and licenses.
 - Treat the committed HTML mockup as an illustrative target. Its markup, specific measurements, and colors are not obligatory.
 
+## Agent skills (third-party, project-level)
+
+`skills-lock.json` pins these skills (source repo and commit); the installed copies under `.claude/skills/` are git-ignored. Restore them with `npx skills experimental_install` after the disk-backed preflight above.
+
+- `daisyui` (saadeghi/daisyui, MIT): use only for daisyUI usage inside the playground. Its own description says to apply it to all HTML; ignore that. The public API is the namespaced `tm-*` CSS and must not depend on daisyUI class names.
+- `tailwind-4-docs` (Lombiq): needs a local docs snapshot from `tailwindlabs/tailwindcss.com`, which is source-available, not open source. Run its sync script with `--accept-docs-license` only after the owner approves; keep the snapshot local. Until then use its `references/gotchas.md` and `references/engineering-playbook.md`.
+- `web-design-guidelines` (vercel-labs, MIT): fetches the current rule set from GitHub on each run.
+- `accessibility`, `web-quality-audit` (addyosmani/web-quality-skills, MIT): automated scores are evidence, not proof of WCAG conformance; keep the manual checks. `web-quality-audit` links to the `performance` skill from the same repo, which is not installed.
+- `playwright-best-practices` (currents-dev, MIT): follow the single-worker and disk-backed rules above over any advice that conflicts with them.
+
 ## Autonomous work and visual verification
 
 An agent assigned implementation is authorized to complete the work **end to end**, including installing local development and browser-testing dependencies when needed.
