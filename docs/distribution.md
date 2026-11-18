@@ -39,6 +39,7 @@ Source files (`src/the-mechanics/*.css`) are also importable directly by any bun
 - **Tokens:** every `--tm-*` custom property listed in `DESIGN.md §4` is public. Others (`--_bg`, `--_series`, …) are private.
 - **Components:** classes prefixed `tm-` with BEM-style elements (`tm-panel__head`) and modifiers (`tm-btn--primary`). State is expressed through native attributes: `disabled`, `aria-invalid`, `aria-busy`, `aria-pressed`, `aria-selected`, `aria-current`, `aria-sort`, `:checked`, `:indeterminate`, `[open]`, `:popover-open`.
 - **Input-modality hook (optional, recommended with scripted popups):** `data-tm-input="pointer" | "key"` on `<html>`, set from capturing `pointerdown` / `keydown` listeners (`trackInputModality()`, part of `the-mechanics.js`). With it, popup items focused by script after a mouse action show no focus frame, and a select clicked open shows no lift. Without it, browsers may paint that focus as keyboard focus before the first click on the page.
+- **Content width:** `.tm-main` centers page content at `--tm-content-max` (`.tm-main--narrow`, `.tm-main--full`); without the shell wrap content in `.tm-container`. Do not set your own `max-width` on page content: every app then gets the same width and centering.
 - **Overrides:** consumer CSS that is not in a layer always wins over the library; no `!important` needed.
 - **Behavior:** native elements (`<dialog>`, `<details>`, `popover`, form controls) plus the optional `the-mechanics.js`.
 

@@ -40,10 +40,6 @@ html {
 .tm-main:focus {
   outline: 0;
 }
-.tm-main {
-  max-width: var(--tm-content-max);
-  width: 100%;
-}
 .pg-sidebar-foot {
   margin-top: auto;
   padding: var(--tm-space-3) calc(var(--tm-bw-control) + var(--tm-select-pad)) 0;
