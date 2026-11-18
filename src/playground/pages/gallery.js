@@ -294,7 +294,7 @@ export default {
     $("#g-drawer").addEventListener("click", (e) => { if (e.target.closest("[data-close]") || e.target === e.currentTarget) e.currentTarget.close(); });
     $("#g-dlg").addEventListener("click", (e) => { if (e.target === e.currentTarget) e.currentTarget.close(); });
     $("#g-confirm").addEventListener("click", async () => {
-      const ok = await confirmDialog({ title: cs.confirmation.title, body: `<p>${esc(cs.confirmation.body)}</p>`, confirm: cs.confirmation.confirm, cancel: cs.confirmation.cancel, danger: true });
+      const ok = await confirmDialog({ title: cs.confirmation.title, body: cs.confirmation.body, confirm: cs.confirmation.confirm, cancel: cs.confirmation.cancel, danger: true });
       toast({ tone: ok ? "success" : "neutral", title: ok ? "Confirmed" : "Cancelled", timeout: 2500 });
     });
     main.querySelectorAll("[data-jump]").forEach((a) =>

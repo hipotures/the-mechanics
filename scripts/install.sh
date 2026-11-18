@@ -5,7 +5,7 @@
 # sha256sum or shasum.
 #
 #   curl -fsSL https://github.com/hipotures/the-mechanics/releases/latest/download/install.sh | sh
-#   curl -fsSL .../install.sh | sh -s -- --version v0.1.8 --css public/vendor/the-mechanics
+#   curl -fsSL .../install.sh | sh -s -- --version v0.1.9 --css public/vendor/the-mechanics
 #
 # Run it from the root of the project that will use The Mechanics.
 set -eu
@@ -22,7 +22,7 @@ usage() {
   cat <<'EOF'
 Usage: install.sh [options]
 
-  --version TAG     release tag to install, e.g. v0.1.8 (default: latest)
+  --version TAG     release tag to install, e.g. v0.1.9 (default: latest)
   --css DIR         where to put the CSS + fonts (default: vendor/the-mechanics)
   --skill DIR       where to put the agent skill (default: .claude/skills/the-mechanics)
   --global-skill    put the skill in ~/.claude/skills/the-mechanics (all projects)
@@ -189,5 +189,5 @@ if [ "$CHANGED" = 1 ]; then
   echo "For the agent: The Mechanics was updated $from -> $VERSION. Apply the release notes and the changed files above to the app; if any skill file changed, re-read $SKILL_DIR/SKILL.md and the changed references first."
 elif [ "$UPDATED" = 0 ] && [ "$DO_CSS" = 1 ]; then
   echo
-  echo "Next: wire the CSS into the app — see $CSS_DIR/distribution.md (the agent skill covers this step)."
+    echo "Next: wire the CSS and the-mechanics.js into the app — see $CSS_DIR/distribution.md (the agent skill covers this step)."
 fi

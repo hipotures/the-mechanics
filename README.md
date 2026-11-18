@@ -2,6 +2,8 @@
 
 A standalone **design system and visual playground** in the *Sharp Retro-Tech / Structured Technical Minimalism* direction: one visual grammar, three themes, five very different example applications and a complete component gallery — all driven by deterministic synthetic fixtures.
 
+**Live demo:** <https://hipotures.github.io/the-mechanics/> — all five example apps and the Component Gallery (`#/components`) in Light, Dark and Coffee.
+
 ![Analytics, Light](docs/screenshots/apps/analytics-light-desktop.jpg)
 
 | | | |
@@ -16,11 +18,11 @@ Each [GitHub release](https://github.com/hipotures/the-mechanics/releases) ships
 ```sh
 cd <your-project>
 curl -fsSL https://github.com/hipotures/the-mechanics/releases/latest/download/install.sh | sh
-# → vendor/the-mechanics/            CSS, fonts, licenses, distribution.md
+# → vendor/the-mechanics/            CSS, fonts, the-mechanics.js, licenses, distribution.md
 # → .claude/skills/the-mechanics/    Claude Code skill
 ```
 
-Options: `--version v0.1.8` (pin a release; default latest), `--css <dir>` (e.g. `public/vendor/the-mechanics` so your server serves it), `--skill <dir>` or `--global-skill` (`~/.claude/skills/`), `--no-css`, `--no-skill`, `--force`. Re-running updates: it replaces only directories the installer created (they contain `.the-mechanics-version`) and prints a report meant to be pasted to the agent working on the app: old → new version, every changed/added/removed file (files that differ only in the version stamp are counted separately), the release notes of every skipped release and a closing instruction for the agent. Release notes: [docs/releases/](docs/releases/). Then follow [docs/distribution.md](docs/distribution.md) to load the CSS for your framework.
+Options: `--version v0.1.9` (pin a release; default latest), `--css <dir>` (e.g. `public/vendor/the-mechanics` so your server serves it), `--skill <dir>` or `--global-skill` (`~/.claude/skills/`), `--no-css`, `--no-skill`, `--force`. Re-running updates: it replaces only directories the installer created (they contain `.the-mechanics-version`) and prints a report meant to be pasted to the agent working on the app: old → new version, every changed/added/removed file (files that differ only in the version stamp are counted separately), the release notes of every skipped release and a closing instruction for the agent. Release notes: [docs/releases/](docs/releases/). Then follow [docs/distribution.md](docs/distribution.md) to load the CSS for your framework.
 
 Skill only, with the [`skills` CLI](https://skills.sh) (installs into Claude Code and other agents; finds `skills/the-mechanics/` in this repo):
 
@@ -91,10 +93,11 @@ src/the-mechanics/        PORTABLE design system (no Tailwind/daisyUI needed)
   adapters/daisyui.css    optional daisyUI 5 variable bridge
   adapters/echarts.js     optional Apache ECharts theme built from --tm-* tokens
   index.css               layered entry point
+  the-mechanics.js        optional behaviors module (picker, select fallback, menus, tooltips, toasts, dialogs)
 src/playground/           playground only: shell, router, pages, ECharts chart mapping, page layouts (pg-*)
 fixtures/demo-data.json   deterministic synthetic data (single source of demo content)
 public/products/          original generated product illustrations (scripts/gen-product-images.mjs)
-examples/plain-html/      CSS-only consumer example
+examples/plain-html/      consumer example: dist CSS + the optional the-mechanics.js only
 scripts/                  build-css, contrast, contrast-derived, screenshots, smoke, image generator;
                           install.sh (release installer, also attached to each release),
                           release-assets.sh (builds the release zips + SHA256SUMS)
@@ -107,7 +110,7 @@ references/               visual concept reference (not production code)
 ## Documentation
 
 - [DESIGN.md](DESIGN.md) — visual intent, hierarchy, tokens, themes, component rules, chart grammar, permitted variations, anti-patterns, decisions for review.
-- [docs/distribution.md](docs/distribution.md) — CSS-only integration for plain HTML, React, Svelte, Rust/Datastar, and optional Tailwind/daisyUI.
+- [docs/distribution.md](docs/distribution.md) — integration for plain HTML, React, Svelte, Rust/Datastar and optional Tailwind/daisyUI; the optional behaviors module `the-mechanics.js`.
 - [docs/component-status.md](docs/component-status.md) — P0/P1 status against [docs/component-coverage.md](docs/component-coverage.md).
 - [docs/derived-data.md](docs/derived-data.md) — how fixtures are used and every derived value.
 - [docs/verification/testing-report.md](docs/verification/testing-report.md) — what was tested, improvement passes, what was not tested.

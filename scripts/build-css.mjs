@@ -4,6 +4,7 @@
 //   the-mechanics.css         tokens + themes + base + components (single file)
 //   the-mechanics.daisyui.css optional bridge for Tailwind 4 + daisyUI 5 apps
 //   fonts.css + fonts/*.woff2 IBM Plex Sans/Mono (latin + latin-ext, OFL-1.1)
+//   the-mechanics.js          optional behaviors (picker, select fallback, popups …), ES module
 import { readFileSync, writeFileSync, mkdirSync, copyFileSync, rmSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -28,6 +29,11 @@ const banner = (name) =>
   `/*! The Mechanics ${pkg.version} — ${name} — CC0-1.0 — https://github.com/hipotures/the-mechanics */\n`;
 
 writeFileSync(join(out, "the-mechanics.css"), banner("design system") + inline(join(src, "index.css")));
+// Behaviors: the source already starts with its own /*! … */ line; stamp the version into it.
+writeFileSync(
+  join(out, "the-mechanics.js"),
+  readFileSync(join(src, "the-mechanics.js"), "utf8").replace(/^\/\*! The Mechanics — /, `/*! The Mechanics ${pkg.version} — `),
+);
 writeFileSync(
   join(out, "the-mechanics.daisyui.css"),
   banner("daisyUI 5 bridge") + readFileSync(join(src, "adapters/daisyui.css"), "utf8"),

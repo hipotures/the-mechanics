@@ -3,8 +3,9 @@
 //   pnpm build && pnpm smoke
 import { chromium, firefox } from "playwright";
 import { spawn } from "node:child_process";
-import { mkdirSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
+import { mkdirSync, writeFileSync, readFileSync } from "node:fs";
+import { join, normalize, extname } from "node:path";
+import { createServer } from "node:http";
 
 const shots = process.env.SHOT_DIR || "tmp/screenshots/states";
 mkdirSync(shots, { recursive: true });
@@ -473,6 +474,43 @@ try {
     const d = await p2.evaluate(() => getComputedStyle(document.querySelector(".tm-spinner")).animationDuration);
     assert(parseFloat(d) < 0.001, `spinner ${d}`);
     await c2.close();
+  });
+  /* ---- Consumer path: dist CSS + dist the-mechanics.js only ----- */
+  await check("consumer example: the-mechanics.js replaces date/time/select popups, wires menus, tips, clear", async () => {
+    // Static server for the repository (examples/ + dist/), like an app serving vendored files.
+    const types = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".woff2": "font/woff2" };
+    const files = createServer((req, res) => {
+      const rel = normalize(decodeURIComponent(req.url.split("?")[0])).replace(/^([/\\])+/, "");
+      if (!/^(examples|dist)[/\\]/.test(rel)) { res.writeHead(404).end(); return; }
+      try { res.writeHead(200, { "content-type": types[extname(rel)] || "application/octet-stream" }).end(readFileSync(rel)); }
+      catch { res.writeHead(404).end(); }
+    }).listen(0, "127.0.0.1");
+    await new Promise((r) => files.on("listening", r));
+    const c3 = await browser.newContext({ viewport: { width: 1300, height: 900 } });
+    const p3 = await c3.newPage();
+    const pageErrors = [];
+    p3.on("pageerror", (e) => pageErrors.push(String(e)));
+    try {
+      await p3.goto(`http://127.0.0.1:${files.address().port}/examples/plain-html/index.html`, { waitUntil: "networkidle" });
+      assert((await p3.locator(".tm-picker-field").count()) === 2, "date + time wrapped in .tm-picker-field");
+      await p3.locator(".tm-picker-field__btn").first().click();
+      assert(await p3.locator(".tm-picker").isVisible(), "our date picker opens");
+      await p3.keyboard.press("Escape");
+      const baseSelect = await p3.evaluate(() => CSS.supports("appearance", "base-select"));
+      if (!baseSelect) {
+        await p3.locator("#run-project").click();
+        assert(await p3.locator(".tm-listbox[role=listbox]").isVisible(), "select fallback list opens");
+        await p3.keyboard.press("Escape");
+      }
+      assert((await p3.locator("[popovertarget=run-menu]").getAttribute("aria-haspopup")) === "menu", "menu wired");
+      assert(await p3.locator("#run-note[data-tm-clear]").count(), "clear ✕ on text field");
+      await p3.evaluate(() => { const i = document.createElement("input"); i.className = "tm-input"; i.type = "time"; i.id = "late"; document.querySelector("#behaviors").append(i); });
+      await p3.waitForFunction(() => document.querySelector("#late")?.closest(".tm-picker-field"));
+      assert(!pageErrors.length, pageErrors.join(" | "));
+    } finally {
+      await c3.close();
+      files.close();
+    }
   });
   await check("no uncaught page errors", async () => assert(!errors.length, errors.join(" | ")));
 } finally {

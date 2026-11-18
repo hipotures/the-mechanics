@@ -98,7 +98,7 @@ function renderOverview(main, data) {
   main.querySelectorAll('input[name="secf"]').forEach((r) => r.addEventListener("change", () => { filter = r.value; draw(); }));
   main.querySelectorAll("[data-pass]").forEach((sel) => sel.addEventListener("change", () => toast({ tone: "success", title: `Pass ${sel.dataset.pass.slice(1)} model updated`, body: sel.value, timeout: 3000 })));
   main.querySelector("#archive").addEventListener("click", async () => {
-    const ok = await confirmDialog({ title: "Archive this workspace?", body: `<p>${esc(w.project)} becomes read-only. Exports and history stay available.</p>`, confirm: "Archive", danger: true });
+    const ok = await confirmDialog({ title: "Archive this workspace?", body: `${w.project} becomes read-only. Exports and history stay available.`, confirm: "Archive", danger: true });
     if (ok) toast({ tone: "neutral", title: "Archive simulated", body: "Nothing was changed in this playground." });
   });
   draw();

@@ -11,6 +11,8 @@
   <title>The Mechanics — plain HTML consumer</title>
   <link rel="stylesheet" href="../../dist/the-mechanics/fonts.css">
   <link rel="stylesheet" href="../../dist/the-mechanics/the-mechanics.css">
+  <!-- Optional behaviors: date/time picker, select list (Firefox), menus, tooltips, ✕ in fields -->
+  <script type="module" src="../../dist/the-mechanics/the-mechanics.js"></script>
   <style>
     /* App-owned layout only; components come from the-mechanics.css */
     main { max-width: 960px; margin: 0 auto; padding: 24px 16px; display: grid; gap: 16px; }
@@ -23,7 +25,7 @@
       <div class="tm-page-head__text">
         <div class="tm-eyebrow">Consumer example · plain HTML</div>
         <h1 class="tm-page-title">Job queue</h1>
-        <p class="tm-subtitle">Only <code>the-mechanics.css</code> and <code>fonts.css</code> are loaded.</p>
+        <p class="tm-subtitle">Only <code>the-mechanics.css</code>, <code>fonts.css</code> and the optional <code>the-mechanics.js</code> are loaded.</p>
       </div>
       <fieldset class="tm-segmented tm-segmented--sm" aria-label="Theme">
         <legend class="tm-sr-only">Theme</legend>
@@ -65,6 +67,21 @@
         <div class="tm-dialog__foot"><button class="tm-btn tm-btn--outline" value="cancel">Cancel</button><button class="tm-btn tm-btn--primary" value="ok">Run</button></div>
       </form>
     </dialog>
+    <section class="tm-region" aria-labelledby="sched">
+      <header class="tm-region__head"><h2 class="tm-region__title" id="sched">Schedule a run</h2></header>
+      <div class="tm-region__body row" id="behaviors">
+        <div class="tm-field"><label class="tm-field__label" for="run-date">Date</label><input class="tm-input" type="date" id="run-date" value="2026-11-14"></div>
+        <div class="tm-field"><label class="tm-field__label" for="run-time">Time (UTC)</label><input class="tm-input" type="time" id="run-time" value="13:30"></div>
+        <div class="tm-field"><label class="tm-field__label" for="run-project">Project</label><select class="tm-select" id="run-project">
+          <option>All projects</option><option>billing-api</option><option>catalog-sync</option><option>export-worker</option><option>field-survey</option><option>image-resizer</option><option>inventory</option><option>mail-relay</option><option>metrics-agent</option><option>notifier</option><option>reports</option><option>search-index</option><option>sync-provider</option><option>uploader</option>
+        </select></div>
+        <div class="tm-field"><label class="tm-field__label" for="run-note">Note</label><input class="tm-input" id="run-note" value="Nightly batch"></div>
+        <div class="tm-field"><span class="tm-field__label">&nbsp;</span>
+          <button class="tm-btn tm-btn--outline" popovertarget="run-menu" data-tm-tip="More actions for this run">More<span class="tm-caret" aria-hidden="true"></span></button>
+          <div class="tm-menu" id="run-menu" popover role="menu" aria-label="Run actions"><button class="tm-menu__item" role="menuitem">Run now</button><button class="tm-menu__item" role="menuitem">Duplicate</button><button class="tm-menu__item tm-menu__item--danger" role="menuitem">Delete</button></div>
+        </div>
+      </div>
+    </section>
   </main>
   <script>
     document.querySelectorAll('input[name="t"]').forEach((r) =>

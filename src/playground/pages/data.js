@@ -258,7 +258,7 @@ export default {
       const names = records.filter((r) => ids.includes(r.id)).map((r) => r.name);
       const ok = await confirmDialog({
         title: cs.confirmation.title,
-        body: `<p>${esc(cs.confirmation.body)}</p><ul class="pg-confirm-list">${names.map((n) => `<li>${esc(n)}</li>`).join("")}</ul>`,
+        bodyHTML: `<p>${esc(cs.confirmation.body)}</p><ul class="pg-confirm-list">${names.map((n) => `<li>${esc(n)}</li>`).join("")}</ul>`,
         confirm: cs.confirmation.confirm,
         cancel: cs.confirmation.cancel,
         danger: true,
@@ -334,7 +334,7 @@ export default {
       const errs = validate();
       if (Object.keys(errs).length) {
         $(`#e-${Object.keys(errs)[0]}`).focus();
-        toast({ tone: "danger", title: "Fix highlighted fields", body: `${Object.keys(errs).length} field(s) need attention.`, timeout: 6000 });
+        toast({ tone: "danger", title: "Fix highlighted fields", body: `${Object.keys(errs).length} field(s) need attention.` });
         return;
       }
       const f = new FormData(e.target);
