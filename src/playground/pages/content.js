@@ -90,7 +90,7 @@ export default {
                  <tr><td>2 · Panel</td><td>Panels, tables, cards, dialogs</td><td><code>--tm-bw-2</code> + <code>--tm-line-2</code></td></tr>
                  <tr><td>3 · Record</td><td>Rows, nested groups, block labels</td><td><code>--tm-bw-3</code> + <code>--tm-line-3</code></td></tr></tbody></table></div>
                <h3>Using the CSS without a framework</h3>
-               <pre><code>&lt;link rel="stylesheet" href="the-mechanics/fonts.css"&gt;
+               <pre tabindex="0"><code>&lt;link rel="stylesheet" href="the-mechanics/fonts.css"&gt;
 &lt;link rel="stylesheet" href="the-mechanics/the-mechanics.css"&gt;
 &lt;html data-tm-theme="coffee"&gt; … &lt;body class="tm-root"&gt;
 &lt;section class="tm-panel"&gt;…&lt;/section&gt;</code></pre>

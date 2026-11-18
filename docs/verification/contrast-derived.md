@@ -49,8 +49,8 @@ Thresholds: 4.5:1 text, 3:1 graphics. Result: **all required pairs pass** (63 re
 | dark | heatmap labels “ink” (worst at 100 %) | #e9ebe6 | #72b2d8 | 1.93 | — | info | 60 of 101 values below 4.5:1 |
 | dark | heatmap labels “auto” (worst at 64 %) | #33373b | #5e89a3 | 3.17 | — | info | 49 of 101 values below 4.5:1 |
 | dark | heat ramp high end vs panel | #72b2d8 | #33373b | 5.18 | 3 | pass | graphic; low end is a near-surface tint by design |
-| dark | danger button label on hover | #33373b | #f29e8e | 5.76 | 4.5 | pass |  |
-| dark | danger button label on press | #33373b | #f2a798 | 6.17 | 4.5 | pass |  |
+| dark | danger button label on hover | #33373b | #f3a798 | 6.15 | 4.5 | pass |  |
+| dark | danger button label on press | #33373b | #f3afa1 | 6.53 | 4.5 | pass |  |
 | dark | chart range band label | #e3b862 | #45443f | 5.26 | 4.5 | pass |  |
 | dark | chart text under drag selection | #e9ebe6 | #424549 | 8.00 | 4.5 | pass |  |
 | coffee | text on hover over surface | #f3e8d8 | #514136 | 8.07 | 4.5 | pass |  |
@@ -72,7 +72,7 @@ Thresholds: 4.5:1 text, 3:1 graphics. Result: **all required pairs pass** (63 re
 | coffee | heatmap labels “ink” (worst at 100 %) | #f3e8d8 | #e8b06f | 1.60 | — | info | 64 of 101 values below 4.5:1 |
 | coffee | heatmap labels “auto” (worst at 56 %) | #433228 | #a27b52 | 3.19 | — | info | 40 of 101 values below 4.5:1 |
 | coffee | heat ramp high end vs panel | #e8b06f | #433228 | 6.30 | 3 | pass | graphic; low end is a near-surface tint by design |
-| coffee | danger button label on hover | #433228 | #f4a38b | 6.05 | 4.5 | pass |  |
-| coffee | danger button label on press | #433228 | #f5ab94 | 6.44 | 4.5 | pass |  |
+| coffee | danger button label on hover | #433228 | #f4a690 | 6.20 | 4.5 | pass |  |
+| coffee | danger button label on press | #433228 | #f5ae98 | 6.59 | 4.5 | pass |  |
 | coffee | chart range band label | #ecb85f | #543f2e | 5.43 | 4.5 | pass |  |
 | coffee | chart text under drag selection | #f3e8d8 | #514136 | 8.07 | 4.5 | pass |  |

@@ -450,7 +450,7 @@ try {
     await page.keyboard.press("Control+k");
     await page.waitForSelector(".tm-palette[open]");
     await page.keyboard.type("dark");
-    assert((await page.locator(".tm-palette [role=option]").count()) === 1, "palette filter");
+    assert((await page.locator(".tm-palette[open] [role=option]").count()) === 1, "palette filter");
     await page.keyboard.press("Enter");
     await page.waitForFunction(() => document.documentElement.dataset.tmTheme === "dark");
     assert(!(await page.locator(".tm-palette[open]").count()), "palette not closed after run");

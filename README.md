@@ -49,8 +49,9 @@ Verification (after `build`):
 ```sh
 corepack pnpm exec playwright install --only-shell chromium   # once; see “Disk-backed temp” below
 corepack pnpm check:contrast   # WCAG ratios: token pairs + derived colors → docs/verification/contrast*.md
-corepack pnpm smoke            # 26 interaction/keyboard checks + state screenshots (own port 4175)
+corepack pnpm smoke            # 27 interaction/keyboard checks + state screenshots (own port 4175)
 SMOKE_BROWSER=firefox corepack pnpm smoke   # the same checks in Firefox
+corepack pnpm a11y             # axe-core WCAG 2.2 AA scan: 6 pages × 3 themes × desktop/mobile → tmp/a11y/axe.json
 corepack pnpm shots [label]    # 7 views × 3 themes × desktop/mobile → tmp/screenshots/<label>/
 ```
 

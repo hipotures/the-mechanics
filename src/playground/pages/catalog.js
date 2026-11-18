@@ -30,7 +30,7 @@ const BADGE_TONE = { Featured: "none", "Sold out": "danger", Preorder: "info" };
 function rating(r) {
   return r == null
     ? `<span class="tm-rating tm-muted">No ratings yet</span>`
-    : `<span class="tm-rating" aria-label="Rated ${r} out of 5"><span class="tm-rating__bar" aria-hidden="true"><span style="width:${(r / 5) * 100}%"></span></span>${fmtNum(r, 1)} / 5</span>`;
+    : `<span class="tm-rating" role="img" aria-label="Rated ${r} out of 5"><span class="tm-rating__bar" aria-hidden="true"><span style="width:${(r / 5) * 100}%"></span></span>${fmtNum(r, 1)} / 5</span>`;
 }
 
 function actionBtn(p, cls = "tm-btn--sm") {
