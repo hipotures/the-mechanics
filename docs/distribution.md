@@ -149,6 +149,10 @@ Serve the three files as static assets (e.g. `tower-http::services::ServeDir` or
 
 Because state is plain attributes (`aria-busy`, `aria-invalid`, `aria-selected`), server-sent fragment patches restyle correctly without any client component runtime.
 
+### Native Android (Jetpack Compose)
+
+The CSS can't be used by a native renderer. For Compose apps, the repository ships a Kotlin port in [`android/`](../android/README.md): colors generated from `themes.css`, geometry and type mirrored from `tokens.css`, a Material 3 mapping and the IBM Plex TTF files. Add the repository as a git submodule and point the app's `java` and `assets` source directories at it.
+
 ## 7. Tailwind CSS 4 + daisyUI 5 applications (optional)
 
 ```css

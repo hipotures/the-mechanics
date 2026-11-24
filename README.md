@@ -99,8 +99,9 @@ src/the-mechanics/        PORTABLE design system (no Tailwind/daisyUI needed)
 src/playground/           playground only: shell, router, pages, ECharts chart mapping, page layouts (pg-*)
 fixtures/demo-data.json   deterministic synthetic data (single source of demo content)
 public/products/          original generated product illustrations (scripts/gen-product-images.mjs)
+android/                  Jetpack Compose / Material 3 port: generated colors, theme, Plex TTFs (android/README.md)
 examples/plain-html/      consumer example: dist CSS + the optional the-mechanics.js only
-scripts/                  build-css, contrast, contrast-derived, screenshots, smoke, image generator;
+scripts/                  build-css, build-compose (Android colors), contrast, contrast-derived, screenshots, smoke, image generator;
                           install.sh (release installer, also attached to each release),
                           release-assets.sh (builds the release zips + SHA256SUMS)
 skills/the-mechanics/     agent skill for applying the system in other projects;
@@ -113,6 +114,7 @@ references/               visual concept reference (not production code)
 
 - [DESIGN.md](DESIGN.md) — visual intent, hierarchy, tokens, themes, component rules, chart grammar, permitted variations, anti-patterns, decisions for review.
 - [docs/distribution.md](docs/distribution.md) — integration for plain HTML, React, Svelte, Rust/Datastar and optional Tailwind/daisyUI; the optional behaviors module `the-mechanics.js`.
+- [android/README.md](android/README.md) — native Android apps (Jetpack Compose, Material 3): add this repository as a submodule and use `TheMechanicsTheme`.
 - [docs/component-status.md](docs/component-status.md) — P0/P1 status against [docs/component-coverage.md](docs/component-coverage.md).
 - [docs/derived-data.md](docs/derived-data.md) — how fixtures are used and every derived value.
 - [docs/verification/testing-report.md](docs/verification/testing-report.md) — what was tested, improvement passes, what was not tested.
@@ -129,7 +131,7 @@ Using The Mechanics in another application is an owner decision per project. Ins
 - Project code and docs: CC0-1.0 (see `LICENSE`).
 - All CSS, JavaScript, SVG illustrations and sample copy were written for this repository. No third-party HTML, scripts, stylesheets or design-skill packages were copied.
 - Charts: Apache ECharts 6.1.0 (Apache-2.0), styled only through `src/the-mechanics/adapters/echarts.js`, which turns `--tm-*` tokens into an ECharts theme.
-- Fonts: IBM Plex Sans / Mono via Fontsource, SIL Open Font License 1.1; license files are copied into `dist/the-mechanics/fonts/`.
+- Fonts: IBM Plex Sans / Mono via Fontsource, SIL Open Font License 1.1; license files are copied into `dist/the-mechanics/fonts/`. The Android port bundles the unmodified IBM Plex 1.1.0 TTF files from the official IBM/plex releases, with their license files, in `android/assets/the-mechanics/fonts/`.
 - Visual references: the local concept `references/sharp-retro-tech-target.html` and the issue brief. The public TypeUI (Cypherpunk, Nostalgia) and Inkline Town pages are aesthetic references only and were not accessed or copied during this implementation. The daisyUI `retro`, `coffee`, `caramellatte`, `wireframe` and `cyberpunk` theme files in the installed package were inspected as starting references; the three themes here use original values.
 - Fixture data is synthetic; no real customer data, credentials or book excerpts.
 

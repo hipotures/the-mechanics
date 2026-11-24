@@ -11,8 +11,9 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/build-css.mjs && vite build",
+    "build": "node scripts/build-css.mjs && node scripts/build-compose.mjs && vite build",
     "build:css": "node scripts/build-css.mjs",
+    "build:compose": "node scripts/build-compose.mjs",
     "preview": "vite preview --port 4173 --strictPort",
     "check:contrast": "node scripts/contrast.mjs && node scripts/contrast-derived.mjs",
     "shots": "node scripts/screenshots.mjs",
