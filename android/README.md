@@ -21,7 +21,7 @@ As a git submodule, pinned to a release tag:
 
 ```sh
 git submodule add https://github.com/hipotures/the-mechanics.git third_party/the-mechanics
-git -C third_party/the-mechanics checkout v0.1.11   # or the release you want
+git -C third_party/the-mechanics checkout v0.1.12   # or the release you want
 git add .gitmodules third_party/the-mechanics
 ```
 
